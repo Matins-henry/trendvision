@@ -6,9 +6,8 @@
  */
 
 import { createClient } from '@supabase/supabase-js';
-import { NextRequest } from 'next/server';
 import { prisma } from '@hotel/db/src/availability';
-import { Role } from '@prisma/client';
+import type { Role } from './role-hierarchy';
 
 export interface ServerStaffAuthResult {
   authId: string;
@@ -20,10 +19,13 @@ export interface ServerStaffAuthResult {
 }
 
 /**
- * Get currently authenticated staff from API route
- * Verifies Authorization Bearer token with Supabase before returning StaffUser
+ * Get currently authenticated staff from API route.
+ * Accepts any Request-like object with a .headers.get() method
+ * (compatible with Next.js NextRequest and standard Request).
  */
-export async function getServerStaff(request: NextRequest): Promise<ServerStaffAuthResult | null> {
+export async function getServerStaff(
+  request: { headers: { get(name: string): string | null } }
+): Promise<ServerStaffAuthResult | null> {
   const startTime = Date.now();
   
   // Extract Bearer token from Authorization header
@@ -73,7 +75,7 @@ export async function getServerStaff(request: NextRequest): Promise<ServerStaffA
   return {
     authId: staffUser.authId,
     staffUserId: staffUser.id,
-    role: staffUser.role,
+    role: staffUser.role as Role,
     name: staffUser.name,
     email: staffUser.email,
     active: staffUser.active,

@@ -1,4 +1,4 @@
-import { Role } from '@prisma/client';
+import type { Role } from './role-hierarchy';
 
 /**
  * Result returned after successful staff authentication

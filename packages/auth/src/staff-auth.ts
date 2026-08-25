@@ -7,7 +7,7 @@
  * StaffUser queries happen server-side via API routes (Prisma cannot run in browser).
  */
 
-import { Role } from '@prisma/client';
+import type { Role } from './role-hierarchy';
 import { supabaseClient } from './supabase';
 
 /**

@@ -7,7 +7,7 @@
 'use client';
 
 import * as React from 'react';
-import { Role } from '@prisma/client';
+import type { Role } from './role-hierarchy';
 import { StaffAuthResult, getCurrentStaff } from './staff-auth';
 
 /**
