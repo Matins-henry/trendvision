@@ -1,0 +1,173 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model StaffUser {
+  id                   String             @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  authId               String             @unique
+  name                 String
+  email                String             @unique
+  role                 Role
+  active               Boolean            @default(true)
+  createdAt            DateTime           @default(now()) @db.Timestamptz(6)
+  auditLogs            AuditLog[]
+  bookingsCreated      Booking[]          @relation("CreatedByStaff")
+  paymentsHandled      Payment[]          @relation("HandledByStaff")
+  expensesLogged       Expense[]          @relation("LoggedByStaff")
+  maintenanceIssuesFlagged MaintenanceIssue[] @relation("FlaggedByStaff")
+}
+
+model Room {
+  id               String             @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  number           String             @unique
+  type             String
+  capacity         Int
+  baseRate         Decimal            @db.Decimal(10, 2)
+  status           String             @default("ACTIVE")
+  description      String?
+  photos           String[]
+  createdAt        DateTime           @default(now()) @db.Timestamptz(6)
+  updatedAt        DateTime           @default(now()) @updatedAt @db.Timestamptz(6)
+  bookings         Booking[]
+  maintenanceIssues MaintenanceIssue[]
+}
+
+model Guest {
+  id        String    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  name      String
+  email     String?
+  phone     String?
+  createdAt DateTime  @default(now()) @db.Timestamptz(6)
+  bookings  Booking[]
+
+  @@index([email])
+  @@index([phone])
+}
+
+model Booking {
+  id          String        @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  reference   String        @unique
+  guestId     String        @db.Uuid
+  roomId      String        @db.Uuid
+  checkIn     DateTime      @db.Timestamptz(6)
+  checkOut    DateTime      @db.Timestamptz(6)
+  status      BookingStatus @default(PENDING)
+  source      BookingSource
+  totalAmount Decimal       @db.Decimal(10, 2)
+  createdById String?       @db.Uuid
+  keycardCode String?
+  notes       String?
+  createdAt   DateTime      @default(now()) @db.Timestamptz(6)
+  updatedAt   DateTime      @default(now()) @updatedAt @db.Timestamptz(6)
+  auditLogs   AuditLog[]
+  createdBy   StaffUser?    @relation("CreatedByStaff", fields: [createdById], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  guest       Guest         @relation(fields: [guestId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  room        Room          @relation(fields: [roomId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  payments    Payment[]
+
+  @@index([roomId, checkIn, checkOut])
+  @@index([status])
+}
+
+model Payment {
+  id          String        @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  bookingId   String        @db.Uuid
+  amount      Decimal       @db.Decimal(10, 2)
+  method      PaymentMethod
+  status      PaymentStatus @default(PENDING)
+  handledById String?       @db.Uuid
+  receiptUrl  String?
+  createdAt   DateTime      @default(now()) @db.Timestamptz(6)
+  booking     Booking       @relation(fields: [bookingId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  handledBy   StaffUser?    @relation("HandledByStaff", fields: [handledById], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model AuditLog {
+  id        String     @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  actorId   String?    @db.Uuid
+  action    String
+  entity    String
+  entityId  String
+  bookingId String?    @db.Uuid
+  metadata  Json?
+  createdAt DateTime   @default(now()) @db.Timestamptz(6)
+  actor     StaffUser? @relation(fields: [actorId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  booking   Booking?   @relation(fields: [bookingId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model Expense {
+  id          String     @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  description String
+  category    String
+  amount      Decimal    @db.Decimal(10, 2)
+  loggedById  String     @db.Uuid
+  date        DateTime   @db.Timestamptz(6)
+  notes       String?
+  createdAt   DateTime   @default(now()) @db.Timestamptz(6)
+  loggedBy    StaffUser  @relation("LoggedByStaff", fields: [loggedById], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([loggedById])
+  @@index([date])
+}
+
+model MaintenanceIssue {
+  id          String            @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  title       String
+  description String
+  status      MaintenanceStatus @default(NEEDS_ATTENTION)
+  roomId      String?           @db.Uuid
+  flaggedById String            @db.Uuid
+  resolvedAt  DateTime?         @db.Timestamptz(6)
+  createdAt   DateTime          @default(now()) @db.Timestamptz(6)
+  flaggedBy   StaffUser         @relation("FlaggedByStaff", fields: [flaggedById], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  room        Room?             @relation(fields: [roomId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([status])
+  @@index([flaggedById])
+  @@index([roomId])
+}
+
+enum Role {
+  RECEPTIONIST
+  MANAGER
+  OWNER
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  CHECKED_IN
+  CHECKED_OUT
+  CANCELLED
+}
+
+enum BookingSource {
+  ONLINE
+  STAFF
+}
+
+enum PaymentMethod {
+  CASH
+  CARD
+  TRANSFER
+  ONLINE
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
+}
+
+enum MaintenanceStatus {
+  NEEDS_ATTENTION
+  IN_PROGRESS
+  RESOLVED
+}
+

@@ -1,0 +1,31 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Metallic Gold Gradient -->
+    <linearGradient id="favAdminGold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F5E0A9" />
+      <stop offset="40%" stop-color="#C9A96E" />
+      <stop offset="75%" stop-color="#A07D50" />
+      <stop offset="100%" stop-color="#E5C583" />
+    </linearGradient>
+    <!-- Deep Forest Background Gradient -->
+    <linearGradient id="favAdminBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1B4332" />
+      <stop offset="100%" stop-color="#0D2818" />
+    </linearGradient>
+  </defs>
+
+  <!-- Rounded Squircle Base -->
+  <rect width="512" height="512" rx="128" fill="url(#favAdminBg)" />
+  <rect width="504" height="504" x="4" y="4" rx="124" stroke="url(#favAdminGold)" stroke-width="8" stroke-opacity="0.35" />
+
+  <!-- Serif 'T' Monogram -->
+  <g transform="translate(106, 80) scale(3)">
+    <!-- Main Stem & Bar -->
+    <path d="M 22 18 H 78 V 26 H 55 V 72 H 62 V 78 H 38 V 72 H 45 V 26 H 22 V 18 Z" fill="#FEFAF4" />
+    <!-- Top Serifs -->
+    <path d="M 22 18 V 28 H 26 V 22 H 30 V 18 Z" fill="#FEFAF4" />
+    <path d="M 78 18 V 28 H 74 V 22 H 70 V 18 Z" fill="#FEFAF4" />
+    <!-- Golden Swoosh Wave -->
+    <path d="M 28 65 C 32 45, 45 32, 85 20 C 70 34, 52 46, 42 62 Z" fill="url(#favAdminGold)" />
+  </g>
+</svg>

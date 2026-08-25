@@ -1,0 +1,25 @@
+{
+  "name": "@hotel/auth",
+  "version": "1.0.0",
+  "description": "Shared authentication package for hotel platform",
+  "main": "src/index.ts",
+  "scripts": {
+    "test": "jest --runInBand",
+    "test:watch": "jest --watch"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "@prisma/client": "5.20.0",
+    "@supabase/ssr": "^0.12.4",
+    "@supabase/supabase-js": "^2.39.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "@types/react": "^19",
+    "react": "^19.2.4",
+    "typescript": "5.9.2"
+  }
+}

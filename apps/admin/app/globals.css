@@ -1,0 +1,554 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;0,900;1,400;1,700&family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+@import "tailwindcss";
+
+/* ═══════════════════════════════════════════════════════════════
+   TREND VISION – DESIGN SYSTEM (ADMIN PORTAL)
+   CSS Custom Properties for Dark / Light Theme
+═══════════════════════════════════════════════════════════════ */
+
+/* ── Dark Theme (Default) ── */
+:root {
+  --tv-bg:            #0B0F19;
+  --tv-bg-2:          #0f1522;
+  --tv-bg-raised:     #131d30;
+  --tv-bg-card:       #141c2e;
+  --tv-bg-input:      #0d1220;
+  --tv-bg-overlay:    rgba(11, 15, 25, 0.92);
+  --tv-border:        rgba(255,255,255,0.065);
+  --tv-border-md:     rgba(255,255,255,0.10);
+  --tv-border-lg:     rgba(255,255,255,0.15);
+  --tv-text:          #EDE9DE;
+  --tv-text-soft:     #B8B0A0;
+  --tv-text-muted:    #6B7491;
+  --tv-text-dim:      #3E4559;
+  --tv-gold:          #C8A97E;
+  --tv-gold-b:        #BE9B6B;
+  --tv-gold-pale:     rgba(200,169,126,0.10);
+  --tv-gold-pale-md:  rgba(200,169,126,0.18);
+  --tv-gold-glow:     rgba(200,169,126,0.25);
+  --tv-success:       #10B981;
+  --tv-success-pale:  rgba(16,185,129,0.08);
+  --tv-danger:        #F87171;
+  --tv-danger-pale:   rgba(248,113,113,0.08);
+  --tv-shadow-sm:     0 2px 8px rgba(0,0,0,0.35);
+  --tv-shadow:        0 8px 32px rgba(0,0,0,0.45);
+  --tv-shadow-lg:     0 20px 60px rgba(0,0,0,0.6);
+  --tv-transition:    250ms cubic-bezier(0.16, 1, 0.3, 1);
+  --tv-radius:        0.75rem;
+  --tv-radius-sm:     0.5rem;
+  --tv-radius-lg:     1rem;
+}
+
+/* ── Light Theme ── */
+html.light {
+  --tv-bg:            #FAF6F0;
+  --tv-bg-2:          #F2ECE1;
+  --tv-bg-raised:     #E7DFD5;
+  --tv-bg-card:       #FFFFFF;
+  --tv-bg-input:      #F7F3EC;
+  --tv-bg-overlay:    rgba(250,246,240,0.95);
+  --tv-border:        rgba(28,25,23,0.08);
+  --tv-border-md:     rgba(28,25,23,0.14);
+  --tv-border-lg:     rgba(28,25,23,0.20);
+  --tv-text:          #1C1917;
+  --tv-text-soft:     #44403C;
+  --tv-text-muted:    #78716C;
+  --tv-text-dim:      #A8A29E;
+  --tv-gold:          #A68353;
+  --tv-gold-b:        #BE9B6B;
+  --tv-gold-pale:     rgba(166,131,83,0.10);
+  --tv-gold-pale-md:  rgba(166,131,83,0.18);
+  --tv-gold-glow:     rgba(166,131,83,0.25);
+  --tv-success:       #059669;
+  --tv-success-pale:  rgba(5,150,105,0.07);
+  --tv-danger:        #DC2626;
+  --tv-danger-pale:   rgba(220,38,38,0.07);
+  --tv-shadow-sm:     0 2px 8px rgba(0,0,0,0.07);
+  --tv-shadow:        0 8px 32px rgba(0,0,0,0.10);
+  --tv-shadow-lg:     0 20px 60px rgba(0,0,0,0.12);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   BASE RESET
+═══════════════════════════════════════════════════════════════ */
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  scroll-behavior: smooth;
+  background-color: var(--tv-bg);
+  color: var(--tv-text);
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background-color: var(--tv-bg);
+  color: var(--tv-text);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color 300ms ease, color 300ms ease;
+  overflow-x: hidden;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   TYPOGRAPHY UTILITIES
+═══════════════════════════════════════════════════════════════ */
+
+.tv-serif { font-family: 'Playfair Display', Georgia, 'Times New Roman', serif; }
+
+.tv-gold-text {
+  background: linear-gradient(135deg, var(--tv-gold-b) 0%, var(--tv-gold) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.tv-label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--tv-gold);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   LAYOUT & SURFACE UTILITIES
+═══════════════════════════════════════════════════════════════ */
+
+.tv-page     { background-color: var(--tv-bg); color: var(--tv-text); min-height: 100vh; }
+.tv-surface  { background-color: var(--tv-bg-raised); }
+.tv-card     {
+  background-color: var(--tv-bg-card);
+  border: 1px solid var(--tv-border);
+  border-radius: var(--tv-radius);
+  box-shadow: var(--tv-shadow);
+  transition: border-color var(--tv-transition), transform var(--tv-transition), box-shadow var(--tv-transition);
+}
+.tv-card:hover {
+  border-color: var(--tv-gold);
+  transform: translateY(-3px);
+  box-shadow: var(--tv-shadow-lg);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SALESSKIP-STYLE SPLIT LOGIN LAYOUT
+═══════════════════════════════════════════════════════════════ */
+
+.tv-login-split-container {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 960px) {
+  .tv-login-split-container {
+    grid-template-columns: 1.1fr 1fr;
+  }
+}
+
+.tv-login-left-brand {
+  background: linear-gradient(135deg, #0D2818 0%, #1B4332 60%, #081C10 100%);
+  color: #FEFAF4;
+  padding: 4rem 3rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+}
+.tv-login-left-brand::before {
+  content: '';
+  position: absolute;
+  top: -100px; left: -100px;
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(201,169,110,0.18) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* Animated Password Slide-Up Keyframes */
+.tv-slide-up {
+  animation: tv-slide-up-in 500ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+@keyframes tv-slide-up-in {
+  0% {
+    opacity: 0;
+    transform: translateY(28px) scale(0.96);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.tv-role-fade {
+  animation: tv-role-fade-in 400ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+@keyframes tv-role-fade-in {
+  0% { opacity: 0; transform: translateY(-8px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   FINNOVA-STYLE EXECUTIVE DASHBOARD CONSOLE
+═══════════════════════════════════════════════════════════════ */
+
+.tv-finnova-dark-panel {
+  background: #0B1320;
+  color: #EDE9DE;
+  border-radius: 1.25rem;
+  border: 1px solid rgba(255,255,255,0.10);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+  overflow: hidden;
+}
+
+.tv-metric-card-glass {
+  background: var(--tv-bg-card);
+  border: 1px solid var(--tv-border);
+  border-radius: var(--tv-radius);
+  padding: 1.5rem;
+  box-shadow: var(--tv-shadow-sm);
+  transition: all var(--tv-transition);
+}
+.tv-metric-card-glass:hover {
+  border-color: var(--tv-gold);
+  transform: translateY(-4px);
+  box-shadow: var(--tv-shadow);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   NAVBAR
+═══════════════════════════════════════════════════════════════ */
+
+.tv-navbar {
+  background-color: var(--tv-bg-overlay);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-bottom: 1px solid var(--tv-border-md);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  transition: background-color 300ms ease;
+}
+
+.tv-nav-link {
+  color: var(--tv-text-muted);
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  border-radius: 0.625rem;
+  text-decoration: none;
+  letter-spacing: 0.02em;
+  transition: color var(--tv-transition), background-color var(--tv-transition);
+}
+.tv-nav-link:hover { color: var(--tv-text); background-color: var(--tv-bg-raised); }
+.tv-nav-link.active {
+  color: var(--tv-gold-b);
+  background-color: var(--tv-gold-pale);
+  border: 1px solid var(--tv-gold-pale-md);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   BUTTONS
+═══════════════════════════════════════════════════════════════ */
+
+.tv-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem;
+  border-radius: var(--tv-radius-sm);
+  font-weight: 700;
+  font-size: 0.8rem;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: all var(--tv-transition);
+  border: none;
+  text-decoration: none;
+  padding: 0.75rem 1.5rem;
+}
+
+.tv-btn-primary {
+  background: linear-gradient(135deg, var(--tv-gold) 0%, var(--tv-gold-b) 100%);
+  color: #0B0F19;
+  box-shadow: 0 4px 20px var(--tv-gold-glow);
+}
+.tv-btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 28px var(--tv-gold-glow);
+  filter: brightness(1.08);
+}
+.tv-btn-primary:active { transform: translateY(0); }
+
+.tv-btn-ghost {
+  background: transparent;
+  color: var(--tv-text-muted);
+  border: 1px solid var(--tv-border-md);
+}
+.tv-btn-ghost:hover { color: var(--tv-text); background: var(--tv-bg-raised); border-color: var(--tv-border-lg); }
+
+.tv-btn-outline-gold {
+  background: transparent;
+  color: var(--tv-gold);
+  border: 1px solid color-mix(in srgb, var(--tv-gold) 35%, transparent);
+}
+.tv-btn-outline-gold:hover {
+  background: var(--tv-gold-pale);
+  color: var(--tv-gold-b);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   FORM INPUTS
+═══════════════════════════════════════════════════════════════ */
+
+.tv-input {
+  background-color: var(--tv-bg-input);
+  border: 1px solid var(--tv-border-md);
+  border-radius: var(--tv-radius-sm);
+  color: var(--tv-text);
+  padding: 0.75rem 1rem;
+  width: 100%;
+  font-size: 0.875rem;
+  font-family: inherit;
+  outline: none;
+  transition: border-color var(--tv-transition), box-shadow var(--tv-transition);
+}
+.tv-input:focus { border-color: var(--tv-gold); box-shadow: 0 0 0 3px var(--tv-gold-pale); }
+.tv-input::placeholder { color: var(--tv-text-dim); }
+
+.tv-select {
+  background-color: var(--tv-bg-input);
+  border: 1px solid var(--tv-border-md);
+  border-radius: var(--tv-radius-sm);
+  color: var(--tv-text);
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+  font-family: inherit;
+  outline: none;
+  cursor: pointer;
+  transition: border-color var(--tv-transition);
+  width: 100%;
+}
+.tv-select:focus { border-color: var(--tv-gold); box-shadow: 0 0 0 3px var(--tv-gold-pale); }
+
+/* ═══════════════════════════════════════════════════════════════
+   BADGES & CHIPS
+═══════════════════════════════════════════════════════════════ */
+
+.tv-badge-gold {
+  background: var(--tv-gold-pale);
+  color: var(--tv-gold-b);
+  border: 1px solid color-mix(in srgb, var(--tv-gold) 25%, transparent);
+  border-radius: 999px;
+  padding: 0.25rem 0.875rem;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.tv-badge-success {
+  background: var(--tv-success-pale);
+  color: var(--tv-success);
+  border: 1px solid color-mix(in srgb, var(--tv-success) 25%, transparent);
+  border-radius: 999px;
+  padding: 0.2rem 0.75rem;
+  font-size: 0.65rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.tv-badge-danger {
+  background: var(--tv-danger-pale);
+  color: var(--tv-danger);
+  border: 1px solid color-mix(in srgb, var(--tv-danger) 25%, transparent);
+  border-radius: 999px;
+  padding: 0.2rem 0.75rem;
+  font-size: 0.65rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.tv-chip {
+  background: var(--tv-bg-raised);
+  color: var(--tv-text-muted);
+  border: 1px solid var(--tv-border-md);
+  border-radius: 999px;
+  padding: 0.35rem 1rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--tv-transition);
+}
+.tv-chip:hover { color: var(--tv-text); border-color: var(--tv-border-lg); }
+.tv-chip.active {
+  background: var(--tv-gold-pale);
+  color: var(--tv-gold-b);
+  border-color: color-mix(in srgb, var(--tv-gold) 35%, transparent);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   THEME TOGGLE
+═══════════════════════════════════════════════════════════════ */
+
+.tv-theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 1rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid var(--tv-border-md);
+  background: var(--tv-bg-raised);
+  color: var(--tv-text-muted);
+  transition: all var(--tv-transition);
+}
+.tv-theme-toggle:hover { color: var(--tv-text); border-color: var(--tv-gold); }
+
+/* ═══════════════════════════════════════════════════════════════
+   SPINNER / LOADING
+═══════════════════════════════════════════════════════════════ */
+
+.tv-spinner {
+  width: 2.5rem; height: 2.5rem;
+  border: 3px solid var(--tv-border-md);
+  border-top-color: var(--tv-gold);
+  border-radius: 50%;
+  animation: tv-spin 0.75s linear infinite;
+}
+@keyframes tv-spin { to { transform: rotate(360deg); } }
+
+/* ═══════════════════════════════════════════════════════════════
+   BROWSER AUTOFILL OVERRIDE
+═══════════════════════════════════════════════════════════════ */
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: var(--tv-text) !important;
+  transition: background-color 5000s ease-in-out 0s;
+  box-shadow: inset 0 0 20px 20px var(--tv-bg-input) !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   FINNOVA EXECUTIVE DASHBOARD STYLES
+═══════════════════════════════════════════════════════════════ */
+
+/* ── Glass Metric Card ── */
+.tv-metric-card-glass {
+  background: var(--tv-bg-card);
+  border: 1px solid var(--tv-border-md);
+  border-radius: var(--tv-radius);
+  padding: 1.5rem;
+  box-shadow: var(--tv-shadow-sm);
+  transition: transform 200ms ease, box-shadow 200ms ease;
+  position: relative;
+  overflow: hidden;
+}
+.tv-metric-card-glass::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--tv-gold), var(--tv-gold-b), transparent);
+  opacity: 0.5;
+}
+.tv-metric-card-glass:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--tv-shadow);
+}
+
+/* ── Dark Operational Console ── */
+.tv-finnova-dark-panel {
+  background: linear-gradient(145deg, #0a0f1a 0%, #111827 50%, #0f172a 100%);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: var(--tv-radius-lg);
+  box-shadow: var(--tv-shadow-lg), inset 0 1px 0 rgba(255,255,255,0.04);
+  position: relative;
+  overflow: hidden;
+}
+html.light .tv-finnova-dark-panel {
+  background: linear-gradient(145deg, #1B4332 0%, #132e24 50%, #0f2920 100%);
+}
+.tv-finnova-dark-panel::before {
+  content: '';
+  position: absolute;
+  top: 0; right: 0;
+  width: 50%;
+  height: 100%;
+  background: radial-gradient(ellipse at top right, rgba(197,160,40,0.04) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* ── Outline Light Button (for dark panels) ── */
+.tv-btn-outline-light {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.18);
+  color: #FEFAF4;
+  border-radius: 0.625rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 200ms ease;
+}
+.tv-btn-outline-light:hover {
+  background: rgba(255,255,255,0.08);
+  border-color: rgba(255,255,255,0.28);
+}
+
+/* ── Gold CTA Button ── */
+.tv-btn-gold {
+  background: var(--tv-gold);
+  color: #0B0F19;
+  border: none;
+  border-radius: 0.625rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 200ms ease;
+  box-shadow: 0 4px 14px var(--tv-gold-glow);
+}
+.tv-btn-gold:hover {
+  background: var(--tv-gold-b);
+  box-shadow: 0 6px 20px var(--tv-gold-glow);
+  transform: translateY(-1px);
+}
+
+/* ── Forest Badge ── */
+.tv-badge-forest {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.65rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  border-radius: 999px;
+  background: var(--tv-success-pale);
+  color: var(--tv-success);
+  letter-spacing: 0.02em;
+}
+
+/* ── Serif utility ── */
+.tv-serif {
+  font-family: 'Playfair Display', serif;
+}
+
+/* ── Scrollbar for dark panel queues ── */
+.tv-finnova-dark-panel ::-webkit-scrollbar {
+  width: 5px;
+}
+.tv-finnova-dark-panel ::-webkit-scrollbar-track {
+  background: rgba(255,255,255,0.03);
+  border-radius: 999px;
+}
+.tv-finnova-dark-panel ::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.12);
+  border-radius: 999px;
+}
+.tv-finnova-dark-panel ::-webkit-scrollbar-thumb:hover {
+  background: rgba(255,255,255,0.2);
+}

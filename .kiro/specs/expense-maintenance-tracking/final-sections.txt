@@ -1,0 +1,13 @@
+e }, MANAGER can view expense summary grouped by category with totals
+8. ✅ OWNER can view active maintenance issues (excluding RESOLVED)
+9. ✅ Role-based access enforced at both page and API level
+10. ✅ RECEPTIONIST cannot access expense/maintenance features (403)
+11. ✅ All form validation works client-side and server-side
+12. ✅ UI shows loading, success, and error states appropriately
+13. ✅ Design follows deep teal color scheme from Phase 2
+14. ✅ Manual testing checklist passes 100%
+15. ✅ Property-based tests written for all applicable properties
+
+---
+
+This design is ready for implementation once approved. The implementation follows established patterns from Phase 2 and requires minimal new infrastructure.
