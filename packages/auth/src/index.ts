@@ -27,7 +27,7 @@ export { authenticatedFetch } from './api-client';
 export { StaffProvider, useStaff } from './staff-provider';
 export type { StaffContext } from './staff-provider';
 
-// Export role hierarchy utilities
+export type { Role } from './role-hierarchy';
 export {
   ROLE_RANK,
   ROUTE_MIN_ROLE,

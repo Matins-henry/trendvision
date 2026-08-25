@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@hotel/db';
-import { canAccessRoute } from '@hotel/auth';
-import { Role } from '@prisma/client';
+import { canAccessRoute, Role } from '@hotel/auth';
 
 /**
  * POST /api/auth/check-access

@@ -7,7 +7,7 @@
  * Hierarchy: RECEPTIONIST (1) < MANAGER (2) < OWNER (3)
  */
 
-import { Role } from '@prisma/client';
+export type Role = 'OWNER' | 'MANAGER' | 'RECEPTIONIST';
 
 /**
  * Role rank - higher number = higher access level

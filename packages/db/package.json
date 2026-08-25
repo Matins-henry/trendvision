@@ -4,6 +4,8 @@
   "description": "Shared database package for hotel platform",
   "main": "src/index.ts",
   "scripts": {
+    "postinstall": "prisma generate",
+    "build": "prisma generate",
     "test": "jest --runInBand",
     "test:watch": "jest --watch"
   },
