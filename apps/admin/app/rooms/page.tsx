@@ -529,31 +529,31 @@ function RoomFormModal({
 
             {/* Presets Quick Picker */}
             <div style={{ marginBottom: '0.875rem' }}>
-              <span style={{ fontSize: '0.65rem', color: 'var(--tv-text-muted)', display: 'block', marginBottom: '0.35rem' }}>Quick Hotel Asset Presets:</span>
+              <span style={{ fontSize: '0.65rem', color: 'var(--tv-text-muted)', display: 'block', marginBottom: '0.35rem' }}>Quick Real Photo Presets:</span>
               <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>
                 <button
                   type="button"
-                  onClick={() => addPhotoUrl('/hotel-bedroom-suite.jpg')}
+                  onClick={() => addPhotoUrl('/real-suite-1.jpg')}
                   className="tv-btn tv-btn-ghost"
                   style={{ padding: '0.25rem 0.6rem', fontSize: '0.68rem' }}
                 >
-                  + Bedroom Suite 🛏️
+                  + Real Bedroom 1 🛏️
                 </button>
                 <button
                   type="button"
-                  onClick={() => addPhotoUrl('/hotel-parlor-suite.jpg')}
+                  onClick={() => addPhotoUrl('/real-suite-2.jpg')}
                   className="tv-btn tv-btn-ghost"
                   style={{ padding: '0.25rem 0.6rem', fontSize: '0.68rem' }}
                 >
-                  + Parlor Lounge 🛋️
+                  + Real Suite Headboard 🛋️
                 </button>
                 <button
                   type="button"
-                  onClick={() => addPhotoUrl('/hotel-facade-night.jpg')}
+                  onClick={() => addPhotoUrl('/real-suite-3.jpg')}
                   className="tv-btn tv-btn-ghost"
                   style={{ padding: '0.25rem 0.6rem', fontSize: '0.68rem' }}
                 >
-                  + Night Facade 🏛️
+                  + Real Corridor & Dressing 🚪
                 </button>
               </div>
             </div>

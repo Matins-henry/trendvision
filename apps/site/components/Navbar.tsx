@@ -12,7 +12,7 @@ export function Navbar() {
   const navLinks = [
     { href: '/', label: 'HOME' },
     { href: '/rooms', label: 'ROOMS & SUITES' },
-    { href: '/#explore', label: 'EXPLORE' },
+    { href: '/explore', label: 'EXPLORE' },
     { href: '/#amenities', label: 'FACILITIES' },
     { href: '/manage-booking', label: 'MY RESERVATION' },
   ];

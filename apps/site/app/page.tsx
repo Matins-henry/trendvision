@@ -111,7 +111,7 @@ export default async function HomePage() {
               </p>
               <div style={{ marginTop: '2rem' }}>
                 <Link
-                  href="/rooms"
+                  href="/explore"
                   style={{
                     display: 'inline-flex',
                     alignItems: 'center',

@@ -20,33 +20,39 @@ export interface ShowcaseRoomItem {
 
 const DEFAULT_SHOWCASE_ROOMS: ShowcaseRoomItem[] = [
   {
+    id: 'standard-suite-101',
     type: 'Standard',
+    number: '101',
     title: 'Standard Bedroom Suite',
     baseRate: 120000,
     description: 'A masterfully crafted bedroom retreat featuring ensuite bath, custom LED ambient lighting, Smart TV, and ultra-fast fiber Wi-Fi.',
-    photos: ['/hotel-bedroom-suite.jpg', '/hotel-hallway-suite.jpg', '/hotel-parlor-suite.jpg'],
+    photos: ['/real-suite-1.jpg', '/real-suite-2.jpg', '/real-suite-3.jpg'],
     size: '32 M²',
     view: 'CITY VIEW',
     bed: 'LUXURY KING BED',
     features: ['COZY PRIVATE SUITE', 'ULTRA HIGH-SPEED WIFI', '24/7 PERSONAL CONCIERGE'],
   },
   {
+    id: 'deluxe-suite-201',
     type: 'Deluxe',
+    number: '201',
     title: 'Deluxe Parlor Suite',
     baseRate: 180000,
     description: 'Spacious master bedroom paired with a separate private parlor lounge, plush tufted seating, executive work desk, and ambient lighting.',
-    photos: ['/hotel-parlor-suite.jpg', '/hotel-bedroom-suite.jpg', '/hotel-hallway-suite.jpg'],
+    photos: ['/real-suite-2.jpg', '/real-suite-3.jpg', '/real-suite-1.jpg'],
     size: '52 M²',
     view: 'COURTYARD VIEW',
     bed: 'KING BED & SOFA LOUNGE',
     features: ['PRIVATE PARLOR LOUNGE', 'COMPLIMENTARY REFRESHMENTS', 'EXECUTIVE WORK SPACE'],
   },
   {
+    id: 'apartment-suite-301',
     type: 'Apartment',
+    number: '301',
     title: 'Full Executive Mini Apartment',
     baseRate: 250000,
     description: 'The ultimate boutique residence experience featuring a private fully-equipped kitchenette, spacious parlor lounge, and master suite.',
-    photos: ['/hotel-hallway-suite.jpg', '/hotel-parlor-suite.jpg', '/hotel-bedroom-suite.jpg'],
+    photos: ['/real-suite-3.jpg', '/real-suite-1.jpg', '/real-suite-2.jpg'],
     size: '75 M²',
     view: 'PANORAMIC VIEW',
     bed: 'SUPER KING SUITE',
@@ -67,7 +73,7 @@ export function RoomShowcase({ rooms }: { rooms?: any[] }) {
         title: `${r.type} Suite${r.number ? ` — Room ${r.number}` : ''}`,
         baseRate: Number(r.baseRate),
         description: r.description || DEFAULT_SHOWCASE_ROOMS[i % DEFAULT_SHOWCASE_ROOMS.length].description,
-        photos: (r.photos && r.photos.length > 0) ? r.photos : DEFAULT_SHOWCASE_ROOMS[i % DEFAULT_SHOWCASE_ROOMS.length].photos,
+        photos: (r.photos && r.photos.length > 0) ? r.photos : ['/real-suite-1.jpg', '/real-suite-2.jpg', '/real-suite-3.jpg'],
         size: DEFAULT_SHOWCASE_ROOMS[i % DEFAULT_SHOWCASE_ROOMS.length].size,
         view: DEFAULT_SHOWCASE_ROOMS[i % DEFAULT_SHOWCASE_ROOMS.length].view,
         bed: DEFAULT_SHOWCASE_ROOMS[i % DEFAULT_SHOWCASE_ROOMS.length].bed,
@@ -76,7 +82,7 @@ export function RoomShowcase({ rooms }: { rooms?: any[] }) {
     : DEFAULT_SHOWCASE_ROOMS;
 
   const currentRoom = showcaseList[currentIndex] || DEFAULT_SHOWCASE_ROOMS[0];
-  const photos = currentRoom.photos && currentRoom.photos.length > 0 ? currentRoom.photos : ['/hotel-bedroom-suite.jpg'];
+  const photos = currentRoom.photos && currentRoom.photos.length > 0 ? currentRoom.photos : ['/real-suite-1.jpg'];
   const activePhoto = photos[photoIndex % photos.length] || photos[0];
 
   function handleSelectRoom(index: number) {
@@ -94,30 +100,57 @@ export function RoomShowcase({ rooms }: { rooms?: any[] }) {
 
   return (
     <div style={{ maxWidth: '1120px', margin: '0 auto' }}>
-      {/* Category Tabs for Room Selection */}
-      <div style={{ display: 'flex', justifyContent: 'center', gap: '0.75rem', marginBottom: '1.5rem', flexWrap: 'wrap' }}>
-        {showcaseList.map((item, idx) => (
-          <button
-            key={item.id || idx}
-            onClick={() => handleSelectRoom(idx)}
-            style={{
-              padding: '0.6rem 1.25rem',
-              fontSize: '0.72rem',
-              fontWeight: '700',
-              letterSpacing: '0.1em',
-              textTransform: 'uppercase',
-              borderRadius: '0.25rem',
-              cursor: 'pointer',
-              transition: 'all 200ms ease',
-              backgroundColor: idx === currentIndex ? '#C8A97E' : 'var(--tv-bg-card)',
-              color: idx === currentIndex ? '#1C1917' : 'var(--tv-text)',
-              border: idx === currentIndex ? '1px solid #BE9B6B' : '1px solid var(--tv-border-md)',
-              boxShadow: idx === currentIndex ? '0 4px 12px rgba(200,169,126,0.3)' : 'none',
-            }}
-          >
-            {item.title}
-          </button>
-        ))}
+      {/* Sleek Minimalist Luxury Suite Filter Navigation */}
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          gap: '1.5rem',
+          marginBottom: '2rem',
+          flexWrap: 'wrap',
+          borderBottom: '1px solid var(--tv-border-md)',
+          paddingBottom: '0.75rem',
+        }}
+      >
+        {showcaseList.map((item, idx) => {
+          const isActive = idx === currentIndex;
+          return (
+            <button
+              key={item.id || idx}
+              onClick={() => handleSelectRoom(idx)}
+              style={{
+                background: 'none',
+                border: 'none',
+                padding: '0.5rem 1rem',
+                fontSize: '0.82rem',
+                fontWeight: '700',
+                letterSpacing: '0.12em',
+                textTransform: 'uppercase',
+                color: isActive ? '#C8A97E' : 'var(--tv-text-muted)',
+                cursor: 'pointer',
+                position: 'relative',
+                transition: 'all 250ms ease',
+              }}
+            >
+              {item.title}
+              {isActive && (
+                <span
+                  style={{
+                    position: 'absolute',
+                    bottom: '-0.85rem',
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    width: '40px',
+                    height: '2px',
+                    backgroundColor: '#C8A97E',
+                    borderRadius: '2px',
+                    boxShadow: '0 0 8px rgba(200,169,126,0.6)',
+                  }}
+                />
+              )}
+            </button>
+          );
+        })}
       </div>
 
       {/* Main Room Showcase Split Card */}
@@ -127,13 +160,13 @@ export function RoomShowcase({ rooms }: { rooms?: any[] }) {
           gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))',
           background: 'var(--tv-bg-card)',
           border: '1px solid var(--tv-border-md)',
-          borderRadius: '0.5rem',
+          borderRadius: '0.75rem',
           overflow: 'hidden',
-          boxShadow: '0 12px 32px rgba(0,0,0,0.08)',
+          boxShadow: '0 16px 40px rgba(0,0,0,0.08)',
         }}
       >
-        {/* Photo Side with Crisp Bright Display & Photo Arrows */}
-        <div style={{ position: 'relative', minHeight: '420px', overflow: 'hidden', backgroundColor: '#F7F3EC' }}>
+        {/* Photo Side with Crisp Bright Display & Real Photos */}
+        <div style={{ position: 'relative', minHeight: '440px', overflow: 'hidden', backgroundColor: '#F7F3EC' }}>
           <img
             key={activePhoto}
             src={activePhoto}
@@ -153,24 +186,24 @@ export function RoomShowcase({ rooms }: { rooms?: any[] }) {
           <span
             style={{
               position: 'absolute',
-              top: '1rem',
-              left: '1rem',
-              padding: '0.35rem 0.85rem',
+              top: '1.25rem',
+              left: '1.25rem',
+              padding: '0.4rem 0.95rem',
               fontSize: '0.65rem',
               fontWeight: '700',
-              letterSpacing: '0.12em',
+              letterSpacing: '0.14em',
               color: '#1C1917',
-              backgroundColor: 'rgba(250,246,240,0.92)',
+              backgroundColor: 'rgba(250,246,240,0.95)',
               border: '1px solid #C8A97E',
               borderRadius: '0.25rem',
               backdropFilter: 'blur(8px)',
-              boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+              boxShadow: '0 4px 12px rgba(0,0,0,0.12)',
             }}
           >
             {currentRoom.type.toUpperCase()} SUITE
           </span>
 
-          {/* Photo Arrows (Cycle through manager's uploaded photos for this room) */}
+          {/* Photo Arrows */}
           {photos.length > 1 && (
             <>
               <button
@@ -179,21 +212,21 @@ export function RoomShowcase({ rooms }: { rooms?: any[] }) {
                 style={{
                   position: 'absolute',
                   top: '50%',
-                  left: '0.75rem',
+                  left: '0.85rem',
                   transform: 'translateY(-50%)',
-                  width: '40px',
-                  height: '40px',
+                  width: '42px',
+                  height: '42px',
                   borderRadius: '50%',
-                  background: 'rgba(250,246,240,0.9)',
+                  background: 'rgba(250,246,240,0.92)',
                   border: '1px solid #C8A97E',
                   color: '#1C1917',
-                  fontSize: '1.3rem',
+                  fontSize: '1.4rem',
                   fontWeight: '700',
                   cursor: 'pointer',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+                  boxShadow: '0 4px 14px rgba(0,0,0,0.18)',
                   zIndex: 5,
                 }}
               >
@@ -206,21 +239,21 @@ export function RoomShowcase({ rooms }: { rooms?: any[] }) {
                 style={{
                   position: 'absolute',
                   top: '50%',
-                  right: '0.75rem',
+                  right: '0.85rem',
                   transform: 'translateY(-50%)',
-                  width: '40px',
-                  height: '40px',
+                  width: '42px',
+                  height: '42px',
                   borderRadius: '50%',
-                  background: 'rgba(250,246,240,0.9)',
+                  background: 'rgba(250,246,240,0.92)',
                   border: '1px solid #C8A97E',
                   color: '#1C1917',
-                  fontSize: '1.3rem',
+                  fontSize: '1.4rem',
                   fontWeight: '700',
                   cursor: 'pointer',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+                  boxShadow: '0 4px 14px rgba(0,0,0,0.18)',
                   zIndex: 5,
                 }}
               >
@@ -229,30 +262,30 @@ export function RoomShowcase({ rooms }: { rooms?: any[] }) {
             </>
           )}
 
-          {/* Manager's Uploaded Photo Thumbnails Strip */}
+          {/* Photo Dots Strip */}
           {photos.length > 1 && (
             <div
               style={{
                 position: 'absolute',
-                bottom: '0.85rem',
+                bottom: '1rem',
                 left: '50%',
                 transform: 'translateX(-50%)',
                 display: 'flex',
                 gap: '0.5rem',
                 zIndex: 5,
                 background: 'rgba(28,25,23,0.75)',
-                padding: '0.35rem 0.65rem',
+                padding: '0.4rem 0.75rem',
                 borderRadius: '999px',
                 backdropFilter: 'blur(8px)',
               }}
             >
-              {photos.map((p, pIdx) => (
+              {photos.map((_, pIdx) => (
                 <button
                   key={pIdx}
                   onClick={() => setPhotoIndex(pIdx)}
                   style={{
-                    width: '12px',
-                    height: '12px',
+                    width: '10px',
+                    height: '10px',
                     borderRadius: '50%',
                     border: 'none',
                     background: pIdx === photoIndex ? '#C8A97E' : 'rgba(255,255,255,0.4)',
@@ -280,12 +313,12 @@ export function RoomShowcase({ rooms }: { rooms?: any[] }) {
             </div>
 
             {/* Title */}
-            <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '1.65rem', fontWeight: '600', color: 'var(--tv-text)', marginBottom: '0.75rem', lineHeight: 1.25 }}>
+            <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '1.75rem', fontWeight: '600', color: 'var(--tv-text)', marginBottom: '0.75rem', lineHeight: 1.25 }}>
               {currentRoom.title}
             </h3>
 
             {/* Description */}
-            <p style={{ fontSize: '0.86rem', color: 'var(--tv-text-muted)', lineHeight: 1.7, marginBottom: '1.75rem' }}>
+            <p style={{ fontSize: '0.88rem', color: 'var(--tv-text-muted)', lineHeight: 1.7, marginBottom: '1.75rem' }}>
               {currentRoom.description}
             </p>
 
@@ -320,17 +353,18 @@ export function RoomShowcase({ rooms }: { rooms?: any[] }) {
                 display: 'inline-flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                padding: '0.8rem 1.85rem',
-                fontSize: '0.72rem',
+                padding: '0.85rem 2rem',
+                fontSize: '0.75rem',
                 fontWeight: '700',
                 letterSpacing: '0.14em',
                 textTransform: 'uppercase',
                 color: '#1C1917',
                 backgroundColor: '#C8A97E',
                 border: '1px solid #BE9B6B',
-                borderRadius: '0.25rem',
+                borderRadius: '0.35rem',
                 textDecoration: 'none',
                 transition: 'all 200ms ease',
+                boxShadow: '0 4px 12px rgba(200,169,126,0.3)',
               }}
             >
               RESERVE SUITE →
@@ -341,15 +375,15 @@ export function RoomShowcase({ rooms }: { rooms?: any[] }) {
                 display: 'inline-flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                padding: '0.8rem 1.85rem',
-                fontSize: '0.72rem',
+                padding: '0.85rem 2rem',
+                fontSize: '0.75rem',
                 fontWeight: '700',
                 letterSpacing: '0.14em',
                 textTransform: 'uppercase',
                 color: 'var(--tv-text)',
                 backgroundColor: 'transparent',
                 border: '1px solid var(--tv-border-lg)',
-                borderRadius: '0.25rem',
+                borderRadius: '0.35rem',
                 textDecoration: 'none',
                 transition: 'all 200ms ease',
               }}

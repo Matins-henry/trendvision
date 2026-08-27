@@ -1,195 +1,208 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 interface Testimonial {
   id: number;
+  name: string;
+  avatar: string;
   quote: string;
-  author: string;
-  location: string;
-  initials: string;
-  rating: number;
 }
 
 const TESTIMONIALS: Testimonial[] = [
   {
-    id: 0,
-    quote: 'Trend Vision is a true sanctuary of luxury. The 24/7 personalized service was incredibly prompt, and the private parlor suite offered the best comfort in town.',
-    author: 'Chief Olumide B.',
-    location: 'Ikoyi, Lagos',
-    initials: 'OB',
-    rating: 5,
-  },
-  {
     id: 1,
-    quote: 'The Deluxe Parlor Suite exceeded all my expectations for my business trip. Ultra-fast Wi-Fi, quiet ambient lighting, and impeccable concierge service.',
-    author: 'Elena Rostova',
-    location: 'London, United Kingdom',
-    initials: 'ER',
-    rating: 5,
+    name: 'Mehwish',
+    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&q=80',
+    quote: 'Compliment interested discretion estimating on stimulated apartments oh. The ambiance and personal concierge service were remarkable.',
   },
   {
     id: 2,
-    quote: 'Absolutely amazing stay! The staff went above and beyond to make our stay unforgettable. The custom LED suite and executive lounge were pure perfection.',
-    author: 'Jessica & Mark A.',
-    location: 'Victoria Island, Lagos',
-    initials: 'JM',
-    rating: 5,
+    name: 'Elizabeth Jeff',
+    avatar: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=120&q=80',
+    quote: 'Dear so sing when in find read of call. As distrusts behaviour abilities defective is. The private parlor suite exceeded every expectation.',
   },
   {
     id: 3,
-    quote: 'From the seamless online reservation to the warm welcome at check-in, Trend Vision sets a new standard for luxury hospitality.',
-    author: 'Dr. Adebayo C.',
-    location: 'Abuja, Nigeria',
-    initials: 'AC',
-    rating: 5,
+    name: 'Emily Thomas',
+    avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=120&q=80',
+    quote: 'Never at water me might. On formed merits hunted unable merely by mr whence or. Seamless stay, fast Wi-Fi and pristine apartment spaces.',
   },
 ];
 
 export function TestimonialCarousel() {
-  const [current, setCurrent] = useState(0);
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrent((prev) => (prev + 1) % TESTIMONIALS.length);
-    }, 5000);
-    return () => clearInterval(timer);
-  }, []);
-
-  const item = TESTIMONIALS[current];
+  const [activeIndex, setActiveIndex] = useState(1); // Default active Elizabeth Jeff
 
   return (
-    <div style={{ maxWidth: '820px', margin: '0 auto', position: 'relative' }}>
-      {/* Testimonial Display Box */}
+    <section
+      style={{
+        backgroundColor: '#FFFFFF',
+        color: '#1C1917',
+        padding: '5rem 1.5rem',
+        borderRadius: '1rem',
+        maxWidth: '1180px',
+        margin: '0 auto 4rem',
+        boxShadow: '0 10px 40px rgba(0,0,0,0.04)',
+      }}
+    >
       <div
-        key={`testimonial-${item.id}`}
         style={{
-          background: 'var(--tv-bg-card)',
-          border: '1px solid var(--tv-border-md)',
-          borderRadius: '0.75rem',
-          padding: '3rem 2.5rem',
-          boxShadow: 'var(--tv-shadow)',
-          position: 'relative',
-          animation: 'tvFadeSlideUp 600ms ease-out forwards',
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+          gap: '3.5rem',
+          alignItems: 'center',
         }}
       >
-        {/* Decorative Big Quote */}
-        <div style={{ position: 'absolute', top: '1.5rem', right: '2rem', fontSize: '4.5rem', fontFamily: 'Playfair Display, serif', color: '#C8A97E', opacity: 0.15, lineHeight: 1 }}>
-          “
-        </div>
+        {/* Left Side: Doodle, Title, Description, Gradient CTA Button */}
+        <div>
+          {/* Yellow Star Doodle Icon */}
+          <div style={{ marginBottom: '1.25rem' }}>
+            <svg width="42" height="42" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M12 35 C18 20, 24 40, 32 15 M32 15 L26 18 M32 15 L33 22"
+                stroke="#8B5CF6"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+              <path
+                d="M36 10 L38.5 15.5 L44 16 L40 20 L41 25.5 L36 22.5 L31 25.5 L32 20 L28 16 L33.5 15.5 Z"
+                fill="#FFC107"
+                stroke="#FFC107"
+                strokeWidth="1"
+              />
+            </svg>
+          </div>
 
-        {/* Rating Stars */}
-        <div style={{ display: 'flex', justifyContent: 'center', gap: '0.25rem', marginBottom: '1.25rem' }}>
-          {Array.from({ length: item.rating }).map((_, i) => (
-            <span key={i} style={{ color: '#C8A97E', fontSize: '1.2rem' }}>★</span>
-          ))}
-        </div>
-
-        {/* Quote Text */}
-        <p
-          style={{
-            fontFamily: 'Playfair Display, Georgia, serif',
-            fontSize: 'clamp(1.05rem, 2.5vw, 1.35rem)',
-            fontStyle: 'italic',
-            color: 'var(--tv-text)',
-            lineHeight: 1.7,
-            textAlign: 'center',
-            maxWidth: '680px',
-            margin: '0 auto 2rem',
-          }}
-        >
-          “{item.quote}”
-        </p>
-
-        {/* Author Avatar & Info */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '1rem' }}>
-          <div
+          <h2
             style={{
-              width: '48px',
-              height: '48px',
-              borderRadius: '50%',
-              background: '#C8A97E',
-              color: '#1C1917',
+              fontSize: 'clamp(2rem, 4vw, 2.75rem)',
               fontWeight: '800',
-              fontSize: '1rem',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              border: '2px solid rgba(200,169,126,0.3)',
+              color: '#0F172A',
+              lineHeight: 1.2,
+              marginBottom: '1.25rem',
+              fontFamily: 'Inter, sans-serif',
             }}
           >
-            {item.initials}
-          </div>
-          <div style={{ textAlign: 'left' }}>
-            <div style={{ fontSize: '0.95rem', fontWeight: '700', color: 'var(--tv-text)' }}>{item.author}</div>
-            <div style={{ fontSize: '0.75rem', color: 'var(--tv-text-muted)', letterSpacing: '0.04em' }}>{item.location}</div>
-          </div>
-        </div>
-      </div>
+            What Our<br />Customers Says
+          </h2>
 
-      {/* Interactive Controls & Slide Indicators */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '1.5rem', marginTop: '2.25rem' }}>
-        <button
-          onClick={() => setCurrent((prev) => (prev - 1 + TESTIMONIALS.length) % TESTIMONIALS.length)}
-          style={{
-            width: '38px',
-            height: '38px',
-            borderRadius: '50%',
-            background: 'var(--tv-bg-card)',
-            border: '1px solid var(--tv-border-lg)',
-            color: 'var(--tv-text)',
-            fontSize: '1.2rem',
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            transition: 'all 200ms ease',
-          }}
-          aria-label="Previous testimonial"
-        >
-          ‹
-        </button>
+          <p
+            style={{
+              fontSize: '0.92rem',
+              color: '#64748B',
+              lineHeight: 1.7,
+              maxWidth: '420px',
+              marginBottom: '2rem',
+            }}
+          >
+            Relation so in confined smallest children unpacked delicate. Why sir end believe uncivil respect. Always get adieus nature day course for common.
+          </p>
 
-        <div style={{ display: 'flex', gap: '0.5rem' }}>
-          {TESTIMONIALS.map((t, idx) => (
-            <button
-              key={t.id}
-              onClick={() => setCurrent(idx)}
-              style={{
-                width: idx === current ? '28px' : '8px',
-                height: '8px',
-                borderRadius: '4px',
-                border: 'none',
-                background: idx === current ? '#C8A97E' : 'var(--tv-border-lg)',
-                cursor: 'pointer',
-                transition: 'all 300ms ease',
-              }}
-              aria-label={`Go to testimonial ${idx + 1}`}
-            />
-          ))}
+          <button
+            style={{
+              padding: '0.85rem 2.25rem',
+              fontSize: '0.85rem',
+              fontWeight: '700',
+              color: '#FFFFFF',
+              background: 'linear-gradient(135deg, #EC4899 0%, #F97316 100%)',
+              border: 'none',
+              borderRadius: '0.5rem',
+              cursor: 'pointer',
+              boxShadow: '0 8px 20px rgba(236, 72, 153, 0.3)',
+              transition: 'transform 200ms ease, box-shadow 200ms ease',
+            }}
+          >
+            View More
+          </button>
         </div>
 
-        <button
-          onClick={() => setCurrent((prev) => (prev + 1) % TESTIMONIALS.length)}
-          style={{
-            width: '38px',
-            height: '38px',
-            borderRadius: '50%',
-            background: 'var(--tv-bg-card)',
-            border: '1px solid var(--tv-border-lg)',
-            color: 'var(--tv-text)',
-            fontSize: '1.2rem',
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            transition: 'all 200ms ease',
-          }}
-          aria-label="Next testimonial"
-        >
-          ›
-        </button>
+        {/* Right Side: Vertical Stacked Testimonial Cards with Active Purple Bar */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', position: 'relative' }}>
+          {TESTIMONIALS.map((item, idx) => {
+            const isActive = idx === activeIndex;
+
+            return (
+              <div
+                key={item.id}
+                onClick={() => setActiveIndex(idx)}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '1.25rem',
+                  padding: '1.25rem 1.5rem',
+                  backgroundColor: '#FFFFFF',
+                  borderRadius: '0.75rem',
+                  border: isActive ? 'none' : '1px solid #F1F5F9',
+                  boxShadow: isActive
+                    ? '0 12px 32px rgba(139, 92, 246, 0.12), 0 2px 8px rgba(0,0,0,0.04)'
+                    : '0 2px 8px rgba(0,0,0,0.02)',
+                  cursor: 'pointer',
+                  position: 'relative',
+                  transition: 'all 300ms ease',
+                  transform: isActive ? 'translateX(8px)' : 'none',
+                }}
+              >
+                {/* Active Highlight Purple Vertical Line Indicator */}
+                {isActive && (
+                  <div
+                    style={{
+                      position: 'absolute',
+                      left: '-1rem',
+                      top: '15%',
+                      bottom: '15%',
+                      width: '5px',
+                      backgroundColor: '#6366F1',
+                      borderRadius: '4px',
+                    }}
+                  />
+                )}
+
+                {/* Avatar */}
+                <img
+                  src={item.avatar}
+                  alt={item.name}
+                  style={{
+                    width: '56px',
+                    height: '56px',
+                    borderRadius: '50%',
+                    objectFit: 'cover',
+                    border: isActive ? '2px solid #6366F1' : '2px solid #E2E8F0',
+                    flexShrink: 0,
+                  }}
+                />
+
+                {/* Content */}
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.35rem' }}>
+                    <h3 style={{ fontSize: '0.95rem', fontWeight: '700', color: '#0F172A' }}>
+                      {item.name}
+                    </h3>
+                    <span style={{ fontSize: '1.25rem', color: isActive ? '#6366F1' : '#CBD5E1', lineHeight: 1 }}>
+                      ❞
+                    </span>
+                  </div>
+
+                  <p
+                    style={{
+                      fontSize: '0.82rem',
+                      color: isActive ? '#334155' : '#64748B',
+                      lineHeight: 1.5,
+                      margin: 0,
+                      display: '-webkit-box',
+                      WebkitLineClamp: 2,
+                      WebkitBoxOrient: 'vertical',
+                      overflow: 'hidden',
+                    }}
+                  >
+                    {item.quote}
+                  </p>
+                </div>
+              </div>
+            );
+          })}
+        </div>
       </div>
-    </div>
+    </section>
   );
 }
