@@ -6,6 +6,7 @@ import { RoomShowcase } from '@/components/RoomShowcase';
 import { HotelVideoSection } from '@/components/HotelVideoSection';
 import { TestimonialCarousel } from '@/components/TestimonialCarousel';
 import { ScrollReveal } from '@/components/ScrollReveal';
+import { RoomPlaceholder } from '@/components/RoomPlaceholder';
 import { prisma } from '@hotel/db/src/availability';
 
 export const revalidate = 60;
@@ -36,7 +37,7 @@ export default async function HomePage() {
     { icon: '💎', title: 'Best prices, and great offers', desc: 'Enjoy unbeatable prices with fantastic offers tailored just for you.' },
   ];
 
-  /* 4 Facilities & Amenities requested by user (Bar & Lounge, Wifi, Parking, Swimming Pool) */
+  /* 4 Facilities & Amenities requested by user */
   const facilities = [
     { icon: '📶', title: 'High Speed Wifi', desc: 'Enjoy seamless, high-speed fiber internet access throughout the apartment.' },
     { icon: '🅿️', title: 'Parking Space', desc: 'Ample and secure private parking space provided for all apartment guests.' },
@@ -60,13 +61,13 @@ export default async function HomePage() {
       <HeroCarousel />
 
       {/* ═══════════════════════════════════ 3 KEY HIGHLIGHTS ROW ═══════════════════════════════════ */}
-      <section style={{ padding: '4.5rem 1.5rem 4rem', borderBottom: '1px solid var(--tv-border)' }}>
+      <section className="tv-highlights-section" style={{ padding: '4.5rem 1.5rem 4rem', borderBottom: '1px solid var(--tv-border)' }}>
         <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '3rem' }}>
+          <div className="tv-highlights-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 240px), 1fr))', gap: '3rem' }}>
             {highlights.map((item, idx) => (
               <ScrollReveal key={idx} animation="fade-up" delay={idx * 100}>
-                <div style={{ textAlign: 'center' }}>
-                  <div style={{ width: '56px', height: '56px', borderRadius: '50%', border: '2px solid #C8A97E', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.25rem', fontSize: '1.5rem' }}>
+                <div className="tv-highlight-card" style={{ textAlign: 'center' }}>
+                  <div style={{ width: '56px', height: '56px', borderRadius: '50%', border: '2px solid #C8A97E', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.25rem', fontSize: '1.5rem', background: 'var(--tv-bg-card)', boxShadow: '0 4px 14px rgba(0,0,0,0.04)' }}>
                     {item.icon}
                   </div>
                   <h3 style={{ fontSize: '1rem', fontWeight: '700', color: 'var(--tv-text)', marginBottom: '0.5rem', lineHeight: 1.3 }}>
@@ -82,25 +83,25 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ═══════════════════════════════════ WELCOME / STORY SECTION (Asymmetric) ═══════════════════════════════════ */}
-      <section id="explore" style={{ padding: '6rem 1.5rem 5rem' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', gap: '3.5rem', alignItems: 'center' }}>
-          {/* Left: Asymmetric Dual Photo */}
+      {/* ═══════════════════════════════════ WELCOME / STORY SECTION ═══════════════════════════════════ */}
+      <section id="explore" className="tv-welcome-section" style={{ padding: '6rem 1.5rem 5rem' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 300px), 1fr))', gap: '3.5rem', alignItems: 'center' }}>
+          {/* Left: Dual Suite Showcase Cards */}
           <ScrollReveal animation="slide-right">
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+            <div className="tv-welcome-photos-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 140px), 1fr))', gap: '1rem' }}>
               <div style={{ borderRadius: '0.5rem', overflow: 'hidden', height: '320px', boxShadow: 'var(--tv-shadow)' }}>
-                <img src="/hotel-parlor-suite.jpg" alt="Parlor Suite" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                <img src="/real-suite-1.jpg" alt="Executive Suite" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               </div>
               <div style={{ borderRadius: '0.5rem', overflow: 'hidden', height: '320px', marginTop: '2rem', boxShadow: 'var(--tv-shadow)' }}>
-                <img src="/hotel-bedroom-suite.jpg" alt="Bedroom Suite" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                <img src="/real-suite-2.jpg" alt="Deluxe Suite" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               </div>
             </div>
           </ScrollReveal>
 
           {/* Right: Welcome Text Content */}
           <ScrollReveal animation="slide-left" delay={200}>
-            <div>
-              <span style={{ fontSize: '0.68rem', fontWeight: '700', letterSpacing: '0.18em', textTransform: 'uppercase', color: '#C8A97E' }}>
+            <div className="tv-welcome-content">
+              <span style={{ fontSize: '0.68rem', fontWeight: '700', letterSpacing: '0.18em', textTransform: 'uppercase', color: '#C8A97E', display: 'block' }}>
                 WELCOME TO TREND VISION
               </span>
               <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: 'clamp(1.8rem, 4vw, 2.8rem)', fontWeight: '400', color: 'var(--tv-text)', lineHeight: 1.2, marginTop: '0.75rem' }}>
@@ -109,14 +110,18 @@ export default async function HomePage() {
               <p style={{ fontSize: '0.88rem', color: 'var(--tv-text-muted)', lineHeight: 1.8, marginTop: '1.25rem' }}>
                 Trend Vision offers modern, luxurious suites and mini apartments. Enjoy premium facilities, perfect for relaxation and indulgence. Our friendly staff ensures a seamless, personalized experience, with stunning city views. Discover true luxury and hospitality at Trend Vision.
               </p>
-              <div style={{ marginTop: '2rem' }}>
+              
+              {/* Centered Button Wrapper on Mobile */}
+              <div className="tv-welcome-cta-wrap" style={{ marginTop: '2rem' }}>
                 <Link
                   href="/explore"
                   style={{
                     display: 'inline-flex',
                     alignItems: 'center',
+                    justifyContent: 'center',
                     gap: '0.5rem',
-                    padding: '0.75rem 2rem',
+                    padding: '0.85rem 2.25rem',
+                    minHeight: '44px',
                     fontSize: '0.72rem',
                     fontWeight: '700',
                     letterSpacing: '0.14em',
@@ -127,14 +132,15 @@ export default async function HomePage() {
                     borderRadius: '0.25rem',
                     textDecoration: 'none',
                     transition: 'all 200ms ease',
+                    boxShadow: '0 4px 14px rgba(200,169,126,0.3)',
                   }}
                 >
                   VIEW MORE →
                 </Link>
               </div>
 
-              {/* Rating Badges Bar (Clean & Authentic) */}
-              <div style={{ display: 'flex', gap: '2rem', marginTop: '2.5rem', flexWrap: 'wrap' }}>
+              {/* Rating Badges Bar */}
+              <div className="tv-rating-badges" style={{ display: 'flex', gap: '1.5rem', marginTop: '2.5rem', flexWrap: 'wrap' }}>
                 {[
                   { logo: 'B.', score: '4.9/5', status: 'Verified Guest Rating', color: '#003B95' },
                   { logo: 'A', score: '5.0', status: 'Top Luxury Residence', color: '#E8523D' },
@@ -159,108 +165,59 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ═══════════════════════════════════ EXQUISITE ROOM SHOWCASE (Interactive Slider) ═══════════════════════════════════ */}
-      <section style={{ padding: '5.5rem 1.5rem 6rem', backgroundColor: 'var(--tv-bg-2)', borderTop: '1px solid var(--tv-border)', borderBottom: '1px solid var(--tv-border)' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', textAlign: 'center', marginBottom: '3.5rem' }}>
-          <ScrollReveal animation="fade-up">
-            <span style={{ fontSize: '0.65rem', fontWeight: '700', letterSpacing: '0.22em', textTransform: 'uppercase', color: '#C8A97E' }}>
-              EXQUISITE AND LUXURIOUS
-            </span>
-            <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: 'clamp(1.8rem, 4vw, 2.6rem)', fontWeight: '400', color: 'var(--tv-text)', lineHeight: 1.2, marginTop: '0.5rem' }}>
-              Room and suite collection
-            </h2>
-          </ScrollReveal>
-        </div>
-
-        {/* Dynamic Interactive Room Showcase Component */}
-        <ScrollReveal animation="fade-up" delay={150}>
-          <RoomShowcase rooms={featuredRooms} />
-        </ScrollReveal>
-      </section>
-
-      {/* ═══════════════════════════════════ FACILITIES & AMENITIES GRID ═══════════════════════════════════ */}
-      <section id="amenities" style={{ padding: '5.5rem 1.5rem 5rem' }}>
+      {/* ═══════════════════════════════════ LIVE SUITE SHOWCASE ═══════════════════════════════════ */}
+      <section style={{ padding: '4rem 1.5rem 6rem', backgroundColor: 'var(--tv-bg-2)', borderTop: '1px solid var(--tv-border)', borderBottom: '1px solid var(--tv-border)' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <ScrollReveal animation="fade-up">
-            <div style={{ textAlign: 'center', marginBottom: '3.5rem' }}>
-              <span style={{ fontSize: '0.65rem', fontWeight: '700', letterSpacing: '0.22em', textTransform: 'uppercase', color: '#C8A97E' }}>
-                MODERN AND COMFORTABLE
-              </span>
-              <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: 'clamp(1.8rem, 4vw, 2.6rem)', fontWeight: '400', color: 'var(--tv-text)', lineHeight: 1.2, marginTop: '0.5rem' }}>
-                Facilities and amenities
-              </h2>
+          <div style={{ textAlign: 'center', marginBottom: '3.5rem' }}>
+            <span style={{ fontSize: '0.68rem', fontWeight: '700', letterSpacing: '0.18em', textTransform: 'uppercase', color: '#C8A97E' }}>
+              ACCOMMODATIONS COLLECTION
+            </span>
+            <h2 className="tv-section-title" style={{ marginTop: '0.4rem' }}>
+              Explore Our Signature Suites
+            </h2>
+            <div className="tv-divider-gold">
+              <span>◆</span>
             </div>
-          </ScrollReveal>
-
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '2.5rem' }}>
-            {facilities.map((item, idx) => (
-              <ScrollReveal key={idx} animation="fade-up" delay={idx * 100}>
-                <div style={{ display: 'flex', gap: '1.25rem', alignItems: 'flex-start' }}>
-                  <div style={{ width: '50px', height: '50px', borderRadius: '50%', border: '1.5px solid #C8A97E', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.3rem', flexShrink: 0 }}>
-                    {item.icon}
-                  </div>
-                  <div>
-                    <h3 style={{ fontSize: '1rem', fontWeight: '700', color: 'var(--tv-text)', marginBottom: '0.35rem', fontStyle: 'italic' }}>
-                      {item.title}
-                    </h3>
-                    <p style={{ fontSize: '0.82rem', color: 'var(--tv-text-muted)', lineHeight: 1.6 }}>
-                      {item.desc}
-                    </p>
-                  </div>
-                </div>
-              </ScrollReveal>
-            ))}
           </div>
+
+          <RoomShowcase rooms={featuredRooms} />
         </div>
       </section>
 
-      {/* ═══════════════════════════════════ HOTEL VIDEO EXPERIENCE BANNER ═══════════════════════════════════ */}
+      {/* ═══════════════════════════════════ VIDEO SHOWCASE ═══════════════════════════════════ */}
       <HotelVideoSection />
 
-      {/* ═══════════════════════════════════ MOVING TESTIMONIALS SLIDER SECTION ═══════════════════════════════════ */}
-      <section style={{ padding: '6.5rem 1.5rem', backgroundColor: 'var(--tv-bg)' }}>
-        <div style={{ maxWidth: '1280px', margin: '0 auto', textAlign: 'center' }}>
-          <ScrollReveal animation="fade-up">
-            <span style={{ fontSize: '0.65rem', fontWeight: '700', letterSpacing: '0.22em', textTransform: 'uppercase', color: '#C8A97E' }}>
-              GUEST REVIEWS
-            </span>
-            <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: 'clamp(1.8rem, 4vw, 2.6rem)', fontWeight: '400', color: 'var(--tv-text)', lineHeight: 1.2, marginTop: '0.5rem' }}>
-              What Our Guests Say
-            </h2>
-          </ScrollReveal>
-          <ScrollReveal animation="fade-up" delay={150} style={{ marginTop: '3rem' }}>
-            <TestimonialCarousel />
-          </ScrollReveal>
-        </div>
+      {/* ═══════════════════════════════════ TESTIMONIALS SLIDER ═══════════════════════════════════ */}
+      <section style={{ padding: '6rem 1.5rem 4rem' }}>
+        <TestimonialCarousel />
       </section>
 
-      {/* ═══════════════════════════════════ FAQ SECTION ═══════════════════════════════════ */}
-      <section style={{ padding: '5.5rem 1.5rem', backgroundColor: 'var(--tv-bg-2)', borderTop: '1px solid var(--tv-border)' }}>
-        <div style={{ maxWidth: '840px', margin: '0 auto' }}>
-          <ScrollReveal animation="fade-up">
-            <div style={{ textAlign: 'center', marginBottom: '3.5rem' }}>
-              <span style={{ fontSize: '0.65rem', fontWeight: '700', letterSpacing: '0.22em', textTransform: 'uppercase', color: '#C8A97E' }}>
-                FREQUENTLY ASKED QUESTIONS
-              </span>
-              <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: 'clamp(1.8rem, 4vw, 2.6rem)', fontWeight: '400', color: 'var(--tv-text)', lineHeight: 1.2, marginTop: '0.5rem' }}>
-                Everything You Need to Know
-              </h2>
+      {/* ═══════════════════════════════════ 4 FACILITIES & AMENITIES GRID ═══════════════════════════════════ */}
+      <section id="amenities" className="tv-facilities-section" style={{ padding: '5rem 1.5rem 6rem', backgroundColor: 'var(--tv-bg-2)', borderTop: '1px solid var(--tv-border)', borderBottom: '1px solid var(--tv-border)' }}>
+        <div style={{ maxWidth: '1120px', margin: '0 auto' }}>
+          <div style={{ textAlign: 'center', marginBottom: '3.5rem' }}>
+            <span style={{ fontSize: '0.68rem', fontWeight: '700', letterSpacing: '0.18em', textTransform: 'uppercase', color: '#C8A97E' }}>
+              UNMATCHED COMFORT
+            </span>
+            <h2 className="tv-section-title" style={{ marginTop: '0.4rem' }}>
+              Boutique Amenities &amp; Facilities
+            </h2>
+            <div className="tv-divider-gold">
+              <span>◆</span>
             </div>
-          </ScrollReveal>
+          </div>
 
-          <div style={{ display: 'flex', flexDirection: 'column' }}>
-            {faqs.map((item, idx) => (
-              <ScrollReveal key={idx} animation="fade-up" delay={idx * 80}>
-                <div className="tv-faq-item">
-                  <details style={{ cursor: 'pointer' }}>
-                    <summary style={{ padding: '1.25rem 0', fontSize: '1rem', fontWeight: '600', color: 'var(--tv-text)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', listStyle: 'none' }}>
-                      <span>{item.q}</span>
-                      <span style={{ color: '#C8A97E', fontSize: '1.2rem', fontWeight: '700' }}>+</span>
-                    </summary>
-                    <p style={{ padding: '0 0 1.25rem', color: 'var(--tv-text-muted)', fontSize: '0.88rem', lineHeight: 1.7 }}>
-                      {item.a}
-                    </p>
-                  </details>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 230px), 1fr))', gap: '2rem' }}>
+            {facilities.map((fac, fIdx) => (
+              <ScrollReveal key={fIdx} animation="fade-up" delay={fIdx * 100}>
+                <div className="tv-card" style={{ padding: '2.25rem 1.5rem', textAlign: 'center', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                  <div style={{ fontSize: '2.5rem', marginBottom: '1.25rem' }}>{fac.icon}</div>
+                  <h3 style={{ fontSize: '1.05rem', fontWeight: '700', color: 'var(--tv-text)', marginBottom: '0.6rem' }}>
+                    {fac.title}
+                  </h3>
+                  <p style={{ fontSize: '0.82rem', color: 'var(--tv-text-muted)', lineHeight: 1.6 }}>
+                    {fac.desc}
+                  </p>
                 </div>
               </ScrollReveal>
             ))}
@@ -268,7 +225,48 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* Upgraded Footer */}
+      {/* ═══════════════════════════════════ FAQ ACCORDION ═══════════════════════════════════ */}
+      <section style={{ padding: '6rem 1.5rem' }}>
+        <div style={{ maxWidth: '860px', margin: '0 auto' }}>
+          <div style={{ textAlign: 'center', marginBottom: '3.5rem' }}>
+            <span style={{ fontSize: '0.68rem', fontWeight: '700', letterSpacing: '0.18em', textTransform: 'uppercase', color: '#C8A97E' }}>
+              GUEST INQUIRIES
+            </span>
+            <h2 className="tv-section-title" style={{ marginTop: '0.4rem' }}>
+              Frequently Asked Questions
+            </h2>
+            <div className="tv-divider-gold">
+              <span>◆</span>
+            </div>
+          </div>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            {faqs.map((faq, idx) => (
+              <div
+                key={idx}
+                className="tv-faq-item"
+                style={{
+                  background: 'var(--tv-bg-card)',
+                  border: '1px solid var(--tv-border-md)',
+                  borderRadius: 'var(--tv-radius)',
+                  overflow: 'hidden',
+                }}
+              >
+                <details style={{ width: '100%', padding: '1.25rem 1.5rem', cursor: 'pointer' }}>
+                  <summary style={{ fontWeight: '700', fontSize: '0.95rem', color: 'var(--tv-text)', outline: 'none', listStyle: 'none', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <span>{faq.q}</span>
+                    <span style={{ color: '#C8A97E', fontSize: '1.2rem', marginLeft: '1rem' }}>+</span>
+                  </summary>
+                  <p style={{ marginTop: '1rem', paddingTop: '1rem', borderTop: '1px solid var(--tv-border)', fontSize: '0.86rem', color: 'var(--tv-text-muted)', lineHeight: 1.7 }}>
+                    {faq.a}
+                  </p>
+                </details>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <Footer />
     </div>
   );

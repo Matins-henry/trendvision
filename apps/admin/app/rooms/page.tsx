@@ -36,8 +36,8 @@ export default function RoomsPage() {
           return;
         }
 
-        // Both MANAGER and OWNER have full operational access to /rooms
-        if (staff.role !== 'MANAGER' && staff.role !== 'OWNER') {
+        // RECEPTIONIST, MANAGER, and OWNER can view rooms. Receptionist can only toggle status.
+        if (staff.role !== 'RECEPTIONIST' && staff.role !== 'MANAGER' && staff.role !== 'OWNER') {
           router.push('/access-denied');
           return;
         }
@@ -159,13 +159,15 @@ export default function RoomsPage() {
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
             <span className="tv-badge-gold">{userRole}</span>
-            <button
-              onClick={openCreateModal}
-              className="tv-btn tv-btn-gold"
-              style={{ padding: '0.65rem 1.25rem', fontSize: '0.82rem' }}
-            >
-              + Add New Room
-            </button>
+            {userRole !== 'RECEPTIONIST' && (
+              <button
+                onClick={openCreateModal}
+                className="tv-btn tv-btn-gold"
+                style={{ padding: '0.65rem 1.25rem', fontSize: '0.82rem' }}
+              >
+                + Add New Room
+              </button>
+            )}
           </div>
         </div>
 
@@ -192,9 +194,9 @@ export default function RoomsPage() {
         </div>
 
         {/* Room Cards Grid */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.5rem' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))', gap: '1.5rem' }}>
           {rooms.map((room) => {
-            const coverPhoto = room.photos && room.photos[0] ? room.photos[0] : '/hotel-bedroom-suite.jpg';
+            const coverPhoto = room.photos && room.photos[0] ? room.photos[0] : null;
 
             return (
               <div
@@ -203,8 +205,15 @@ export default function RoomsPage() {
                 style={{ padding: '0', overflow: 'hidden', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}
               >
                 {/* Cover Image Header */}
-                <div style={{ height: '180px', width: '100%', position: 'relative', overflow: 'hidden', background: '#000' }}>
-                  <img src={coverPhoto} alt={`Room ${room.number}`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                <div style={{ height: '180px', width: '100%', position: 'relative', overflow: 'hidden', background: '#1C1917' }}>
+                  {coverPhoto ? (
+                    <img src={coverPhoto} alt={`Room ${room.number}`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  ) : (
+                    <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: 'linear-gradient(135deg, #1C1917 0%, #292524 100%)', color: '#C8A97E', padding: '1rem', textAlign: 'center' }}>
+                      <span style={{ fontSize: '1.5rem', marginBottom: '0.25rem' }}>🏨</span>
+                      <span style={{ fontSize: '0.7rem', fontWeight: '700', letterSpacing: '0.12em', textTransform: 'uppercase' }}>{room.type} SUITE {room.number}</span>
+                    </div>
+                  )}
                   <span
                     className={room.status === 'ACTIVE' ? 'tv-badge-forest' : 'tv-badge-gold'}
                     style={{ position: 'absolute', top: '0.875rem', right: '0.875rem', fontSize: '0.68rem', padding: '0.25rem 0.65rem', backdropFilter: 'blur(8px)' }}
@@ -256,13 +265,15 @@ export default function RoomsPage() {
 
                   {/* Action Buttons */}
                   <div style={{ display: 'flex', gap: '0.75rem', borderTop: '1px solid var(--tv-border-md)', paddingTop: '1rem' }}>
-                    <button
-                      onClick={() => openEditModal(room)}
-                      className="tv-btn tv-btn-gold"
-                      style={{ flex: 1, padding: '0.55rem', fontSize: '0.75rem' }}
-                    >
-                      Edit Suite ✎
-                    </button>
+                    {userRole !== 'RECEPTIONIST' && (
+                      <button
+                        onClick={() => openEditModal(room)}
+                        className="tv-btn tv-btn-gold"
+                        style={{ flex: 1, padding: '0.55rem', fontSize: '0.75rem' }}
+                      >
+                        Edit Suite ✎
+                      </button>
+                    )}
                     <button
                       onClick={() => toggleRoomStatus(room.id)}
                       className="tv-btn tv-btn-ghost"
@@ -317,7 +328,7 @@ function RoomFormModal({
     description: room?.description || '',
   });
 
-  const [photos, setPhotos] = useState<string[]>(room?.photos && room.photos.length > 0 ? room.photos : ['/hotel-bedroom-suite.jpg']);
+  const [photos, setPhotos] = useState<string[]>(room?.photos && room.photos.length > 0 ? room.photos : []);
   const [newPhotoUrl, setNewPhotoUrl] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
@@ -525,37 +536,6 @@ function RoomFormModal({
                 📷 Room Photo Gallery ({photos.length} Attached)
               </label>
               <span style={{ fontSize: '0.65rem', color: 'var(--tv-text-muted)' }}>First photo = Primary Cover</span>
-            </div>
-
-            {/* Presets Quick Picker */}
-            <div style={{ marginBottom: '0.875rem' }}>
-              <span style={{ fontSize: '0.65rem', color: 'var(--tv-text-muted)', display: 'block', marginBottom: '0.35rem' }}>Quick Real Photo Presets:</span>
-              <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>
-                <button
-                  type="button"
-                  onClick={() => addPhotoUrl('/real-suite-1.jpg')}
-                  className="tv-btn tv-btn-ghost"
-                  style={{ padding: '0.25rem 0.6rem', fontSize: '0.68rem' }}
-                >
-                  + Real Bedroom 1 🛏️
-                </button>
-                <button
-                  type="button"
-                  onClick={() => addPhotoUrl('/real-suite-2.jpg')}
-                  className="tv-btn tv-btn-ghost"
-                  style={{ padding: '0.25rem 0.6rem', fontSize: '0.68rem' }}
-                >
-                  + Real Suite Headboard 🛋️
-                </button>
-                <button
-                  type="button"
-                  onClick={() => addPhotoUrl('/real-suite-3.jpg')}
-                  className="tv-btn tv-btn-ghost"
-                  style={{ padding: '0.25rem 0.6rem', fontSize: '0.68rem' }}
-                >
-                  + Real Corridor & Dressing 🚪
-                </button>
-              </div>
             </div>
 
             {/* Custom URL Input */}

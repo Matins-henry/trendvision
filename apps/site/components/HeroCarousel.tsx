@@ -1,11 +1,10 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 
 interface Slide {
   id: number;
-  image: string;
   tag: string;
   title: string;
   subtitle: string;
@@ -16,7 +15,6 @@ interface Slide {
 const HERO_SLIDES: Slide[] = [
   {
     id: 0,
-    image: '/hotel-facade-night.jpg',
     tag: 'LUXURY REDEFINED',
     title: 'Experience Timeless Elegance',
     subtitle: 'Indulge in world-class comfort, ambient nighttime luxury, and personalized service at Trend Vision Luxury Apartments & Residences.',
@@ -25,7 +23,6 @@ const HERO_SLIDES: Slide[] = [
   },
   {
     id: 1,
-    image: '/hotel-bedroom-suite.jpg',
     tag: 'EXQUISITE ACCOMMODATIONS',
     title: 'Master Bedrooms & Refined Design',
     subtitle: 'Immerse yourself in masterfully crafted suites featuring custom architectural ceilings, king-size beds, and total privacy.',
@@ -34,7 +31,6 @@ const HERO_SLIDES: Slide[] = [
   },
   {
     id: 2,
-    image: '/hotel-parlor-suite.jpg',
     tag: 'EXECUTIVE SUITES',
     title: 'Spacious Private Parlor Suites',
     subtitle: 'Unwind in sophisticated private living spaces complete with plush seating, Smart Entertainment, and high-speed Wi-Fi.',
@@ -46,12 +42,40 @@ const HERO_SLIDES: Slide[] = [
 export function HeroCarousel() {
   const [currentSlide, setCurrentSlide] = useState(0);
 
+  // Touch Swipe Gesture Refs for Mobile Devices
+  const touchStartX = useRef<number | null>(null);
+  const touchEndX = useRef<number | null>(null);
+
+  const minSwipeDistance = 50; // minimum px distance for swipe trigger
+
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % HERO_SLIDES.length);
     }, 6000);
     return () => clearInterval(timer);
   }, []);
+
+  function handleTouchStart(e: React.TouchEvent) {
+    touchEndX.current = null;
+    touchStartX.current = e.targetTouches[0].clientX;
+  }
+
+  function handleTouchMove(e: React.TouchEvent) {
+    touchEndX.current = e.targetTouches[0].clientX;
+  }
+
+  function handleTouchEnd() {
+    if (!touchStartX.current || !touchEndX.current) return;
+    const distance = touchStartX.current - touchEndX.current;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+
+    if (isLeftSwipe) {
+      setCurrentSlide((prev) => (prev + 1) % HERO_SLIDES.length);
+    } else if (isRightSwipe) {
+      setCurrentSlide((prev) => (prev - 1 + HERO_SLIDES.length) % HERO_SLIDES.length);
+    }
+  }
 
   function handleGoToSlide(index: number) {
     setCurrentSlide(index);
@@ -60,19 +84,35 @@ export function HeroCarousel() {
   const slide = HERO_SLIDES[currentSlide];
 
   return (
-    <section className="tv-hero" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      {/* Background Images with smooth opacity cross-fade */}
+    <section
+      className="tv-hero"
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
+      style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', touchAction: 'pan-y' }}
+    >
+      {/* Background Ambient Luxury Gradients with smooth opacity cross-fade */}
       {HERO_SLIDES.map((s, idx) => (
         <div
           key={s.id}
           className="tv-hero-bg"
           style={{
             opacity: idx === currentSlide ? 1 : 0,
-            transition: 'opacity 1200ms cubic-bezier(0.4, 0, 0.2, 1), transform 1200ms cubic-bezier(0.4, 0, 0.2, 1)',
-            transform: idx === currentSlide ? 'scale(1.02)' : 'scale(1)',
+            transition: 'opacity 1200ms cubic-bezier(0.4, 0, 0.2, 1)',
+            background: idx === 0
+              ? 'radial-gradient(ellipse at 50% 30%, #292524 0%, #1C1917 50%, #0C0A09 100%)'
+              : idx === 1
+              ? 'radial-gradient(ellipse at 50% 30%, #352B20 0%, #1C1917 50%, #0C0A09 100%)'
+              : 'radial-gradient(ellipse at 50% 30%, #25201A 0%, #1C1917 50%, #0C0A09 100%)',
           }}
         >
-          <img src={s.image} alt={s.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+          <div
+            style={{
+              position: 'absolute',
+              inset: 0,
+              backgroundImage: 'radial-gradient(circle at 50% 50%, rgba(200,169,126,0.12) 0%, transparent 65%)',
+            }}
+          />
         </div>
       ))}
 
@@ -92,136 +132,82 @@ export function HeroCarousel() {
           }}
         >
           {/* 5 Gold Stars */}
-          <div style={{ fontSize: '1.2rem', letterSpacing: '0.35em', color: '#C8A97E', marginBottom: '0.85rem' }}>
-            ★ ★ ★ ★ ★
+          <div style={{ display: 'flex', gap: '0.3rem', color: '#C8A97E', fontSize: '1.2rem', marginBottom: '1.25rem', justifyContent: 'center' }}>
+            <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
           </div>
 
-          {/* Centered Symmetrical Tag */}
-          <div
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '0.75rem',
-              fontSize: '0.68rem',
-              fontWeight: '700',
-              letterSpacing: '0.24em',
-              textTransform: 'uppercase',
-              color: '#C8A97E',
-              marginBottom: '1.25rem',
-            }}
-          >
-            <span style={{ width: '30px', height: '1px', background: '#C8A97E', opacity: 0.6 }} />
-            <span>{slide.tag}</span>
-            <span style={{ width: '30px', height: '1px', background: '#C8A97E', opacity: 0.6 }} />
-          </div>
+          {/* Category Tag */}
+          <span style={{ fontSize: '0.68rem', fontWeight: '700', letterSpacing: '0.22em', textTransform: 'uppercase', color: '#C8A97E', marginBottom: '1rem', display: 'block' }}>
+            {slide.tag}
+          </span>
 
-          {/* Centered Title */}
+          {/* Title */}
           <h1
             style={{
               fontFamily: 'Playfair Display, serif',
-              fontSize: 'clamp(2.2rem, 5vw, 3.8rem)',
+              fontSize: 'clamp(2.2rem, 5.5vw, 4.2rem)',
               fontWeight: '400',
               color: '#FEFAF4',
-              lineHeight: '1.15',
-              letterSpacing: '0.04em',
-              textTransform: 'uppercase',
-              marginBottom: '1.25rem',
-              textAlign: 'center',
-              margin: '0 auto 1.25rem',
+              lineHeight: 1.12,
+              letterSpacing: '0.01em',
+              margin: '0 0 1.25rem',
             }}
           >
-            TREND VISION<br />LUXURY APARTMENTS
+            {slide.title}
           </h1>
 
-          {/* Centered Subtitle */}
+          {/* Subtitle */}
           <p
             style={{
-              fontSize: 'clamp(0.85rem, 1.8vw, 0.95rem)',
-              color: 'rgba(250,246,240,0.8)',
-              lineHeight: 1.75,
-              maxWidth: '560px',
+              fontSize: 'clamp(0.88rem, 2vw, 1.05rem)',
+              color: 'rgba(250,246,240,0.82)',
+              maxWidth: '580px',
               margin: '0 auto 2.25rem',
-              textAlign: 'center',
+              lineHeight: 1.7,
             }}
           >
             {slide.subtitle}
           </p>
 
-          {/* Centered Button */}
-          <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+          {/* Action Button */}
+          <div>
             <Link
               href={slide.ctaPrimaryHref}
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                padding: '0.9rem 2.75rem',
-                fontSize: '0.74rem',
+                padding: '0.9rem 2.25rem',
+                minHeight: '44px', // Apple 44px HIG touch target
+                fontSize: '0.75rem',
                 fontWeight: '700',
                 letterSpacing: '0.16em',
                 textTransform: 'uppercase',
                 color: '#1C1917',
                 backgroundColor: '#C8A97E',
                 border: '1px solid #BE9B6B',
-                borderRadius: '0.25rem',
+                borderRadius: '0.35rem',
                 textDecoration: 'none',
-                transition: 'all 250ms ease',
-                boxShadow: '0 4px 20px rgba(200,169,126,0.3)',
+                transition: 'all 300ms ease',
+                boxShadow: '0 8px 25px rgba(200,169,126,0.3)',
               }}
             >
-              EXPLORE SUITES →
+              {slide.ctaPrimaryText} →
             </Link>
           </div>
         </div>
       </div>
 
-      {/* Bottom Stats Bar */}
-      <div
-        style={{
-          position: 'absolute',
-          bottom: 0,
-          left: 0,
-          right: 0,
-          zIndex: 10,
-          background: 'rgba(28,25,23,0.88)',
-          backdropFilter: 'blur(16px)',
-          borderTop: '1px solid rgba(200,169,126,0.2)',
-          padding: '0.875rem 2rem',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          gap: '3rem',
-          flexWrap: 'wrap',
-        }}
-      >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap', justifyContent: 'center' }}>
-          <span style={{ fontSize: '0.65rem', fontWeight: '700', letterSpacing: '0.14em', color: '#C8A97E', textTransform: 'uppercase' }}>PREMIUM LUXURY SUITES</span>
-          <span style={{ width: '1px', height: '16px', background: 'rgba(255,255,255,0.15)' }} />
-          <span style={{ fontSize: '0.65rem', fontWeight: '600', letterSpacing: '0.1em', color: 'rgba(250,246,240,0.7)', textTransform: 'uppercase' }}>24/7 PERSONALIZED SERVICE</span>
-          <span style={{ width: '1px', height: '16px', background: 'rgba(255,255,255,0.15)' }} />
-          <span style={{ fontSize: '0.65rem', fontWeight: '600', letterSpacing: '0.1em', color: 'rgba(250,246,240,0.7)', textTransform: 'uppercase' }}>BOUTIQUE RESIDENCE</span>
-        </div>
-
-        {/* Carousel Dots */}
-        <div style={{ display: 'flex', gap: '0.5rem' }}>
-          {HERO_SLIDES.map((s, idx) => (
-            <button
-              key={s.id}
-              onClick={() => handleGoToSlide(idx)}
-              style={{
-                width: idx === currentSlide ? '28px' : '8px',
-                height: '8px',
-                borderRadius: '999px',
-                border: 'none',
-                cursor: 'pointer',
-                transition: 'all 300ms ease',
-                background: idx === currentSlide ? '#C8A97E' : 'rgba(255,255,255,0.3)',
-              }}
-              aria-label={`Go to slide ${idx + 1}`}
-            />
-          ))}
-        </div>
+      {/* Pagination Dots Indicator */}
+      <div className="tv-hero-dots">
+        {HERO_SLIDES.map((_, idx) => (
+          <button
+            key={idx}
+            onClick={() => handleGoToSlide(idx)}
+            className={`tv-hero-dot ${idx === currentSlide ? 'active' : ''}`}
+            aria-label={`Go to slide ${idx + 1}`}
+          />
+        ))}
       </div>
     </section>
   );

@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { authenticatedFetch } from '@hotel/auth';
 import { PaymentMethodBadge } from './PaymentMethodBadge';
+import { formatNaira } from '@/lib/currency';
 
 type PaymentMethod = 'CASH' | 'CARD' | 'TRANSFER' | 'ONLINE';
 
@@ -19,7 +20,6 @@ interface RecordPaymentModalProps {
   onSuccess: () => void;
   bookingId: string;
   bookingReference: string;
-  /** Remaining balance owing — used as a convenience default for the amount field */
   balanceOwing: number;
 }
 
@@ -36,7 +36,6 @@ export function RecordPaymentModal({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
 
-  // Pre-populate amount with balance owing when modal opens
   useEffect(() => {
     if (isOpen) {
       setAmount(balanceOwing > 0 ? balanceOwing.toFixed(2) : '');
@@ -57,15 +56,6 @@ export function RecordPaymentModal({
 
     if (!isValidAmount) {
       setErrorMsg('Please enter a valid positive amount.');
-      return;
-    }
-
-    // Validate max 2 decimal places
-    const amountStr = parsedAmount.toFixed(10);
-    const decimalPart = amountStr.split('.')[1];
-    const significantDecimals = decimalPart?.replace(/0+$/, '').length ?? 0;
-    if (significantDecimals > 2) {
-      setErrorMsg('Amount must have at most 2 decimal places.');
       return;
     }
 
@@ -94,73 +84,99 @@ export function RecordPaymentModal({
   }
 
   return (
-    <div className="fixed inset-0 z-[60] overflow-y-auto bg-gray-900/60 backdrop-blur-sm flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl max-w-md w-full shadow-2xl overflow-hidden border border-gray-100 animate-in fade-in zoom-in-95 duration-200">
+    <div
+      style={{
+        position: 'fixed',
+        inset: 0,
+        zIndex: 60,
+        backgroundColor: 'rgba(11, 15, 25, 0.88)',
+        backdropFilter: 'blur(8px)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '1rem',
+      }}
+    >
+      <div
+        style={{
+          background: '#121827',
+          color: '#FEFAF4',
+          borderRadius: '1rem',
+          maxWidth: '460px',
+          width: '100%',
+          boxShadow: '0 20px 50px rgba(0,0,0,0.5)',
+          border: '1px solid #1F2937',
+          overflow: 'hidden',
+        }}
+      >
         {/* Header */}
-        <div className="bg-teal-800 text-white px-6 py-4 flex items-center justify-between">
+        <div style={{ background: '#1A2234', padding: '1.25rem 1.5rem', borderBottom: '1px solid #2D3748', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <div>
-            <h2 className="text-lg font-bold">Record Payment</h2>
-            <p className="text-xs text-teal-200 mt-0.5">{bookingReference}</p>
+            <h2 style={{ fontSize: '1.1rem', fontWeight: '800', color: '#FEFAF4' }}>Record Staff Payment</h2>
+            <p style={{ fontSize: '0.75rem', color: '#C8A97E', marginTop: '2px' }}>{bookingReference}</p>
           </div>
-          <button
-            onClick={onClose}
-            className="text-teal-200 hover:text-white text-xl font-bold p-1 rounded hover:bg-teal-700 transition-colors"
-          >
+          <button onClick={onClose} style={{ background: 'none', border: 'none', color: '#9CA3AF', fontSize: '1.2rem', cursor: 'pointer' }}>
             ✕
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="p-6 space-y-5">
+        <form onSubmit={handleSubmit} style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
           {errorMsg && (
-            <div className="p-3 bg-red-50 border border-red-200 text-red-700 text-xs rounded-lg font-medium">
+            <div style={{ padding: '0.75rem', background: 'rgba(239,68,68,0.15)', border: '1px solid #EF4444', borderRadius: '0.5rem', color: '#FCA5A5', fontSize: '0.78rem' }}>
               ⚠️ {errorMsg}
             </div>
           )}
 
-          {/* Balance context */}
-          <div className="bg-gray-50 rounded-xl border border-gray-200 p-4 space-y-1">
-            <p className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Balance Owing</p>
-            <p className="text-2xl font-bold text-gray-900">${balanceOwing.toFixed(2)}</p>
+          {/* Balance Context */}
+          <div style={{ background: '#1A2234', padding: '1rem', borderRadius: '0.625rem', border: '1px solid #2D3748' }}>
+            <span style={{ fontSize: '0.62rem', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#9CA3AF' }}>
+              Current Balance Owing
+            </span>
+            <p style={{ fontSize: '1.35rem', fontWeight: '800', color: balanceOwing > 0 ? '#FBBF24' : '#34D399', marginTop: '2px', fontFamily: 'Playfair Display, serif' }}>
+              {formatNaira(balanceOwing)}
+            </p>
           </div>
 
-          {/* Amount field */}
+          {/* Amount Field */}
           <div>
-            <label className="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-1">
-              Amount *
+            <label style={{ display: 'block', fontSize: '0.65rem', fontWeight: '700', textTransform: 'uppercase', color: '#C8A97E', marginBottom: '0.35rem' }}>
+              Payment Amount (₦) *
             </label>
-            <div className="relative">
-              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-sm font-semibold">$</span>
-              <input
-                type="number"
-                step="0.01"
-                min="0.01"
-                value={amount}
-                onChange={(e) => setAmount(e.target.value)}
-                placeholder="0.00"
-                className="w-full pl-7 pr-3 py-2.5 bg-white border border-gray-300 rounded-lg text-sm font-medium focus:ring-2 focus:ring-teal-600 focus:outline-none focus:border-teal-600"
-                autoFocus
-              />
-            </div>
+            <input
+              type="number"
+              step="0.01"
+              min="0.01"
+              value={amount}
+              onChange={(e) => setAmount(e.target.value)}
+              placeholder="0.00"
+              className="tv-input"
+              style={{ padding: '0.75rem', fontSize: '0.88rem' }}
+              autoFocus
+            />
           </div>
 
-          {/* Method selector */}
+          {/* Method Selector */}
           <div>
-            <label className="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-1">
+            <label style={{ display: 'block', fontSize: '0.65rem', fontWeight: '700', textTransform: 'uppercase', color: '#C8A97E', marginBottom: '0.35rem' }}>
               Payment Method *
             </label>
-            <div className="grid grid-cols-2 gap-2">
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem' }}>
               {PAYMENT_METHODS.map(({ value, label }) => (
                 <button
                   key={value}
                   type="button"
                   onClick={() => setMethod(value)}
-                  className={`
-                    px-3 py-2 rounded-lg text-xs font-semibold border transition-all
-                    ${method === value
-                      ? 'border-teal-600 bg-teal-50 text-teal-800 ring-2 ring-teal-600 ring-offset-1'
-                      : 'border-gray-200 bg-white text-gray-700 hover:border-gray-300 hover:bg-gray-50'
-                    }
-                  `}
+                  style={{
+                    padding: '0.6rem',
+                    borderRadius: '0.4rem',
+                    fontSize: '0.75rem',
+                    fontWeight: '700',
+                    cursor: 'pointer',
+                    backgroundColor: method === value ? '#C8A97E' : '#1A2234',
+                    color: method === value ? '#1C1917' : '#9CA3AF',
+                    border: method === value ? '1px solid #BE9B6B' : '1px solid #2D3748',
+                    transition: 'all 150ms ease',
+                  }}
                 >
                   {label}
                 </button>
@@ -168,37 +184,32 @@ export function RecordPaymentModal({
             </div>
           </div>
 
-          {/* Live balance preview */}
+          {/* Live Balance Preview */}
           {isValidAmount && (
-            <div className="bg-teal-50 border border-teal-100 rounded-xl p-4 space-y-1.5">
-              <p className="text-[10px] font-bold text-teal-800 uppercase tracking-wider">Payment Preview</p>
-              <div className="flex justify-between text-xs text-teal-700">
-                <span>This payment:</span>
-                <span className="font-bold">${parsedAmount.toFixed(2)} <PaymentMethodBadge method={method} /></span>
+            <div style={{ background: '#1A2234', padding: '0.85rem 1rem', borderRadius: '0.5rem', border: '1px solid #2D3748', display: 'flex', flexDirection: 'column', gap: '0.4rem', fontSize: '0.78rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', color: '#9CA3AF' }}>
+                <span>This Payment:</span>
+                <span style={{ fontWeight: '700', color: '#34D399' }}>{formatNaira(parsedAmount)}</span>
               </div>
-              <div className="flex justify-between text-xs text-teal-700 pt-1 border-t border-teal-200">
-                <span>New balance owing:</span>
-                <span className={`font-bold ${newBalance === 0 ? 'text-emerald-700' : 'text-amber-700'}`}>
-                  ${newBalance.toFixed(2)}
-                  {newBalance === 0 ? ' ✓ Settled' : ''}
+              <div style={{ display: 'flex', justifyContent: 'space-between', color: '#FEFAF4', paddingTop: '0.4rem', borderTop: '1px solid #2D3748' }}>
+                <span>Remaining Balance:</span>
+                <span style={{ fontWeight: '800', color: newBalance === 0 ? '#34D399' : '#FBBF24' }}>
+                  {formatNaira(newBalance)} {newBalance === 0 ? '✓ Settled' : ''}
                 </span>
               </div>
             </div>
           )}
 
           {/* Actions */}
-          <div className="pt-2 flex items-center justify-end space-x-3">
-            <button
-              type="button"
-              onClick={onClose}
-              className="px-4 py-2 text-xs font-semibold text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
-            >
+          <div style={{ display: 'flex', gap: '0.75rem', paddingTop: '0.5rem' }}>
+            <button type="button" onClick={onClose} className="tv-btn tv-btn-ghost" style={{ flex: 1, padding: '0.65rem', fontSize: '0.8rem' }}>
               Cancel
             </button>
             <button
               type="submit"
               disabled={isSubmitting || !isValidAmount}
-              className="px-5 py-2 bg-teal-700 hover:bg-teal-800 text-white text-xs font-bold rounded-lg shadow-sm disabled:opacity-50 transition-colors"
+              className="tv-btn tv-btn-gold"
+              style={{ flex: 1, padding: '0.65rem', fontSize: '0.8rem', opacity: isSubmitting || !isValidAmount ? 0.6 : 1 }}
             >
               {isSubmitting ? 'Recording...' : '💳 Record Payment'}
             </button>

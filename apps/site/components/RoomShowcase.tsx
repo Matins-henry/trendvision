@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import Link from 'next/link';
 import { formatNaira } from '@/lib/currency';
 
@@ -63,6 +63,11 @@ const DEFAULT_SHOWCASE_ROOMS: ShowcaseRoomItem[] = [
 export function RoomShowcase({ rooms }: { rooms?: any[] }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [photoIndex, setPhotoIndex] = useState(0);
+  const [animating, setAnimating] = useState(false);
+
+  // Touch Swipe Gesture Refs for Mobile Devices
+  const touchStartX = useRef<number | null>(null);
+  const touchEndX = useRef<number | null>(null);
 
   // Map database rooms uploaded by manager or fall back to showcase default
   const showcaseList: ShowcaseRoomItem[] = (rooms && rooms.length > 0)
@@ -73,7 +78,7 @@ export function RoomShowcase({ rooms }: { rooms?: any[] }) {
         title: `${r.type} Suite${r.number ? ` — Room ${r.number}` : ''}`,
         baseRate: Number(r.baseRate),
         description: r.description || DEFAULT_SHOWCASE_ROOMS[i % DEFAULT_SHOWCASE_ROOMS.length].description,
-        photos: (r.photos && r.photos.length > 0) ? r.photos : ['/real-suite-1.jpg', '/real-suite-2.jpg', '/real-suite-3.jpg'],
+        photos: (r.photos && r.photos.length > 0) ? r.photos : [],
         size: DEFAULT_SHOWCASE_ROOMS[i % DEFAULT_SHOWCASE_ROOMS.length].size,
         view: DEFAULT_SHOWCASE_ROOMS[i % DEFAULT_SHOWCASE_ROOMS.length].view,
         bed: DEFAULT_SHOWCASE_ROOMS[i % DEFAULT_SHOWCASE_ROOMS.length].bed,
@@ -82,105 +87,108 @@ export function RoomShowcase({ rooms }: { rooms?: any[] }) {
     : DEFAULT_SHOWCASE_ROOMS;
 
   const currentRoom = showcaseList[currentIndex] || DEFAULT_SHOWCASE_ROOMS[0];
-  const photos = currentRoom.photos && currentRoom.photos.length > 0 ? currentRoom.photos : ['/real-suite-1.jpg'];
-  const activePhoto = photos[photoIndex % photos.length] || photos[0];
+  const photos = currentRoom.photos || [];
+  const activePhoto = photos.length > 0 ? (photos[photoIndex % photos.length] || photos[0]) : null;
 
-  function handleSelectRoom(index: number) {
-    setCurrentIndex(index);
-    setPhotoIndex(0);
+  function triggerTransition(nextIndex: number) {
+    setAnimating(true);
+    setTimeout(() => {
+      setCurrentIndex(nextIndex);
+      setPhotoIndex(0);
+      setAnimating(false);
+    }, 200);
   }
 
-  function handlePrevPhoto() {
-    setPhotoIndex((prev) => (prev - 1 + photos.length) % photos.length);
+  function handlePrevRoom() {
+    if (animating) return;
+    const nextIdx = (currentIndex - 1 + showcaseList.length) % showcaseList.length;
+    triggerTransition(nextIdx);
   }
 
-  function handleNextPhoto() {
-    setPhotoIndex((prev) => (prev + 1) % photos.length);
+  function handleNextRoom() {
+    if (animating) return;
+    const nextIdx = (currentIndex + 1) % showcaseList.length;
+    triggerTransition(nextIdx);
+  }
+
+  function handleTouchStart(e: React.TouchEvent) {
+    touchEndX.current = null;
+    touchStartX.current = e.targetTouches[0].clientX;
+  }
+
+  function handleTouchMove(e: React.TouchEvent) {
+    touchEndX.current = e.targetTouches[0].clientX;
+  }
+
+  function handleTouchEnd() {
+    if (!touchStartX.current || !touchEndX.current) return;
+    const distance = touchStartX.current - touchEndX.current;
+    if (distance > 50) {
+      handleNextRoom();
+    } else if (distance < -50) {
+      handlePrevRoom();
+    }
   }
 
   return (
-    <div style={{ maxWidth: '1120px', margin: '0 auto' }}>
-      {/* Sleek Minimalist Luxury Suite Filter Navigation */}
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          gap: '1.5rem',
-          marginBottom: '2rem',
-          flexWrap: 'wrap',
-          borderBottom: '1px solid var(--tv-border-md)',
-          paddingBottom: '0.75rem',
-        }}
-      >
-        {showcaseList.map((item, idx) => {
-          const isActive = idx === currentIndex;
-          return (
-            <button
-              key={item.id || idx}
-              onClick={() => handleSelectRoom(idx)}
-              style={{
-                background: 'none',
-                border: 'none',
-                padding: '0.5rem 1rem',
-                fontSize: '0.82rem',
-                fontWeight: '700',
-                letterSpacing: '0.12em',
-                textTransform: 'uppercase',
-                color: isActive ? '#C8A97E' : 'var(--tv-text-muted)',
-                cursor: 'pointer',
-                position: 'relative',
-                transition: 'all 250ms ease',
-              }}
-            >
-              {item.title}
-              {isActive && (
-                <span
-                  style={{
-                    position: 'absolute',
-                    bottom: '-0.85rem',
-                    left: '50%',
-                    transform: 'translateX(-50%)',
-                    width: '40px',
-                    height: '2px',
-                    backgroundColor: '#C8A97E',
-                    borderRadius: '2px',
-                    boxShadow: '0 0 8px rgba(200,169,126,0.6)',
-                  }}
-                />
-              )}
-            </button>
-          );
-        })}
-      </div>
-
+    <div
+      className="tv-room-showcase-wrapper"
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
+      style={{ maxWidth: '1120px', margin: '0 auto', position: 'relative', touchAction: 'pan-y' }}
+    >
       {/* Main Room Showcase Split Card */}
       <div
+        className="tv-room-showcase-grid"
         style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
           background: 'var(--tv-bg-card)',
           border: '1px solid var(--tv-border-md)',
           borderRadius: '0.75rem',
           overflow: 'hidden',
           boxShadow: '0 16px 40px rgba(0,0,0,0.08)',
+          opacity: animating ? 0.4 : 1,
+          transform: animating ? 'scale(0.995)' : 'scale(1)',
+          transition: 'all 200ms ease-in-out',
         }}
       >
-        {/* Photo Side with Crisp Bright Display & Real Photos */}
-        <div style={{ position: 'relative', minHeight: '440px', overflow: 'hidden', backgroundColor: '#F7F3EC' }}>
-          <img
-            key={activePhoto}
-            src={activePhoto}
-            alt={currentRoom.title}
-            style={{
-              width: '100%',
-              height: '100%',
-              objectFit: 'cover',
-              position: 'absolute',
-              inset: 0,
-              filter: 'brightness(1.02) contrast(1.02)',
-              transition: 'opacity 300ms ease-in-out',
-            }}
-          />
+        {/* Photo Side */}
+        <div className="tv-room-showcase-photo" style={{ position: 'relative', minHeight: '440px', overflow: 'hidden', backgroundColor: '#F7F3EC' }}>
+          {activePhoto ? (
+            <img
+              key={activePhoto}
+              src={activePhoto}
+              alt={currentRoom.title}
+              style={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+                position: 'absolute',
+                inset: 0,
+                filter: 'brightness(1.02) contrast(1.02)',
+                transition: 'opacity 300ms ease-in-out',
+              }}
+            />
+          ) : (
+            <div
+              style={{
+                position: 'absolute',
+                inset: 0,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                background: 'linear-gradient(135deg, #292524 0%, #1C1917 100%)',
+                color: '#C8A97E',
+                fontFamily: 'Playfair Display, serif',
+                fontSize: '1.25rem',
+                fontWeight: '600',
+              }}
+            >
+              Trend Vision Luxury Suite
+            </div>
+          )}
 
           {/* Room Category Badge on Photo */}
           <span
@@ -203,66 +211,65 @@ export function RoomShowcase({ rooms }: { rooms?: any[] }) {
             {currentRoom.type.toUpperCase()} SUITE
           </span>
 
-          {/* Photo Arrows */}
-          {photos.length > 1 && (
-            <>
-              <button
-                onClick={handlePrevPhoto}
-                aria-label="Previous Photo"
-                style={{
-                  position: 'absolute',
-                  top: '50%',
-                  left: '0.85rem',
-                  transform: 'translateY(-50%)',
-                  width: '42px',
-                  height: '42px',
-                  borderRadius: '50%',
-                  background: 'rgba(250,246,240,0.92)',
-                  border: '1px solid #C8A97E',
-                  color: '#1C1917',
-                  fontSize: '1.4rem',
-                  fontWeight: '700',
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  boxShadow: '0 4px 14px rgba(0,0,0,0.18)',
-                  zIndex: 5,
-                }}
-              >
-                ‹
-              </button>
+          {/* Left Navigation Arrow */}
+          <button
+            onClick={handlePrevRoom}
+            aria-label="Previous Suite"
+            style={{
+              position: 'absolute',
+              top: '50%',
+              left: '1rem',
+              transform: 'translateY(-50%)',
+              width: '46px',
+              height: '46px',
+              borderRadius: '50%',
+              background: 'rgba(250,246,240,0.95)',
+              border: '1px solid #C8A97E',
+              color: '#1C1917',
+              fontSize: '1.5rem',
+              fontWeight: '700',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              boxShadow: '0 6px 18px rgba(0,0,0,0.2)',
+              zIndex: 10,
+              transition: 'transform 200ms ease, background-color 200ms ease',
+            }}
+          >
+            ‹
+          </button>
 
-              <button
-                onClick={handleNextPhoto}
-                aria-label="Next Photo"
-                style={{
-                  position: 'absolute',
-                  top: '50%',
-                  right: '0.85rem',
-                  transform: 'translateY(-50%)',
-                  width: '42px',
-                  height: '42px',
-                  borderRadius: '50%',
-                  background: 'rgba(250,246,240,0.92)',
-                  border: '1px solid #C8A97E',
-                  color: '#1C1917',
-                  fontSize: '1.4rem',
-                  fontWeight: '700',
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  boxShadow: '0 4px 14px rgba(0,0,0,0.18)',
-                  zIndex: 5,
-                }}
-              >
-                ›
-              </button>
-            </>
-          )}
+          {/* Right Navigation Arrow */}
+          <button
+            onClick={handleNextRoom}
+            aria-label="Next Suite"
+            style={{
+              position: 'absolute',
+              top: '50%',
+              right: '1rem',
+              transform: 'translateY(-50%)',
+              width: '46px',
+              height: '46px',
+              borderRadius: '50%',
+              background: 'rgba(250,246,240,0.95)',
+              border: '1px solid #C8A97E',
+              color: '#1C1917',
+              fontSize: '1.5rem',
+              fontWeight: '700',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              boxShadow: '0 6px 18px rgba(0,0,0,0.2)',
+              zIndex: 10,
+              transition: 'transform 200ms ease, background-color 200ms ease',
+            }}
+          >
+            ›
+          </button>
 
-          {/* Photo Dots Strip */}
+          {/* Photo Indicator Dots */}
           {photos.length > 1 && (
             <div
               style={{
@@ -300,7 +307,7 @@ export function RoomShowcase({ rooms }: { rooms?: any[] }) {
         </div>
 
         {/* Info Side */}
-        <div style={{ padding: '2.5rem', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+        <div style={{ padding: '2.25rem 2rem', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
           <div>
             {/* Header Rate */}
             <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
@@ -313,12 +320,12 @@ export function RoomShowcase({ rooms }: { rooms?: any[] }) {
             </div>
 
             {/* Title */}
-            <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '1.75rem', fontWeight: '600', color: 'var(--tv-text)', marginBottom: '0.75rem', lineHeight: 1.25 }}>
+            <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '1.65rem', fontWeight: '600', color: 'var(--tv-text)', marginBottom: '0.75rem', lineHeight: 1.25 }}>
               {currentRoom.title}
             </h3>
 
             {/* Description */}
-            <p style={{ fontSize: '0.88rem', color: 'var(--tv-text-muted)', lineHeight: 1.7, marginBottom: '1.75rem' }}>
+            <p style={{ fontSize: '0.86rem', color: 'var(--tv-text-muted)', lineHeight: 1.7, marginBottom: '1.75rem' }}>
               {currentRoom.description}
             </p>
 
@@ -354,6 +361,7 @@ export function RoomShowcase({ rooms }: { rooms?: any[] }) {
                 alignItems: 'center',
                 justifyContent: 'center',
                 padding: '0.85rem 2rem',
+                minHeight: '44px',
                 fontSize: '0.75rem',
                 fontWeight: '700',
                 letterSpacing: '0.14em',
@@ -376,6 +384,7 @@ export function RoomShowcase({ rooms }: { rooms?: any[] }) {
                 alignItems: 'center',
                 justifyContent: 'center',
                 padding: '0.85rem 2rem',
+                minHeight: '44px',
                 fontSize: '0.75rem',
                 fontWeight: '700',
                 letterSpacing: '0.14em',

@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import { ThemeProvider } from '@/components/ThemeProvider';
+import { FloatingMobileBar } from '@/components/FloatingMobileBar';
 
 export const metadata: Metadata = {
   title: 'Trend Vision – Luxury Hotel & Apartments',
@@ -18,6 +19,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <ThemeProvider>
           {children}
+          <FloatingMobileBar />
         </ThemeProvider>
       </body>
     </html>

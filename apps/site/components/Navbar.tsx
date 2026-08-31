@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { BrandLogo } from './BrandLogo';
@@ -12,14 +12,33 @@ export function Navbar() {
   const navLinks = [
     { href: '/', label: 'HOME' },
     { href: '/rooms', label: 'ROOMS & SUITES' },
-    { href: '/explore', label: 'EXPLORE' },
+    { href: '/explore', label: 'EXPLORE GALLERY' },
     { href: '/#amenities', label: 'FACILITIES' },
     { href: '/manage-booking', label: 'MY RESERVATION' },
   ];
 
+  // Lock body scroll when mobile drawer is open
+  useEffect(() => {
+    if (mobileOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [mobileOpen]);
+
   return (
-    <header className="tv-navbar" style={{ height: '84px' }}>
+    <header
+      className="tv-navbar"
+      style={{
+        height: '84px',
+        paddingTop: 'env(safe-area-inset-top, 0px)',
+      }}
+    >
       <div
+        className="tv-navbar-inner"
         style={{
           maxWidth: '1280px',
           margin: '0 auto',
@@ -28,12 +47,12 @@ export function Navbar() {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          gap: '1rem',
+          gap: '0.5rem',
         }}
       >
         {/* Dynamic Brand Logo */}
-        <Link href="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', flexShrink: 0 }}>
-          <BrandLogo height={46} variant="dark" />
+        <Link href="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', flexShrink: 0, minWidth: 0 }}>
+          <BrandLogo height={40} variant="dark" />
         </Link>
 
         {/* Desktop Nav */}
@@ -49,6 +68,7 @@ export function Navbar() {
                 letterSpacing: '0.14em',
                 textDecoration: 'none',
                 transition: 'color 200ms ease',
+                whiteSpace: 'nowrap',
               }}
             >
               {link.label}
@@ -57,17 +77,19 @@ export function Navbar() {
         </nav>
 
         {/* Actions & Mobile Hamburger */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexShrink: 0 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexShrink: 0 }}>
           <Link
             href="/rooms"
+            className="tv-navbar-cta"
             style={{
               display: 'inline-flex',
               alignItems: 'center',
               justifyContent: 'center',
-              padding: '0.6rem 1.4rem',
-              fontSize: '0.7rem',
+              padding: '0.55rem 1.1rem',
+              minHeight: '40px',
+              fontSize: '0.68rem',
               fontWeight: '700',
-              letterSpacing: '0.14em',
+              letterSpacing: '0.12em',
               textTransform: 'uppercase',
               color: '#1C1917',
               backgroundColor: '#C8A97E',
@@ -76,6 +98,7 @@ export function Navbar() {
               textDecoration: 'none',
               transition: 'all 200ms ease',
               boxShadow: '0 4px 14px rgba(200,169,126,0.25)',
+              whiteSpace: 'nowrap',
             }}
           >
             📋 RESERVATION
@@ -87,14 +110,41 @@ export function Navbar() {
             className="tv-mobile-menu-btn"
             onClick={() => setMobileOpen(!mobileOpen)}
             aria-label="Toggle mobile menu"
+            style={{
+              minWidth: '44px',
+              minHeight: '44px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
           >
             {mobileOpen ? '✕' : '☰'}
           </button>
         </div>
       </div>
 
+      {/* Backdrop overlay for mobile menu */}
+      {mobileOpen && (
+        <div
+          onClick={() => setMobileOpen(false)}
+          style={{
+            position: 'fixed',
+            inset: 0,
+            zIndex: 48,
+            backgroundColor: 'rgba(0,0,0,0.6)',
+            backdropFilter: 'blur(4px)',
+          }}
+        />
+      )}
+
       {/* Mobile Drawer */}
-      <div className={`tv-mobile-nav ${mobileOpen ? 'open' : ''}`}>
+      <div
+        className={`tv-mobile-nav ${mobileOpen ? 'open' : ''}`}
+        style={{
+          paddingTop: 'calc(84px + env(safe-area-inset-top, 0px))',
+          paddingBottom: 'calc(1.5rem + env(safe-area-inset-bottom, 0px))',
+        }}
+      >
         {navLinks.map((link) => (
           <Link
             key={link.href}
@@ -102,6 +152,9 @@ export function Navbar() {
             onClick={() => setMobileOpen(false)}
             style={{
               color: pathname === link.href ? '#C8A97E' : 'rgba(245,239,224,0.85)',
+              minHeight: '44px',
+              display: 'flex',
+              alignItems: 'center',
             }}
           >
             {link.label}

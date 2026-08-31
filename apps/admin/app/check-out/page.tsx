@@ -58,7 +58,7 @@ export default function CheckOutQueuePage() {
       return;
     }
 
-    if (staff && !hasRole(['RECEPTIONIST', 'MANAGER'])) {
+    if (staff && !hasRole(['RECEPTIONIST', 'MANAGER', 'OWNER'])) {
       router.push('/access-denied');
       return;
     }

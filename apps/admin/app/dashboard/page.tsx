@@ -43,6 +43,15 @@ interface ExpenseCategorySummary {
   amount: number;
 }
 
+interface AuditLogItem {
+  id: string;
+  action: string;
+  entity: string;
+  actorName: string;
+  actorRole: string;
+  createdAt: string;
+}
+
 export default function DashboardPage() {
   const { staff, isLoading } = useStaff();
   const router = useRouter();
@@ -57,6 +66,7 @@ export default function DashboardPage() {
   const [expensesByCategory, setExpensesByCategory] = useState<ExpenseCategorySummary[]>([]);
   const [recentBookings, setRecentBookings] = useState<RecentBooking[]>([]);
   const [keycardAlerts, setKeycardAlerts] = useState<KeycardAlert[]>([]);
+  const [auditLogs, setAuditLogs] = useState<AuditLogItem[]>([]);
   const [selectedBooking, setSelectedBooking] = useState<RecentBooking | null>(null);
 
   const [loadingData, setLoadingData] = useState(true);
@@ -67,10 +77,13 @@ export default function DashboardPage() {
       setLoadingData(true);
       setError(null);
 
-      const res = await authenticatedFetch('/api/reports/dashboard');
-      const data = await res.json();
+      const [resDashboard, resLogs] = await Promise.all([
+        authenticatedFetch('/api/reports/dashboard'),
+        authenticatedFetch('/api/audit-logs'),
+      ]);
 
-      if (!res.ok) {
+      const data = await resDashboard.json();
+      if (!resDashboard.ok) {
         throw new Error(data.error || 'Failed to load dashboard metrics');
       }
 
@@ -83,6 +96,11 @@ export default function DashboardPage() {
         setSelectedBooking(bookingsList[0]);
       }
       setKeycardAlerts(data.keycardSecurityAlerts || []);
+
+      if (resLogs.ok) {
+        const dataLogs = await resLogs.json();
+        setAuditLogs(dataLogs.auditLogs || []);
+      }
     } catch (err: any) {
       console.error('Dashboard load error:', err);
       setError(err.message || 'Failed to load dashboard metrics');
@@ -112,7 +130,7 @@ export default function DashboardPage() {
       <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--tv-bg)' }}>
         <div style={{ textAlign: 'center' }}>
           <div className="tv-spinner" style={{ margin: '0 auto 0.75rem' }} />
-          <p style={{ fontSize: '0.8rem', color: 'var(--tv-text-muted)' }}>Loading Executive Finnova Dashboard...</p>
+          <p style={{ fontSize: '0.8rem', color: 'var(--tv-text-muted)' }}>Loading Executive Control Dashboard...</p>
         </div>
       </div>
     );
@@ -128,7 +146,7 @@ export default function DashboardPage() {
           <div>
             <span className="tv-label">Executive Control Center</span>
             <h1 className="tv-serif" style={{ fontSize: '2rem', fontWeight: '800', color: 'var(--tv-text)', marginTop: '0.2rem' }}>
-              Operations & Financial Dashboard
+              Operations &amp; Financial Dashboard
             </h1>
           </div>
 
@@ -149,7 +167,7 @@ export default function DashboardPage() {
           </div>
         )}
 
-        {/* ═══════════════════════════════════ TOP METRICS STRIP (FINNOVA GLASS CARDS) ═══════════════════════════════════ */}
+        {/* TOP METRICS STRIP */}
         {metrics && (
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1.25rem', marginBottom: '2.5rem' }}>
             {/* Monthly Revenue */}
@@ -234,7 +252,7 @@ export default function DashboardPage() {
           </div>
         )}
 
-        {/* ═══════════════════════════════════ FINNOVA DARK CONTRAST OPERATIONAL PANEL ═══════════════════════════════════ */}
+        {/* OPERATIONAL PANEL */}
         <div className="tv-finnova-dark-panel" style={{ padding: '2rem', marginBottom: '2.5rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.75rem', borderBottom: '1px solid rgba(255,255,255,0.08)', paddingBottom: '1rem' }}>
             <div>
@@ -242,7 +260,7 @@ export default function DashboardPage() {
                 LIVE OPERATIONAL CONSOLE
               </span>
               <h2 className="tv-serif" style={{ fontSize: '1.4rem', color: '#FEFAF4', marginTop: '0.2rem' }}>
-                Active Guest Reservations & Queues
+                Active Guest Reservations &amp; Queues
               </h2>
             </div>
 
@@ -354,6 +372,44 @@ export default function DashboardPage() {
           </div>
         </div>
 
+        {/* Real-Time Staff Activity Audit Log Feed */}
+        <div className="tv-card" style={{ padding: '1.5rem', marginBottom: '2.5rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
+            <div>
+              <h2 style={{ fontSize: '0.75rem', fontWeight: '800', color: 'var(--tv-gold)', textTransform: 'uppercase', letterSpacing: '0.12em' }}>
+                📜 Real-Time Staff Activity Audit Stream
+              </h2>
+              <p style={{ fontSize: '0.75rem', color: 'var(--tv-text-muted)', marginTop: '0.15rem' }}>
+                Live operational activity log tracking every action by Managers &amp; Receptionists
+              </p>
+            </div>
+            <span style={{ fontSize: '0.72rem', color: 'var(--tv-text-muted)' }}>
+              Showing recent {auditLogs.length} events
+            </span>
+          </div>
+
+          {auditLogs.length === 0 ? (
+            <p style={{ fontSize: '0.8rem', color: 'var(--tv-text-muted)', fontStyle: 'italic', textAlign: 'center', padding: '1.5rem 0' }}>
+              No staff activity logged yet. Action logs will appear here as staff check-in guests, log expenses, and update room inventory.
+            </p>
+          ) : (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', maxHeight: '280px', overflowY: 'auto' }}>
+              {auditLogs.map((log) => (
+                <div key={log.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.65rem 0.85rem', background: 'var(--tv-bg-raised)', borderRadius: '0.5rem', border: '1px solid var(--tv-border-md)', fontSize: '0.8rem' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                    <span className="tv-badge-gold" style={{ fontSize: '0.6rem' }}>{log.actorRole}</span>
+                    <span style={{ fontWeight: '800', color: 'var(--tv-text)' }}>{log.actorName}</span>
+                    <span style={{ color: 'var(--tv-text-muted)' }}>— {log.action.replace(/_/g, ' ')}</span>
+                  </div>
+                  <span style={{ fontSize: '0.72rem', color: 'var(--tv-text-muted)' }}>
+                    {new Date(log.createdAt).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
+                  </span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
         {/* Breakdown Widgets Grid */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.5rem' }}>
           {/* Revenue Breakdown */}
@@ -388,7 +444,7 @@ export default function DashboardPage() {
                 {expensesByCategory.slice(0, 5).map((exp) => (
                   <div key={exp.category} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '0.82rem' }}>
                     <span style={{ color: 'var(--tv-text-soft)', fontWeight: '500' }}>{exp.category}</span>
-                    <span style={{ fontWeight: '800', color: 'var(--tv-text)' }}>${exp.amount.toFixed(2)}</span>
+                    <span style={{ fontWeight: '800', color: 'var(--tv-text)' }}>{formatNaira(exp.amount)}</span>
                   </div>
                 ))}
               </div>

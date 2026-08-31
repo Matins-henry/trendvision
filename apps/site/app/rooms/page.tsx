@@ -7,6 +7,7 @@ import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 import { DateSearchHeader } from '@/components/DateSearchHeader';
 import { RoomGalleryModal } from '@/components/RoomGalleryModal';
+import { RoomPlaceholder } from '@/components/RoomPlaceholder';
 import { formatNaira } from '@/lib/currency';
 
 interface RoomResult {
@@ -28,12 +29,6 @@ const CATEGORY_TABS = [
   { id: 'Deluxe', label: 'Deluxe Parlor Suite' },
   { id: 'Apartment', label: 'Full Mini Apartment' },
 ];
-
-const ROOM_PHOTOS_FALLBACK: Record<string, string> = {
-  Standard: '/hotel-bedroom-suite.jpg',
-  Deluxe: '/hotel-parlor-suite.jpg',
-  Apartment: '/hotel-parlor-suite.jpg',
-};
 
 function RoomCatalogContent() {
   const searchParams = useSearchParams();
@@ -71,7 +66,7 @@ function RoomCatalogContent() {
             capacity: 2,
             baseRate: 120000,
             description: 'A masterfully crafted bedroom retreat featuring ensuite bath, custom LED ambient lighting, Smart TV, and ultra-fast fiber Wi-Fi.',
-            photos: ['/hotel-bedroom-suite.jpg', '/hotel-hallway-suite.jpg'],
+            photos: ['/rooms/standard.png'],
             isAvailable: true,
             totalStayPrice: 120000,
             stayNights: 1,
@@ -83,7 +78,7 @@ function RoomCatalogContent() {
             capacity: 3,
             baseRate: 180000,
             description: 'Spacious master bedroom paired with a separate private parlor lounge, plush tufted seating, executive work desk, and ambient lighting.',
-            photos: ['/hotel-parlor-suite.jpg', '/hotel-bedroom-suite.jpg'],
+            photos: ['/rooms/deluxe.png'],
             isAvailable: true,
             totalStayPrice: 180000,
             stayNights: 1,
@@ -95,7 +90,7 @@ function RoomCatalogContent() {
             capacity: 4,
             baseRate: 250000,
             description: 'The ultimate boutique residence experience featuring a private fully-equipped kitchenette, spacious parlor lounge, and master suite.',
-            photos: ['/hotel-hallway-suite.jpg', '/hotel-parlor-suite.jpg'],
+            photos: ['/rooms/apartment.png'],
             isAvailable: true,
             totalStayPrice: 250000,
             stayNights: 1,
@@ -112,7 +107,7 @@ function RoomCatalogContent() {
           capacity: 2,
           baseRate: 120000,
           description: 'A masterfully crafted bedroom retreat featuring ensuite bath, custom LED ambient lighting, Smart TV, and ultra-fast fiber Wi-Fi.',
-          photos: ['/hotel-bedroom-suite.jpg', '/hotel-hallway-suite.jpg'],
+          photos: ['/rooms/standard.png'],
           isAvailable: true,
           totalStayPrice: 120000,
           stayNights: 1,
@@ -124,7 +119,7 @@ function RoomCatalogContent() {
           capacity: 3,
           baseRate: 180000,
           description: 'Spacious master bedroom paired with a separate private parlor lounge, plush tufted seating, executive work desk, and ambient lighting.',
-          photos: ['/hotel-parlor-suite.jpg', '/hotel-bedroom-suite.jpg'],
+          photos: ['/rooms/deluxe.png'],
           isAvailable: true,
           totalStayPrice: 180000,
           stayNights: 1,
@@ -136,7 +131,7 @@ function RoomCatalogContent() {
           capacity: 4,
           baseRate: 250000,
           description: 'The ultimate boutique residence experience featuring a private fully-equipped kitchenette, spacious parlor lounge, and master suite.',
-          photos: ['/hotel-hallway-suite.jpg', '/hotel-parlor-suite.jpg'],
+          photos: ['/rooms/apartment.png'],
           isAvailable: true,
           totalStayPrice: 250000,
           stayNights: 1,
@@ -265,17 +260,21 @@ function RoomCatalogContent() {
               </p>
             </div>
           ) : (
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '2rem' }}>
+            <div className="tv-rooms-catalog-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 280px), 1fr))', gap: '2rem' }}>
               {rooms.map((room) => {
                 const bookUrl = `/checkout?roomId=${room.id}&checkIn=${checkIn}&checkOut=${checkOut}`;
-                const photoList = room.photos && room.photos.length > 0 ? room.photos : [ROOM_PHOTOS_FALLBACK[room.type] || '/hotel-bedroom-suite.jpg', '/hotel-parlor-suite.jpg', '/hotel-facade-night.jpg'];
-                const photoSrc = photoList[0];
+                const photoList = room.photos || [];
+                const photoSrc = photoList.length > 0 ? photoList[0] : null;
 
                 return (
                   <div key={room.id} className="tv-room-card" style={{ opacity: room.isAvailable ? 1 : 0.75 }}>
                     {/* Image Container */}
                     <div style={{ height: '240px', position: 'relative', overflow: 'hidden' }}>
-                      <img src={photoSrc} alt={`Room ${room.number}`} className="tv-room-img" />
+                      {photoSrc ? (
+                        <img src={photoSrc} alt={`Room ${room.number}`} className="tv-room-img" />
+                      ) : (
+                        <RoomPlaceholder type={room.type} number={room.number} height="100%" />
+                      )}
 
                       {/* Availability Tag */}
                       <div style={{ position: 'absolute', top: '0.875rem', left: '0.875rem', zIndex: 2 }}>
@@ -296,27 +295,29 @@ function RoomCatalogContent() {
                       </span>
 
                       {/* Photo Gallery Button */}
-                      <button
-                        onClick={() => setActiveGallery({ title: `Room ${room.number} (${room.type})`, photos: photoList })}
-                        style={{
-                          position: 'absolute',
-                          bottom: '0.875rem',
-                          right: '0.875rem',
-                          zIndex: 2,
-                          background: 'rgba(11,15,25,0.85)',
-                          color: '#D4AF37',
-                          border: '1px solid rgba(212,175,55,0.4)',
-                          borderRadius: '999px',
-                          padding: '0.35rem 0.85rem',
-                          fontSize: '0.68rem',
-                          fontWeight: '700',
-                          cursor: 'pointer',
-                          backdropFilter: 'blur(8px)',
-                          boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
-                        }}
-                      >
-                        📷 View Gallery ({photoList.length})
-                      </button>
+                      {photoList.length > 0 && (
+                        <button
+                          onClick={() => setActiveGallery({ title: `Room ${room.number} (${room.type})`, photos: photoList })}
+                          style={{
+                            position: 'absolute',
+                            bottom: '0.875rem',
+                            right: '0.875rem',
+                            zIndex: 2,
+                            background: 'rgba(11,15,25,0.85)',
+                            color: '#D4AF37',
+                            border: '1px solid rgba(212,175,55,0.4)',
+                            borderRadius: '999px',
+                            padding: '0.35rem 0.85rem',
+                            fontSize: '0.68rem',
+                            fontWeight: '700',
+                            cursor: 'pointer',
+                            backdropFilter: 'blur(8px)',
+                            boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
+                          }}
+                        >
+                          📷 View Gallery ({photoList.length})
+                        </button>
+                      )}
                     </div>
 
                     {/* Room Info */}

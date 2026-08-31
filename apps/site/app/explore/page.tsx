@@ -20,35 +20,27 @@ const DEFAULT_GALLERY: GalleryItem[] = [
     title: 'Master Bedroom Suite & Tufted Lounge',
     category: 'Suites',
     type: 'image',
-    url: '/real-suite-1.jpg',
+    url: '/rooms/standard.png',
     caption: 'Executive king bedroom featuring custom wooden paneling, plush tufted armchair, and dimmable mood lighting.',
   },
   {
     id: 'gal-2',
-    title: 'Upholstered Luxury Headboard',
+    title: 'Deluxe Parlor Suite & Lounge',
     category: 'Suites',
     type: 'image',
-    url: '/real-suite-2.jpg',
-    caption: 'Custom geometric leather headboard with integrated reading lamps and premium cotton bedding.',
+    url: '/rooms/deluxe.png',
+    caption: 'Custom upholstered parlor lounge with integrated ambient lighting and executive work area.',
   },
   {
     id: 'gal-3',
-    title: 'Private Dressing & Suite Corridor',
+    title: 'Executive Mini Apartment',
     category: 'Architecture',
     type: 'image',
-    url: '/real-suite-3.jpg',
-    caption: 'Integrated hardwood wardrobe, vanity dressing mirror, marble flooring, and whisper-quiet climate control.',
+    url: '/rooms/apartment.png',
+    caption: 'Full mini apartment with private kitchenette, dining lounge, and master bedroom suite.',
   },
   {
     id: 'gal-4',
-    title: 'Trend Vision Building Facade at Night',
-    category: 'Architecture',
-    type: 'image',
-    url: '/hotel-facade-night.jpg',
-    caption: 'Stunning exterior night perspective of Trend Vision Luxury Apartments in Victoria Island.',
-  },
-  {
-    id: 'gal-5',
     title: 'Ambient Suite Walkthrough Video',
     category: 'Video',
     type: 'video',
@@ -56,6 +48,8 @@ const DEFAULT_GALLERY: GalleryItem[] = [
     caption: 'Experience the serene, high-end atmosphere of our luxury residence suites.',
   },
 ];
+
+import { RoomPlaceholder } from '@/components/RoomPlaceholder';
 
 export default function ExplorePage() {
   const [activeTab, setActiveTab] = useState<string>('ALL');
@@ -154,7 +148,7 @@ export default function ExplorePage() {
           </div>
 
           {/* Gallery Masonry Grid */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '1.5rem', marginBottom: '4rem' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 280px), 1fr))', gap: '1.5rem', marginBottom: '4rem' }}>
             {filteredItems.map((item) => (
               <div
                 key={item.id}
@@ -180,12 +174,14 @@ export default function ExplorePage() {
                         </span>
                       </div>
                     </div>
-                  ) : (
+                  ) : item.url ? (
                     <img
                       src={item.url}
                       alt={item.title}
                       style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 400ms ease' }}
                     />
+                  ) : (
+                    <RoomPlaceholder type={item.category} number="" height="100%" />
                   )}
 
                   <span

@@ -127,7 +127,7 @@ export default function ManageBookingPage() {
           {/* Lookup Form Card */}
           <div className="tv-card" style={{ padding: '2.5rem 2rem', marginBottom: '2.5rem' }}>
             <form onSubmit={handleLookup} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1.25rem' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 240px), 1fr))', gap: '1.25rem' }}>
                 <div>
                   <label style={{ display: 'block', fontSize: '0.65rem', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.14em', color: 'var(--tv-forest)', marginBottom: '0.4rem' }}>
                     Booking Reference Code *
