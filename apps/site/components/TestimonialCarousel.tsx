@@ -57,12 +57,14 @@ export function TestimonialCarousel() {
     return () => clearInterval(timer);
   }, []);
 
-  // Scroll track when activeIndex changes
+  // Scroll track horizontally without scrolling window viewport
   useEffect(() => {
     if (!trackRef.current) return;
     const card = trackRef.current.children[activeIndex] as HTMLElement;
     if (card) {
-      card.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+      const track = trackRef.current;
+      const targetLeft = card.offsetLeft - (track.clientWidth - card.clientWidth) / 2;
+      track.scrollTo({ left: Math.max(0, targetLeft), behavior: 'smooth' });
     }
   }, [activeIndex]);
 

@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import { ThemeProvider } from '@/components/ThemeProvider';
-import { FloatingMobileBar } from '@/components/FloatingMobileBar';
 
 export const metadata: Metadata = {
   title: 'Trend Vision – Luxury Hotel & Apartments',
@@ -34,11 +33,23 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             `,
           }}
         />
+        {/* Scroll-to-top on refresh: disable browser scroll restoration */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              if ('scrollRestoration' in history) {
+                history.scrollRestoration = 'manual';
+              }
+              window.addEventListener('beforeunload', function() {
+                window.scrollTo(0, 0);
+              });
+            `,
+          }}
+        />
       </head>
       <body>
         <ThemeProvider>
           {children}
-          <FloatingMobileBar />
         </ThemeProvider>
       </body>
     </html>
