@@ -307,61 +307,37 @@ export function RoomShowcase({ rooms }: { rooms?: any[] }) {
         </div>
 
         {/* Info Side */}
-        <div style={{ padding: '2.25rem 2rem', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-          <div>
-            {/* Header Rate */}
-            <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
-              <span style={{ fontSize: '0.68rem', fontWeight: '700', letterSpacing: '0.14em', color: '#C8A97E', textTransform: 'uppercase' }}>
-                FROM {formatNaira(currentRoom.baseRate)} <span style={{ fontWeight: '400', color: 'var(--tv-text-muted)' }}>/ NIGHT</span>
-              </span>
-              <span style={{ fontSize: '0.75rem', color: 'var(--tv-text-muted)', fontWeight: '600' }}>
-                Suite {currentIndex + 1} of {showcaseList.length}
-              </span>
-            </div>
-
-            {/* Title */}
-            <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '1.65rem', fontWeight: '600', color: 'var(--tv-text)', marginBottom: '0.75rem', lineHeight: 1.25 }}>
-              {currentRoom.title}
-            </h3>
-
-            {/* Description */}
-            <p style={{ fontSize: '0.86rem', color: 'var(--tv-text-muted)', lineHeight: 1.7, marginBottom: '1.75rem' }}>
-              {currentRoom.description}
-            </p>
-
-            {/* Specifications Grid */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.85rem', marginBottom: '2rem' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.72rem', fontWeight: '700', color: 'var(--tv-text-soft)', padding: '0.5rem 0', borderBottom: '1px solid var(--tv-border)' }}>
-                <span>📐</span>
-                <span>ROOM SIZE: {currentRoom.size}</span>
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.72rem', fontWeight: '700', color: 'var(--tv-text-soft)', padding: '0.5rem 0', borderBottom: '1px solid var(--tv-border)' }}>
-                <span>🌆</span>
-                <span>{currentRoom.view}</span>
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.72rem', fontWeight: '700', color: 'var(--tv-text-soft)', padding: '0.5rem 0', borderBottom: '1px solid var(--tv-border)' }}>
-                <span>🛏️</span>
-                <span>{currentRoom.bed}</span>
-              </div>
-              {currentRoom.features.map((feat, fIdx) => (
-                <div key={fIdx} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.72rem', fontWeight: '700', color: 'var(--tv-text-soft)', padding: '0.5rem 0', borderBottom: '1px solid var(--tv-border)' }}>
-                  <span>✨</span>
-                  <span>{feat}</span>
-                </div>
-              ))}
-            </div>
+        <div style={{ padding: '2.5rem 2rem', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '1.5rem' }}>
+          {/* Header Rate + Counter */}
+          <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between' }}>
+            <span style={{ fontSize: '0.72rem', fontWeight: '700', letterSpacing: '0.14em', color: '#C8A97E', textTransform: 'uppercase' }}>
+              FROM {formatNaira(currentRoom.baseRate)} <span style={{ fontWeight: '400', color: 'var(--tv-text-muted)' }}>/ NIGHT</span>
+            </span>
+            <span style={{ fontSize: '0.72rem', color: 'var(--tv-text-muted)', fontWeight: '600' }}>
+              {currentIndex + 1} / {showcaseList.length}
+            </span>
           </div>
 
+          {/* Title */}
+          <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: 'clamp(1.4rem, 3vw, 1.8rem)', fontWeight: '600', color: 'var(--tv-text)', lineHeight: 1.25, margin: 0 }}>
+            {currentRoom.title}
+          </h3>
+
+          {/* Description */}
+          <p style={{ fontSize: '0.88rem', color: 'var(--tv-text-muted)', lineHeight: 1.75, margin: 0 }}>
+            {currentRoom.description}
+          </p>
+
           {/* Action Buttons */}
-          <div style={{ display: 'flex', gap: '0.85rem', flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
             <Link
               href={currentRoom.id ? `/checkout?roomId=${currentRoom.id}` : `/rooms?type=${currentRoom.type}`}
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                padding: '0.85rem 2rem',
-                minHeight: '44px',
+                padding: '0.9rem 2rem',
+                minHeight: '48px',
                 fontSize: '0.75rem',
                 fontWeight: '700',
                 letterSpacing: '0.14em',
@@ -383,8 +359,8 @@ export function RoomShowcase({ rooms }: { rooms?: any[] }) {
                 display: 'inline-flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                padding: '0.85rem 2rem',
-                minHeight: '44px',
+                padding: '0.9rem 2rem',
+                minHeight: '48px',
                 fontSize: '0.75rem',
                 fontWeight: '700',
                 letterSpacing: '0.14em',

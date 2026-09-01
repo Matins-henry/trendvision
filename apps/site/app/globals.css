@@ -1263,7 +1263,75 @@ img { max-width: 100%; display: block; }
   .tv-rating-badges {
     justify-content: center !important;
   }
-  .tv-hero-dots {
-    bottom: 5.5rem !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   DESKTOP-ONLY UTILITY (hide on mobile)
+ ═══════════════════════════════════════════════════════════════ */
+.tv-desktop-only {
+  display: inline-flex !important;
+}
+@media (max-width: 767px) {
+  .tv-desktop-only {
+    display: none !important;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   HERO — MOBILE SUBTITLE VISIBILITY FIX
+ ═══════════════════════════════════════════════════════════════ */
+@media (max-width: 480px) {
+  /* Keep subtitle visible but condensed */
+  .tv-hero-subtitle {
+    font-size: 0.8rem !important;
+    line-height: 1.6 !important;
+    margin-bottom: 1.25rem !important;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+  }
+  /* Reduce hero title for iPhone SE */
+  .tv-hero h1 {
+    font-size: clamp(1.65rem, 7.5vw, 2.4rem) !important;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   TESTIMONIAL CARD TRACK — HIDE SCROLLBAR CROSS-BROWSER
+ ═══════════════════════════════════════════════════════════════ */
+.tv-testimonial-track::-webkit-scrollbar { display: none; }
+
+/* ═══════════════════════════════════════════════════════════════
+   ROOMS CATALOG — MOBILE CARD IMPROVEMENTS
+ ═══════════════════════════════════════════════════════════════ */
+@media (max-width: 640px) {
+  .tv-rooms-catalog-grid {
+    grid-template-columns: 1fr !important;
+    gap: 1.25rem !important;
+  }
+  .tv-room-card {
+    border-radius: 0.875rem !important;
+    overflow: hidden;
+  }
+  /* Taller image on mobile for visual impact */
+  .tv-room-card > div:first-child {
+    height: 210px !important;
+  }
+  /* Compact info padding */
+  .tv-room-card > div:last-child {
+    padding: 1.25rem !important;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   NAVBAR — CLEAN MOBILE HEIGHT ADJUSTMENT
+ ═══════════════════════════════════════════════════════════════ */
+@media (max-width: 767px) {
+  .tv-navbar {
+    height: 72px !important;
+  }
+  .tv-mobile-nav {
+    padding-top: 72px !important;
   }
 }

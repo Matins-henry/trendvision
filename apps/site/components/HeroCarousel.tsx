@@ -42,11 +42,8 @@ const HERO_SLIDES: Slide[] = [
 export function HeroCarousel() {
   const [currentSlide, setCurrentSlide] = useState(0);
 
-  // Touch Swipe Gesture Refs for Mobile Devices
   const touchStartX = useRef<number | null>(null);
   const touchEndX = useRef<number | null>(null);
-
-  const minSwipeDistance = 50; // minimum px distance for swipe trigger
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -67,18 +64,8 @@ export function HeroCarousel() {
   function handleTouchEnd() {
     if (!touchStartX.current || !touchEndX.current) return;
     const distance = touchStartX.current - touchEndX.current;
-    const isLeftSwipe = distance > minSwipeDistance;
-    const isRightSwipe = distance < -minSwipeDistance;
-
-    if (isLeftSwipe) {
-      setCurrentSlide((prev) => (prev + 1) % HERO_SLIDES.length);
-    } else if (isRightSwipe) {
-      setCurrentSlide((prev) => (prev - 1 + HERO_SLIDES.length) % HERO_SLIDES.length);
-    }
-  }
-
-  function handleGoToSlide(index: number) {
-    setCurrentSlide(index);
+    if (distance > 50) setCurrentSlide((prev) => (prev + 1) % HERO_SLIDES.length);
+    else if (distance < -50) setCurrentSlide((prev) => (prev - 1 + HERO_SLIDES.length) % HERO_SLIDES.length);
   }
 
   const slide = HERO_SLIDES[currentSlide];
@@ -91,7 +78,7 @@ export function HeroCarousel() {
       onTouchEnd={handleTouchEnd}
       style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', touchAction: 'pan-y' }}
     >
-      {/* Background Ambient Luxury Gradients with smooth opacity cross-fade */}
+      {/* Background gradients */}
       {HERO_SLIDES.map((s, idx) => (
         <div
           key={s.id}
@@ -116,8 +103,11 @@ export function HeroCarousel() {
         </div>
       ))}
 
-      {/* Hero Content — Perfectly Symmetrical & Centered Layout */}
-      <div className="tv-hero-content" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '100%' }}>
+      {/* Hero Content */}
+      <div
+        className="tv-hero-content"
+        style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '100%' }}
+      >
         <div
           key={`content-${slide.id}`}
           className="tv-hero-animated-text"
@@ -145,69 +135,77 @@ export function HeroCarousel() {
           <h1
             style={{
               fontFamily: 'Playfair Display, serif',
-              fontSize: 'clamp(2.2rem, 5.5vw, 4.2rem)',
+              fontSize: 'clamp(2rem, 5.5vw, 4.2rem)',
               fontWeight: '400',
               color: '#FEFAF4',
               lineHeight: 1.12,
               letterSpacing: '0.01em',
-              margin: '0 0 1.25rem',
+              margin: '0 0 1rem',
             }}
           >
             {slide.title}
           </h1>
 
-          {/* Subtitle */}
+          {/* Subtitle — hidden on very small screens to avoid crowding */}
           <p
+            className="tv-hero-subtitle"
             style={{
-              fontSize: 'clamp(0.88rem, 2vw, 1.05rem)',
+              fontSize: 'clamp(0.82rem, 2vw, 1.05rem)',
               color: 'rgba(250,246,240,0.82)',
-              maxWidth: '580px',
-              margin: '0 auto 2.25rem',
+              maxWidth: '560px',
+              margin: '0 auto 1.5rem',
               lineHeight: 1.7,
             }}
           >
             {slide.subtitle}
           </p>
 
-          {/* Action Button */}
-          <div>
-            <Link
-              href={slide.ctaPrimaryHref}
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                padding: '0.9rem 2.25rem',
-                minHeight: '44px', // Apple 44px HIG touch target
-                fontSize: '0.75rem',
-                fontWeight: '700',
-                letterSpacing: '0.16em',
-                textTransform: 'uppercase',
-                color: '#1C1917',
-                backgroundColor: '#C8A97E',
-                border: '1px solid #BE9B6B',
-                borderRadius: '0.35rem',
-                textDecoration: 'none',
-                transition: 'all 300ms ease',
-                boxShadow: '0 8px 25px rgba(200,169,126,0.3)',
-              }}
-            >
-              {slide.ctaPrimaryText} →
-            </Link>
+          {/* Pagination Dots — placed ABOVE the button to avoid collision */}
+          <div style={{ display: 'flex', gap: '0.6rem', justifyContent: 'center', marginBottom: '1.5rem' }}>
+            {HERO_SLIDES.map((_, idx) => (
+              <button
+                key={idx}
+                onClick={() => setCurrentSlide(idx)}
+                aria-label={`Go to slide ${idx + 1}`}
+                style={{
+                  width: idx === currentSlide ? '28px' : '10px',
+                  height: '10px',
+                  borderRadius: '5px',
+                  background: idx === currentSlide ? '#C8A97E' : 'rgba(255,255,255,0.35)',
+                  border: 'none',
+                  cursor: 'pointer',
+                  transition: 'all 350ms ease',
+                  padding: 0,
+                }}
+              />
+            ))}
           </div>
-        </div>
-      </div>
 
-      {/* Pagination Dots Indicator */}
-      <div className="tv-hero-dots">
-        {HERO_SLIDES.map((_, idx) => (
-          <button
-            key={idx}
-            onClick={() => handleGoToSlide(idx)}
-            className={`tv-hero-dot ${idx === currentSlide ? 'active' : ''}`}
-            aria-label={`Go to slide ${idx + 1}`}
-          />
-        ))}
+          {/* Action Button */}
+          <Link
+            href={slide.ctaPrimaryHref}
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: '0.9rem 2.5rem',
+              minHeight: '48px',
+              fontSize: '0.75rem',
+              fontWeight: '700',
+              letterSpacing: '0.16em',
+              textTransform: 'uppercase',
+              color: '#1C1917',
+              backgroundColor: '#C8A97E',
+              border: '1px solid #BE9B6B',
+              borderRadius: '0.35rem',
+              textDecoration: 'none',
+              transition: 'all 300ms ease',
+              boxShadow: '0 8px 25px rgba(200,169,126,0.3)',
+            }}
+          >
+            {slide.ctaPrimaryText} →
+          </Link>
+        </div>
       </div>
     </section>
   );

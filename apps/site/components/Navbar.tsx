@@ -33,7 +33,7 @@ export function Navbar() {
     <header
       className="tv-navbar"
       style={{
-        height: '84px',
+        height: '72px',
         paddingTop: 'env(safe-area-inset-top, 0px)',
       }}
     >
@@ -42,7 +42,7 @@ export function Navbar() {
         style={{
           maxWidth: '1280px',
           margin: '0 auto',
-          padding: '0 1.5rem',
+          padding: '0 1.25rem',
           height: '100%',
           display: 'flex',
           alignItems: 'center',
@@ -52,10 +52,10 @@ export function Navbar() {
       >
         {/* Dynamic Brand Logo */}
         <Link href="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', flexShrink: 0, minWidth: 0 }}>
-          <BrandLogo height={40} variant="dark" />
+          <BrandLogo height={38} variant="dark" />
         </Link>
 
-        {/* Desktop Nav */}
+        {/* Desktop Nav Links */}
         <nav style={{ display: 'flex', alignItems: 'center', gap: '1.75rem' }} className="desktop-nav">
           {navLinks.map((link) => (
             <Link
@@ -76,11 +76,12 @@ export function Navbar() {
           ))}
         </nav>
 
-        {/* Actions & Mobile Hamburger */}
+        {/* Right-side Actions */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexShrink: 0 }}>
+          {/* RESERVATION button: desktop only — hidden on mobile since FloatingMobileBar handles it */}
           <Link
             href="/rooms"
-            className="tv-navbar-cta"
+            className="tv-navbar-cta tv-desktop-only"
             style={{
               display: 'inline-flex',
               alignItems: 'center',
@@ -104,7 +105,7 @@ export function Navbar() {
             📋 RESERVATION
           </Link>
 
-          {/* Mobile Menu Button */}
+          {/* Mobile Menu Hamburger */}
           <button
             type="button"
             className="tv-mobile-menu-btn"
@@ -141,7 +142,7 @@ export function Navbar() {
       <div
         className={`tv-mobile-nav ${mobileOpen ? 'open' : ''}`}
         style={{
-          paddingTop: 'calc(84px + env(safe-area-inset-top, 0px))',
+          paddingTop: 'calc(72px + env(safe-area-inset-top, 0px))',
           paddingBottom: 'calc(1.5rem + env(safe-area-inset-bottom, 0px))',
         }}
       >
@@ -160,6 +161,31 @@ export function Navbar() {
             {link.label}
           </Link>
         ))}
+
+        {/* Reserve Suite CTA in mobile drawer */}
+        <Link
+          href="/rooms"
+          onClick={() => setMobileOpen(false)}
+          style={{
+            marginTop: '1rem',
+            display: 'inline-flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '0.85rem 2rem',
+            width: '100%',
+            fontSize: '0.75rem',
+            fontWeight: '700',
+            letterSpacing: '0.14em',
+            textTransform: 'uppercase',
+            color: '#1C1917',
+            backgroundColor: '#C8A97E',
+            borderRadius: '0.35rem',
+            textDecoration: 'none',
+            boxShadow: '0 4px 14px rgba(200,169,126,0.3)',
+          }}
+        >
+          RESERVE A SUITE →
+        </Link>
       </div>
     </header>
   );
