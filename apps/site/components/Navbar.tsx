@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { BrandLogo } from './BrandLogo';
+import { Icons } from './Icons';
 
 export function Navbar() {
   const pathname = usePathname();
@@ -78,7 +79,7 @@ export function Navbar() {
 
         {/* Right-side Actions */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexShrink: 0 }}>
-          {/* RESERVATION button: desktop only — hidden on mobile since FloatingMobileBar handles it */}
+          {/* RESERVATION button: desktop only */}
           <Link
             href="/rooms"
             className="tv-navbar-cta tv-desktop-only"
@@ -86,6 +87,7 @@ export function Navbar() {
               display: 'inline-flex',
               alignItems: 'center',
               justifyContent: 'center',
+              gap: '0.4rem',
               padding: '0.55rem 1.1rem',
               minHeight: '40px',
               fontSize: '0.68rem',
@@ -102,7 +104,8 @@ export function Navbar() {
               whiteSpace: 'nowrap',
             }}
           >
-            📋 RESERVATION
+            <Icons.Clipboard size={14} color="#1C1917" />
+            <span>RESERVATION</span>
           </Link>
 
           {/* Mobile Menu Hamburger */}

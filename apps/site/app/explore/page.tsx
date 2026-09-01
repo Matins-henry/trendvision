@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
+import { RoomPlaceholder } from '@/components/RoomPlaceholder';
 
 interface GalleryItem {
   id: string;
@@ -20,7 +21,7 @@ const DEFAULT_GALLERY: GalleryItem[] = [
     title: 'Master Bedroom Suite & Tufted Lounge',
     category: 'Suites',
     type: 'image',
-    url: '/rooms/standard.png',
+    url: '',
     caption: 'Executive king bedroom featuring custom wooden paneling, plush tufted armchair, and dimmable mood lighting.',
   },
   {
@@ -28,7 +29,7 @@ const DEFAULT_GALLERY: GalleryItem[] = [
     title: 'Deluxe Parlor Suite & Lounge',
     category: 'Suites',
     type: 'image',
-    url: '/rooms/deluxe.png',
+    url: '',
     caption: 'Custom upholstered parlor lounge with integrated ambient lighting and executive work area.',
   },
   {
@@ -36,7 +37,7 @@ const DEFAULT_GALLERY: GalleryItem[] = [
     title: 'Executive Mini Apartment',
     category: 'Architecture',
     type: 'image',
-    url: '/rooms/apartment.png',
+    url: '',
     caption: 'Full mini apartment with private kitchenette, dining lounge, and master bedroom suite.',
   },
   {
@@ -48,8 +49,6 @@ const DEFAULT_GALLERY: GalleryItem[] = [
     caption: 'Experience the serene, high-end atmosphere of our luxury residence suites.',
   },
 ];
-
-import { RoomPlaceholder } from '@/components/RoomPlaceholder';
 
 export default function ExplorePage() {
   const [activeTab, setActiveTab] = useState<string>('ALL');
@@ -122,7 +121,7 @@ export default function ExplorePage() {
               { id: 'ALL', label: 'All Gallery' },
               { id: 'Suites', label: 'Master Suites' },
               { id: 'Architecture', label: 'Architecture & Design' },
-              { id: 'Video', label: '🎥 Video Tours' },
+              { id: 'Video', label: 'Video Tours' },
             ].map((tab) => (
               <button
                 key={tab.id}
@@ -249,8 +248,10 @@ export default function ExplorePage() {
             <div style={{ position: 'relative', maxHeight: '70vh', backgroundColor: '#000', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               {selectedItem.type === 'video' ? (
                 <video src={selectedItem.url} controls autoPlay style={{ maxWidth: '100%', maxHeight: '70vh' }} />
-              ) : (
+              ) : selectedItem.url ? (
                 <img src={selectedItem.url} alt={selectedItem.title} style={{ maxWidth: '100%', maxHeight: '70vh', objectFit: 'contain' }} />
+              ) : (
+                <RoomPlaceholder type={selectedItem.category} number="" height="300px" />
               )}
 
               <button

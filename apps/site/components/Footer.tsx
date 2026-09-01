@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { BrandLogo } from './BrandLogo';
+import { Icons } from './Icons';
 
 export function Footer() {
   const links = [
@@ -16,12 +17,6 @@ export function Footer() {
     { href: '/rooms?type=Deluxe', label: 'Deluxe Parlor Suites' },
     { href: '/rooms?type=Apartment', label: 'Full Mini Apartments' },
     { href: '/#dining', label: 'Fine Dining & VVIP Lounge' },
-  ];
-
-  const socialLinks = [
-    { label: 'Instagram', href: 'https://instagram.com', icon: '📸' },
-    { label: 'Facebook', href: 'https://facebook.com', icon: '📘' },
-    { label: 'YouTube', href: 'https://youtube.com', icon: '▶️' },
   ];
 
   return (
@@ -51,31 +46,72 @@ export function Footer() {
                 Follow Our Journey
               </h4>
               <div style={{ display: 'flex', gap: '0.75rem' }}>
-                {socialLinks.map((s) => (
-                  <a
-                    key={s.label}
-                    href={s.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '0.4rem',
-                      padding: '0.45rem 0.85rem',
-                      borderRadius: '0.35rem',
-                      backgroundColor: 'rgba(255,255,255,0.06)',
-                      border: '1px solid rgba(255,255,255,0.12)',
-                      color: 'rgba(245,239,224,0.85)',
-                      fontSize: '0.75rem',
-                      fontWeight: '600',
-                      textDecoration: 'none',
-                      transition: 'all 200ms ease',
-                    }}
-                  >
-                    <span>{s.icon}</span>
-                    <span>{s.label}</span>
-                  </a>
-                ))}
+                <a
+                  href="https://instagram.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '0.4rem',
+                    padding: '0.45rem 0.85rem',
+                    borderRadius: '0.35rem',
+                    backgroundColor: 'rgba(255,255,255,0.06)',
+                    border: '1px solid rgba(255,255,255,0.12)',
+                    color: 'rgba(245,239,224,0.85)',
+                    fontSize: '0.75rem',
+                    fontWeight: '600',
+                    textDecoration: 'none',
+                    transition: 'all 200ms ease',
+                  }}
+                >
+                  <Icons.Instagram size={15} color="#C8A97E" />
+                  <span>Instagram</span>
+                </a>
+                <a
+                  href="https://facebook.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '0.4rem',
+                    padding: '0.45rem 0.85rem',
+                    borderRadius: '0.35rem',
+                    backgroundColor: 'rgba(255,255,255,0.06)',
+                    border: '1px solid rgba(255,255,255,0.12)',
+                    color: 'rgba(245,239,224,0.85)',
+                    fontSize: '0.75rem',
+                    fontWeight: '600',
+                    textDecoration: 'none',
+                    transition: 'all 200ms ease',
+                  }}
+                >
+                  <Icons.Facebook size={15} color="#C8A97E" />
+                  <span>Facebook</span>
+                </a>
+                <a
+                  href="https://youtube.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '0.4rem',
+                    padding: '0.45rem 0.85rem',
+                    borderRadius: '0.35rem',
+                    backgroundColor: 'rgba(255,255,255,0.06)',
+                    border: '1px solid rgba(255,255,255,0.12)',
+                    color: 'rgba(245,239,224,0.85)',
+                    fontSize: '0.75rem',
+                    fontWeight: '600',
+                    textDecoration: 'none',
+                    transition: 'all 200ms ease',
+                  }}
+                >
+                  <Icons.Youtube size={15} color="#C8A97E" />
+                  <span>YouTube</span>
+                </a>
               </div>
             </div>
           </div>
@@ -113,17 +149,23 @@ export function Footer() {
             <h4 className="tv-footer-heading">Contact &amp; Location</h4>
             <div style={{ fontSize: '0.84rem', color: 'rgba(245,239,224,0.75)', display: 'flex', flexDirection: 'column', gap: '0.75rem', lineHeight: 1.6 }}>
               <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.6rem' }}>
-                <span style={{ color: '#C8A97E', flexShrink: 0 }}>📍</span>
+                <div style={{ color: '#C8A97E', flexShrink: 0, marginTop: '2px' }}>
+                  <Icons.MapPin size={18} color="#C8A97E" />
+                </div>
                 <span>Trend Vision Limited, Abuja, plot 140, court road</span>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-                <span style={{ color: '#C8A97E', flexShrink: 0 }}>📞</span>
+                <div style={{ color: '#C8A97E', flexShrink: 0 }}>
+                  <Icons.Phone size={18} color="#C8A97E" />
+                </div>
                 <a href="tel:+2348032780622" style={{ color: 'inherit', textDecoration: 'none' }}>
                   +234 803 278 0622
                 </a>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-                <span style={{ color: '#C8A97E', flexShrink: 0 }}>✉️</span>
+                <div style={{ color: '#C8A97E', flexShrink: 0 }}>
+                  <Icons.Mail size={18} color="#C8A97E" />
+                </div>
                 <a href="mailto:trendslimited@gmail.com" style={{ color: 'inherit', textDecoration: 'none' }}>
                   trendslimited@gmail.com
                 </a>

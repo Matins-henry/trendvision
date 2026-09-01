@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { Icons } from './Icons';
 
 interface RoomPlaceholderProps {
   type?: string;
@@ -48,7 +49,6 @@ export function RoomPlaceholder({ type = 'Standard', number = '101', height = '1
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          fontSize: '1.4rem',
           color: '#C8A97E',
           marginBottom: '0.875rem',
           boxShadow: '0 4px 16px rgba(0,0,0,0.3)',
@@ -56,7 +56,7 @@ export function RoomPlaceholder({ type = 'Standard', number = '101', height = '1
           zIndex: 2,
         }}
       >
-        🏨
+        <Icons.Crown size={24} color="#C8A97E" />
       </div>
 
       <span

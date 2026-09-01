@@ -6,7 +6,7 @@ import { RoomShowcase } from '@/components/RoomShowcase';
 import { HotelVideoSection } from '@/components/HotelVideoSection';
 import { TestimonialCarousel } from '@/components/TestimonialCarousel';
 import { ScrollReveal } from '@/components/ScrollReveal';
-import { RoomPlaceholder } from '@/components/RoomPlaceholder';
+import { Icons } from '@/components/Icons';
 import { prisma } from '@hotel/db/src/availability';
 
 export const revalidate = 60;
@@ -30,19 +30,19 @@ export default async function HomePage() {
     featuredRooms = [];
   }
 
-  /* Exactly 3 Key Feature Highlights requested by user */
+  /* Exactly 3 Key Feature Highlights with SVG Icons */
   const highlights = [
-    { icon: '🏛️', title: 'Luxurious, modern, and comfortable', desc: 'Experience a luxurious, modern, and fully equipped space for comfort.' },
-    { icon: '👥', title: 'Friendly and welcoming staff', desc: 'Our friendly and welcoming staff ensure a delightful stay every time.' },
-    { icon: '💎', title: 'Best prices, and great offers', desc: 'Enjoy unbeatable prices with fantastic offers tailored just for you.' },
+    { icon: <Icons.Crown size={26} color="#C8A97E" />, title: 'Luxurious, modern, and comfortable', desc: 'Experience a luxurious, modern, and fully equipped space for comfort.' },
+    { icon: <Icons.Users size={26} color="#C8A97E" />, title: 'Friendly and welcoming staff', desc: 'Our friendly and welcoming staff ensure a delightful stay every time.' },
+    { icon: <Icons.Gem size={26} color="#C8A97E" />, title: 'Best prices, and great offers', desc: 'Enjoy unbeatable prices with fantastic offers tailored just for you.' },
   ];
 
-  /* 4 Facilities & Amenities requested by user */
+  /* 4 Facilities & Amenities with SVG Icons */
   const facilities = [
-    { icon: '📶', title: 'High Speed Wifi', desc: 'Enjoy seamless, high-speed fiber internet access throughout the apartment.' },
-    { icon: '🅿️', title: 'Parking Space', desc: 'Ample and secure private parking space provided for all apartment guests.' },
-    { icon: '🍸', title: 'Bar & Lounge', desc: 'Savor signature cocktails, fine wines, and spirits at our elegant executive bar & lounge.' },
-    { icon: '🏊', title: 'Swimming Pool', desc: 'Refresh and unwind in our pristine outdoor swimming pool.' },
+    { icon: <Icons.Wifi size={32} color="#C8A97E" />, title: 'High Speed Wifi', desc: 'Enjoy seamless, high-speed fiber internet access throughout the apartment.' },
+    { icon: <Icons.Parking size={32} color="#C8A97E" />, title: 'Parking Space', desc: 'Ample and secure private parking space provided for all apartment guests.' },
+    { icon: <Icons.Cocktail size={32} color="#C8A97E" />, title: 'Bar & Lounge', desc: 'Savor signature cocktails, fine wines, and spirits at our elegant executive bar & lounge.' },
+    { icon: <Icons.Pool size={32} color="#C8A97E" />, title: 'Swimming Pool', desc: 'Refresh and unwind in our pristine outdoor swimming pool.' },
   ];
 
   const faqs = [
@@ -67,7 +67,7 @@ export default async function HomePage() {
             {highlights.map((item, idx) => (
               <ScrollReveal key={idx} animation="fade-up" delay={idx * 100}>
                 <div className="tv-highlight-card" style={{ textAlign: 'center' }}>
-                  <div style={{ width: '56px', height: '56px', borderRadius: '50%', border: '2px solid #C8A97E', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.25rem', fontSize: '1.5rem', background: 'var(--tv-bg-card)', boxShadow: '0 4px 14px rgba(0,0,0,0.04)' }}>
+                  <div style={{ width: '56px', height: '56px', borderRadius: '50%', border: '1.5px solid #C8A97E', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.25rem', background: 'var(--tv-bg-card)', boxShadow: '0 4px 14px rgba(0,0,0,0.04)' }}>
                     {item.icon}
                   </div>
                   <h3 style={{ fontSize: '1rem', fontWeight: '700', color: 'var(--tv-text)', marginBottom: '0.5rem', lineHeight: 1.3 }}>
@@ -86,14 +86,26 @@ export default async function HomePage() {
       {/* ═══════════════════════════════════ WELCOME / STORY SECTION ═══════════════════════════════════ */}
       <section id="explore" className="tv-welcome-section" style={{ padding: '6rem 1.5rem 5rem' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 300px), 1fr))', gap: '3.5rem', alignItems: 'center' }}>
-          {/* Left: Dual Suite Showcase Cards */}
+          {/* Left: Luxury Vector Showcase Badge Cards */}
           <ScrollReveal animation="slide-right">
             <div className="tv-welcome-photos-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 140px), 1fr))', gap: '1rem' }}>
-              <div style={{ borderRadius: '0.5rem', overflow: 'hidden', height: '320px', boxShadow: 'var(--tv-shadow)' }}>
-                <img src="/real-suite-1.jpg" alt="Executive Suite" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              <div style={{ borderRadius: '0.75rem', overflow: 'hidden', height: '320px', background: 'linear-gradient(135deg, #1C1917 0%, #0C0A09 100%)', border: '1px solid rgba(200,169,126,0.3)', padding: '2rem 1.5rem', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', boxShadow: 'var(--tv-shadow)' }}>
+                <Icons.Crown size={38} color="#C8A97E" />
+                <span style={{ fontSize: '0.62rem', fontWeight: '700', letterSpacing: '0.2em', textTransform: 'uppercase', color: '#C8A97E', marginTop: '1.25rem' }}>
+                  VVIP SUITE
+                </span>
+                <h4 style={{ fontFamily: 'Playfair Display, serif', fontSize: '1.25rem', color: '#FEFAF4', marginTop: '0.5rem', fontWeight: '600' }}>
+                  Executive Residence
+                </h4>
               </div>
-              <div style={{ borderRadius: '0.5rem', overflow: 'hidden', height: '320px', marginTop: '2rem', boxShadow: 'var(--tv-shadow)' }}>
-                <img src="/real-suite-2.jpg" alt="Deluxe Suite" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              <div style={{ borderRadius: '0.75rem', overflow: 'hidden', height: '320px', marginTop: '2rem', background: 'linear-gradient(135deg, #25201A 0%, #1C1917 100%)', border: '1px solid rgba(200,169,126,0.3)', padding: '2rem 1.5rem', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', boxShadow: 'var(--tv-shadow)' }}>
+                <Icons.Gem size={38} color="#C8A97E" />
+                <span style={{ fontSize: '0.62rem', fontWeight: '700', letterSpacing: '0.2em', textTransform: 'uppercase', color: '#C8A97E', marginTop: '1.25rem' }}>
+                  BOUTIQUE LUXURY
+                </span>
+                <h4 style={{ fontFamily: 'Playfair Display, serif', fontSize: '1.25rem', color: '#FEFAF4', marginTop: '0.5rem', fontWeight: '600' }}>
+                  Master Apartments
+                </h4>
               </div>
             </div>
           </ScrollReveal>
@@ -211,7 +223,9 @@ export default async function HomePage() {
             {facilities.map((fac, fIdx) => (
               <ScrollReveal key={fIdx} animation="fade-up" delay={fIdx * 100}>
                 <div className="tv-card" style={{ padding: '2.25rem 1.5rem', textAlign: 'center', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                  <div style={{ fontSize: '2.5rem', marginBottom: '1.25rem' }}>{fac.icon}</div>
+                  <div style={{ width: '60px', height: '60px', borderRadius: '50%', background: 'rgba(200,169,126,0.1)', border: '1px solid rgba(200,169,126,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.25rem' }}>
+                    {fac.icon}
+                  </div>
                   <h3 style={{ fontSize: '1.05rem', fontWeight: '700', color: 'var(--tv-text)', marginBottom: '0.6rem' }}>
                     {fac.title}
                   </h3>

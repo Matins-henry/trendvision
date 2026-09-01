@@ -6,7 +6,7 @@ interface Testimonial {
   id: number;
   name: string;
   role: string;
-  avatar: string;
+  initials: string;
   quote: string;
 }
 
@@ -15,28 +15,28 @@ const TESTIMONIALS: Testimonial[] = [
     id: 1,
     name: 'Mehwish A.',
     role: 'Executive Suite Guest',
-    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&q=80',
+    initials: 'MA',
     quote: 'Staying at Trend Vision was an absolute dream. The ambient nighttime lighting, master tufted lounge, and 24/7 personal concierge made our anniversary stay unforgettable.',
   },
   {
     id: 2,
     name: 'Elizabeth Jeff',
     role: 'Mini Apartment Guest',
-    avatar: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=120&q=80',
+    initials: 'EJ',
     quote: 'The Executive Mini Apartment at Trend Vision exceeded every expectation. Ultra high-speed fiber Wi-Fi, pristine marble finishes, and complete privacy right in the city.',
   },
   {
     id: 3,
     name: 'Emily Thomas',
     role: 'Boutique Residence Guest',
-    avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=120&q=80',
+    initials: 'ET',
     quote: 'Trend Vision is truly boutique hospitality redefined. From instant online reservations to the immaculate suite furnishings, this is our top recommendation for Abuja.',
   },
   {
     id: 4,
     name: 'Daniel Okonkwo',
     role: 'Deluxe Suite Guest',
-    avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=120&q=80',
+    initials: 'DO',
     quote: 'Premium experience from start to finish. The suite was spotless, the staff was warm and professional. Trend Vision has set a new standard for luxury accommodation in Nigeria.',
   },
 ];
@@ -106,14 +106,8 @@ export function TestimonialCarousel() {
     <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
       {/* Section Header */}
       <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
-        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '0.75rem' }}>
-          <svg width="32" height="32" viewBox="0 0 50 50" fill="none">
-            <path d="M12 35 C18 20, 24 40, 32 15 M32 15 L26 18 M32 15 L33 22" stroke="#8B5CF6" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-            <path d="M36 10 L38.5 15.5 L44 16 L40 20 L41 25.5 L36 22.5 L31 25.5 L32 20 L28 16 L33.5 15.5 Z" fill="#FFC107" stroke="#FFC107" strokeWidth="1" />
-          </svg>
-        </div>
         <span style={{ fontSize: '0.68rem', fontWeight: '700', letterSpacing: '0.2em', textTransform: 'uppercase', color: '#C8A97E', display: 'block', marginBottom: '0.5rem' }}>
-          GUEST REVIEWS & FEEDBACK
+          GUEST REVIEWS &amp; FEEDBACK
         </span>
         <h2 style={{ fontSize: 'clamp(1.8rem, 4vw, 2.4rem)', fontWeight: '800', color: 'var(--tv-text)', fontFamily: 'Playfair Display, serif', margin: 0 }}>
           What Our Guests Say
@@ -140,7 +134,6 @@ export function TestimonialCarousel() {
           cursor: 'grab',
           userSelect: 'none',
           WebkitOverflowScrolling: 'touch',
-          /* hide scrollbar */
           scrollbarWidth: 'none',
           msOverflowStyle: 'none',
         }}
@@ -152,8 +145,8 @@ export function TestimonialCarousel() {
             style={{
               flex: '0 0 clamp(260px, 80vw, 340px)',
               scrollSnapAlign: 'center',
-              backgroundColor: '#FFFFFF',
-              border: `1.5px solid ${idx === activeIndex ? '#C8A97E' : '#F1F0EE'}`,
+              backgroundColor: 'var(--tv-bg-card)',
+              border: `1.5px solid ${idx === activeIndex ? '#C8A97E' : 'var(--tv-border-md)'}`,
               borderRadius: '1rem',
               padding: '2rem 1.75rem',
               boxShadow: idx === activeIndex
@@ -175,7 +168,7 @@ export function TestimonialCarousel() {
             {/* Quote */}
             <p style={{
               fontSize: '0.9rem',
-              color: '#334155',
+              color: 'var(--tv-text-soft)',
               lineHeight: 1.75,
               fontStyle: 'italic',
               margin: 0,
@@ -184,23 +177,30 @@ export function TestimonialCarousel() {
               "{item.quote}"
             </p>
 
-            {/* Author */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', paddingTop: '0.75rem', borderTop: '1px solid #F1F0EE' }}>
-              <img
-                src={item.avatar}
-                alt={item.name}
+            {/* Author Badge */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', paddingTop: '0.75rem', borderTop: '1px solid var(--tv-border)' }}>
+              <div
                 style={{
                   width: '44px',
                   height: '44px',
                   borderRadius: '50%',
-                  objectFit: 'cover',
-                  border: '2px solid #C8A97E',
+                  backgroundColor: '#1C1917',
+                  color: '#C8A97E',
+                  border: '1.5px solid #C8A97E',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontWeight: '800',
+                  fontSize: '0.85rem',
+                  letterSpacing: '0.05em',
                   flexShrink: 0,
                 }}
-              />
+              >
+                {item.initials}
+              </div>
               <div>
-                <div style={{ fontSize: '0.9rem', fontWeight: '800', color: '#0F172A', lineHeight: 1.2 }}>{item.name}</div>
-                <div style={{ fontSize: '0.72rem', color: '#94A3B8', marginTop: '2px' }}>{item.role}</div>
+                <div style={{ fontSize: '0.9rem', fontWeight: '800', color: 'var(--tv-text)', lineHeight: 1.2 }}>{item.name}</div>
+                <div style={{ fontSize: '0.72rem', color: 'var(--tv-text-muted)', marginTop: '2px' }}>{item.role}</div>
               </div>
             </div>
           </div>

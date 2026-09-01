@@ -8,6 +8,7 @@ import { Footer } from '@/components/Footer';
 import { DateSearchHeader } from '@/components/DateSearchHeader';
 import { RoomGalleryModal } from '@/components/RoomGalleryModal';
 import { RoomPlaceholder } from '@/components/RoomPlaceholder';
+import { Icons } from '@/components/Icons';
 import { formatNaira } from '@/lib/currency';
 
 interface RoomResult {
@@ -66,7 +67,7 @@ function RoomCatalogContent() {
             capacity: 2,
             baseRate: 120000,
             description: 'A masterfully crafted bedroom retreat featuring ensuite bath, custom LED ambient lighting, Smart TV, and ultra-fast fiber Wi-Fi.',
-            photos: ['/rooms/standard.png'],
+            photos: [],
             isAvailable: true,
             totalStayPrice: 120000,
             stayNights: 1,
@@ -78,7 +79,7 @@ function RoomCatalogContent() {
             capacity: 3,
             baseRate: 180000,
             description: 'Spacious master bedroom paired with a separate private parlor lounge, plush tufted seating, executive work desk, and ambient lighting.',
-            photos: ['/rooms/deluxe.png'],
+            photos: [],
             isAvailable: true,
             totalStayPrice: 180000,
             stayNights: 1,
@@ -90,7 +91,7 @@ function RoomCatalogContent() {
             capacity: 4,
             baseRate: 250000,
             description: 'The ultimate boutique residence experience featuring a private fully-equipped kitchenette, spacious parlor lounge, and master suite.',
-            photos: ['/rooms/apartment.png'],
+            photos: [],
             isAvailable: true,
             totalStayPrice: 250000,
             stayNights: 1,
@@ -107,7 +108,7 @@ function RoomCatalogContent() {
           capacity: 2,
           baseRate: 120000,
           description: 'A masterfully crafted bedroom retreat featuring ensuite bath, custom LED ambient lighting, Smart TV, and ultra-fast fiber Wi-Fi.',
-          photos: ['/rooms/standard.png'],
+          photos: [],
           isAvailable: true,
           totalStayPrice: 120000,
           stayNights: 1,
@@ -119,7 +120,7 @@ function RoomCatalogContent() {
           capacity: 3,
           baseRate: 180000,
           description: 'Spacious master bedroom paired with a separate private parlor lounge, plush tufted seating, executive work desk, and ambient lighting.',
-          photos: ['/rooms/deluxe.png'],
+          photos: [],
           isAvailable: true,
           totalStayPrice: 180000,
           stayNights: 1,
@@ -131,7 +132,7 @@ function RoomCatalogContent() {
           capacity: 4,
           baseRate: 250000,
           description: 'The ultimate boutique residence experience featuring a private fully-equipped kitchenette, spacious parlor lounge, and master suite.',
-          photos: ['/rooms/apartment.png'],
+          photos: [],
           isAvailable: true,
           totalStayPrice: 250000,
           stayNights: 1,
@@ -224,9 +225,9 @@ function RoomCatalogContent() {
               }}
             >
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', fontSize: '0.85rem' }}>
-                <span style={{ color: 'var(--tv-forest)', fontWeight: '700' }}>🗓️ Stay Dates:</span>
+                <Icons.Calendar size={18} color="#C8A97E" />
                 <span style={{ fontWeight: '700', color: 'var(--tv-text)' }}>
-                  {new Date(checkIn).toLocaleDateString()} – {new Date(checkOut).toLocaleDateString()}
+                  Stay Dates: {new Date(checkIn).toLocaleDateString()} – {new Date(checkOut).toLocaleDateString()}
                 </span>
               </div>
               <button
@@ -241,7 +242,7 @@ function RoomCatalogContent() {
 
           {error && (
             <div style={{ marginBottom: '2rem', padding: '1rem', background: 'var(--tv-danger-pale)', border: '1px solid var(--tv-danger)', borderRadius: 'var(--tv-radius)', color: 'var(--tv-danger)', textAlign: 'center', fontSize: '0.85rem' }}>
-              ⚠️ {error}
+              {error}
             </div>
           )}
 
@@ -253,7 +254,9 @@ function RoomCatalogContent() {
             </div>
           ) : rooms.length === 0 ? (
             <div style={{ background: 'var(--tv-bg-card)', border: '1px solid var(--tv-border)', borderRadius: 'var(--tv-radius)', padding: '4rem 2rem', textAlign: 'center' }}>
-              <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🏨</div>
+              <div style={{ margin: '0 auto 1rem', display: 'flex', justifyContent: 'center' }}>
+                <Icons.Crown size={48} color="#C8A97E" />
+              </div>
               <h3 className="tv-serif" style={{ fontSize: '1.4rem', fontWeight: '700', color: 'var(--tv-text)', marginBottom: '0.5rem' }}>No Suites Found</h3>
               <p style={{ fontSize: '0.85rem', color: 'var(--tv-text-muted)', maxWidth: '420px', margin: '0 auto', lineHeight: 1.6 }}>
                 No active suites matched your category filter or selected stay dates. Try choosing a different category or clearing dates.
@@ -279,12 +282,12 @@ function RoomCatalogContent() {
                       {/* Availability Tag */}
                       <div style={{ position: 'absolute', top: '0.875rem', left: '0.875rem', zIndex: 2 }}>
                         {room.isAvailable ? (
-                          <span style={{ background: 'var(--tv-success-pale)', color: 'var(--tv-success)', border: '1px solid var(--tv-success)', borderRadius: '999px', padding: '0.25rem 0.75rem', fontSize: '0.65rem', fontWeight: '800', letterSpacing: '0.06em', textTransform: 'uppercase', backdropFilter: 'blur(8px)' }}>
-                            ✓ Available
+                          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.3rem', background: 'var(--tv-success-pale)', color: 'var(--tv-success)', border: '1px solid var(--tv-success)', borderRadius: '999px', padding: '0.25rem 0.75rem', fontSize: '0.65rem', fontWeight: '800', letterSpacing: '0.06em', textTransform: 'uppercase', backdropFilter: 'blur(8px)' }}>
+                            <Icons.Check size={12} color="var(--tv-success)" /> Available
                           </span>
                         ) : (
                           <span style={{ background: 'var(--tv-danger-pale)', color: 'var(--tv-danger)', border: '1px solid var(--tv-danger)', borderRadius: '999px', padding: '0.25rem 0.75rem', fontSize: '0.65rem', fontWeight: '800', letterSpacing: '0.06em', textTransform: 'uppercase', backdropFilter: 'blur(8px)' }}>
-                            ✕ Reserved
+                            Reserved
                           </span>
                         )}
                       </div>
@@ -313,9 +316,12 @@ function RoomCatalogContent() {
                             cursor: 'pointer',
                             backdropFilter: 'blur(8px)',
                             boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '0.35rem',
                           }}
                         >
-                          📷 View Gallery ({photoList.length})
+                          <Icons.Camera size={14} color="#D4AF37" /> View Gallery ({photoList.length})
                         </button>
                       )}
                     </div>
@@ -326,8 +332,8 @@ function RoomCatalogContent() {
                         <h3 className="tv-serif" style={{ fontSize: '1.35rem', fontWeight: '700', color: 'var(--tv-text)' }}>
                           Room {room.number}
                         </h3>
-                        <span style={{ fontSize: '0.75rem', color: 'var(--tv-text-muted)', fontWeight: '500' }}>
-                          👤 Up to {room.capacity} Guests
+                        <span style={{ fontSize: '0.75rem', color: 'var(--tv-text-muted)', fontWeight: '500', display: 'inline-flex', alignItems: 'center', gap: '0.25rem' }}>
+                          <Icons.User size={14} color="var(--tv-text-muted)" /> Up to {room.capacity} Guests
                         </span>
                       </div>
 

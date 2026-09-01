@@ -3,6 +3,8 @@
 import { useState, useRef } from 'react';
 import Link from 'next/link';
 import { formatNaira } from '@/lib/currency';
+import { RoomPlaceholder } from './RoomPlaceholder';
+import { Icons } from './Icons';
 
 export interface ShowcaseRoomItem {
   id?: string;
@@ -12,10 +14,6 @@ export interface ShowcaseRoomItem {
   baseRate: number;
   description: string;
   photos: string[];
-  size: string;
-  view: string;
-  bed: string;
-  features: string[];
 }
 
 const DEFAULT_SHOWCASE_ROOMS: ShowcaseRoomItem[] = [
@@ -26,11 +24,7 @@ const DEFAULT_SHOWCASE_ROOMS: ShowcaseRoomItem[] = [
     title: 'Standard Bedroom Suite',
     baseRate: 120000,
     description: 'A masterfully crafted bedroom retreat featuring ensuite bath, custom LED ambient lighting, Smart TV, and ultra-fast fiber Wi-Fi.',
-    photos: ['/real-suite-1.jpg', '/real-suite-2.jpg', '/real-suite-3.jpg'],
-    size: '32 M²',
-    view: 'CITY VIEW',
-    bed: 'LUXURY KING BED',
-    features: ['COZY PRIVATE SUITE', 'ULTRA HIGH-SPEED WIFI', '24/7 PERSONAL CONCIERGE'],
+    photos: [],
   },
   {
     id: 'deluxe-suite-201',
@@ -39,11 +33,7 @@ const DEFAULT_SHOWCASE_ROOMS: ShowcaseRoomItem[] = [
     title: 'Deluxe Parlor Suite',
     baseRate: 180000,
     description: 'Spacious master bedroom paired with a separate private parlor lounge, plush tufted seating, executive work desk, and ambient lighting.',
-    photos: ['/real-suite-2.jpg', '/real-suite-3.jpg', '/real-suite-1.jpg'],
-    size: '52 M²',
-    view: 'COURTYARD VIEW',
-    bed: 'KING BED & SOFA LOUNGE',
-    features: ['PRIVATE PARLOR LOUNGE', 'COMPLIMENTARY REFRESHMENTS', 'EXECUTIVE WORK SPACE'],
+    photos: [],
   },
   {
     id: 'apartment-suite-301',
@@ -52,11 +42,7 @@ const DEFAULT_SHOWCASE_ROOMS: ShowcaseRoomItem[] = [
     title: 'Full Executive Mini Apartment',
     baseRate: 250000,
     description: 'The ultimate boutique residence experience featuring a private fully-equipped kitchenette, spacious parlor lounge, and master suite.',
-    photos: ['/real-suite-3.jpg', '/real-suite-1.jpg', '/real-suite-2.jpg'],
-    size: '75 M²',
-    view: 'PANORAMIC VIEW',
-    bed: 'SUPER KING SUITE',
-    features: ['PRIVATE KITCHENETTE', 'FULL DINING & LOUNGE', 'VIP CHAUFFEUR PICKUP'],
+    photos: [],
   },
 ];
 
@@ -65,11 +51,9 @@ export function RoomShowcase({ rooms }: { rooms?: any[] }) {
   const [photoIndex, setPhotoIndex] = useState(0);
   const [animating, setAnimating] = useState(false);
 
-  // Touch Swipe Gesture Refs for Mobile Devices
   const touchStartX = useRef<number | null>(null);
   const touchEndX = useRef<number | null>(null);
 
-  // Map database rooms uploaded by manager or fall back to showcase default
   const showcaseList: ShowcaseRoomItem[] = (rooms && rooms.length > 0)
     ? rooms.map((r, i) => ({
         id: r.id,
@@ -79,10 +63,6 @@ export function RoomShowcase({ rooms }: { rooms?: any[] }) {
         baseRate: Number(r.baseRate),
         description: r.description || DEFAULT_SHOWCASE_ROOMS[i % DEFAULT_SHOWCASE_ROOMS.length].description,
         photos: (r.photos && r.photos.length > 0) ? r.photos : [],
-        size: DEFAULT_SHOWCASE_ROOMS[i % DEFAULT_SHOWCASE_ROOMS.length].size,
-        view: DEFAULT_SHOWCASE_ROOMS[i % DEFAULT_SHOWCASE_ROOMS.length].view,
-        bed: DEFAULT_SHOWCASE_ROOMS[i % DEFAULT_SHOWCASE_ROOMS.length].bed,
-        features: DEFAULT_SHOWCASE_ROOMS[i % DEFAULT_SHOWCASE_ROOMS.length].features,
       }))
     : DEFAULT_SHOWCASE_ROOMS;
 
@@ -172,22 +152,7 @@ export function RoomShowcase({ rooms }: { rooms?: any[] }) {
               }}
             />
           ) : (
-            <div
-              style={{
-                position: 'absolute',
-                inset: 0,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                background: 'linear-gradient(135deg, #292524 0%, #1C1917 100%)',
-                color: '#C8A97E',
-                fontFamily: 'Playfair Display, serif',
-                fontSize: '1.25rem',
-                fontWeight: '600',
-              }}
-            >
-              Trend Vision Luxury Suite
-            </div>
+            <RoomPlaceholder type={currentRoom.type} number={currentRoom.number} height="100%" />
           )}
 
           {/* Room Category Badge on Photo */}
@@ -206,6 +171,7 @@ export function RoomShowcase({ rooms }: { rooms?: any[] }) {
               borderRadius: '0.25rem',
               backdropFilter: 'blur(8px)',
               boxShadow: '0 4px 12px rgba(0,0,0,0.12)',
+              zIndex: 10,
             }}
           >
             {currentRoom.type.toUpperCase()} SUITE
