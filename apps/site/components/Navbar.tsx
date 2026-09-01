@@ -108,7 +108,7 @@ export function Navbar() {
             <span>RESERVATION</span>
           </Link>
 
-          {/* Mobile Menu Hamburger */}
+          {/* Mobile Menu Hamburger — HIDDEN ON DESKTOP VIA CSS */}
           <button
             type="button"
             className="tv-mobile-menu-btn"
@@ -117,9 +117,6 @@ export function Navbar() {
             style={{
               minWidth: '44px',
               minHeight: '44px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
             }}
           >
             {mobileOpen ? '✕' : '☰'}

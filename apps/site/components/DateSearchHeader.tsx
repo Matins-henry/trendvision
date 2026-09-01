@@ -40,13 +40,15 @@ export function DateSearchHeader({
   const fieldStyle: React.CSSProperties = {
     backgroundColor: 'var(--tv-bg-input)',
     border: '1px solid var(--tv-border-md)',
-    borderRadius: '0.5rem',
+    borderRadius: '0.4rem',
     color: 'var(--tv-text)',
-    padding: '0.75rem 0.875rem',
+    padding: '0.75rem 0.85rem',
     width: '100%',
-    fontSize: '0.875rem',
+    fontSize: '1rem', // 16px prevents iOS Safari auto-zoom
     fontFamily: 'inherit',
     outline: 'none',
+    minHeight: '46px',
+    boxSizing: 'border-box',
     transition: 'border-color 150ms ease',
   };
 
@@ -54,7 +56,9 @@ export function DateSearchHeader({
     <form onSubmit={handleSearch} className="tv-search-box">
       {/* Check-In */}
       <div className="tv-search-field">
-        <label>Check In</label>
+        <label style={{ display: 'block', fontSize: '0.68rem', fontWeight: '700', letterSpacing: '0.12em', textTransform: 'uppercase', color: '#C8A97E', marginBottom: '0.45rem' }}>
+          CHECK IN
+        </label>
         <input
           type="date"
           value={checkIn}
@@ -67,7 +71,9 @@ export function DateSearchHeader({
 
       {/* Check-Out */}
       <div className="tv-search-field">
-        <label>Check Out</label>
+        <label style={{ display: 'block', fontSize: '0.68rem', fontWeight: '700', letterSpacing: '0.12em', textTransform: 'uppercase', color: '#C8A97E', marginBottom: '0.45rem' }}>
+          CHECK OUT
+        </label>
         <input
           type="date"
           value={checkOut}
@@ -80,7 +86,9 @@ export function DateSearchHeader({
 
       {/* Room Type */}
       <div className="tv-search-field">
-        <label>Room Category</label>
+        <label style={{ display: 'block', fontSize: '0.68rem', fontWeight: '700', letterSpacing: '0.12em', textTransform: 'uppercase', color: '#C8A97E', marginBottom: '0.45rem' }}>
+          ROOM CATEGORY
+        </label>
         <select
           value={roomType}
           onChange={(e) => setRoomType(e.target.value)}
@@ -94,13 +102,28 @@ export function DateSearchHeader({
       </div>
 
       {/* Submit Button */}
-      <div style={{ flexShrink: 0 }}>
+      <div style={{ flexShrink: 0, width: '100%' }} className="tv-search-submit-wrap">
         <button
           type="submit"
-          className="tv-btn tv-btn-primary"
-          style={{ width: '100%', padding: '0.8rem 1.75rem' }}
+          className="tv-btn"
+          style={{
+            width: '100%',
+            minHeight: '48px',
+            padding: '0.85rem 1.75rem',
+            fontSize: '0.75rem',
+            fontWeight: '800',
+            letterSpacing: '0.14em',
+            textTransform: 'uppercase',
+            color: '#1C1917',
+            backgroundColor: '#C8A97E',
+            border: '1px solid #BE9B6B',
+            borderRadius: '0.4rem',
+            cursor: 'pointer',
+            boxShadow: '0 4px 14px rgba(200,169,126,0.3)',
+            transition: 'all 200ms ease',
+          }}
         >
-          Check Availability
+          CHECK AVAILABILITY →
         </button>
       </div>
     </form>

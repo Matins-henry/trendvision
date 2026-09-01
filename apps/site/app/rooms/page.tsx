@@ -168,7 +168,21 @@ function RoomCatalogContent() {
           </div>
 
           {/* Quick Category Filter Tabs */}
-          <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', marginBottom: '2.5rem' }}>
+          <div
+            className="tv-category-tabs-row"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '0.65rem',
+              marginBottom: '2.5rem',
+              overflowX: 'auto',
+              padding: '0.25rem 0.25rem 0.5rem',
+              WebkitOverflowScrolling: 'touch',
+              scrollbarWidth: 'none',
+              msOverflowStyle: 'none',
+            }}
+          >
             {CATEGORY_TABS.map((tab) => {
               const isActive = typeFilter === tab.id;
               return (
@@ -181,16 +195,19 @@ function RoomCatalogContent() {
                     router.push(`/rooms?${params.toString()}`);
                   }}
                   style={{
-                    padding: '0.6rem 1.25rem',
+                    padding: '0.65rem 1.35rem',
                     borderRadius: '999px',
                     fontSize: '0.78rem',
-                    fontWeight: '600',
+                    fontWeight: '700',
+                    letterSpacing: '0.04em',
                     cursor: 'pointer',
+                    whiteSpace: 'nowrap',
+                    flexShrink: 0,
                     transition: 'all 200ms ease',
-                    border: isActive ? '1px solid var(--tv-forest)' : '1px solid var(--tv-border-md)',
-                    background: isActive ? 'var(--tv-forest)' : 'var(--tv-bg-card)',
-                    color: isActive ? '#FEFAF4' : 'var(--tv-text-soft)',
-                    boxShadow: isActive ? '0 4px 14px rgba(27,67,50,0.20)' : 'none',
+                    border: isActive ? '1px solid #C8A97E' : '1px solid var(--tv-border-md)',
+                    background: isActive ? '#C8A97E' : 'var(--tv-bg-card)',
+                    color: isActive ? '#1C1917' : 'var(--tv-text-soft)',
+                    boxShadow: isActive ? '0 4px 14px rgba(200,169,126,0.30)' : 'none',
                   }}
                 >
                   {tab.label}
