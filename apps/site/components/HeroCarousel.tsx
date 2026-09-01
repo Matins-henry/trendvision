@@ -10,6 +10,8 @@ interface Slide {
   subtitle: string;
   ctaPrimaryText: string;
   ctaPrimaryHref: string;
+  /** Optional real background image URL — leave empty to use gradient */
+  bgImage?: string;
 }
 
 const HERO_SLIDES: Slide[] = [
@@ -20,6 +22,7 @@ const HERO_SLIDES: Slide[] = [
     subtitle: 'Indulge in world-class comfort, ambient nighttime luxury, and personalized service at Trend Vision Luxury Apartments & Residences.',
     ctaPrimaryText: 'Discover Suites',
     ctaPrimaryHref: '/rooms',
+    bgImage: '', // ← manager: paste your own image URL here, e.g. '/hero-1.jpg'
   },
   {
     id: 1,
@@ -28,6 +31,7 @@ const HERO_SLIDES: Slide[] = [
     subtitle: 'Immerse yourself in masterfully crafted suites featuring custom architectural ceilings, king-size beds, and total privacy.',
     ctaPrimaryText: 'Reserve Your Stay',
     ctaPrimaryHref: '/rooms',
+    bgImage: '', // ← manager: paste your own image URL here
   },
   {
     id: 2,
@@ -36,7 +40,15 @@ const HERO_SLIDES: Slide[] = [
     subtitle: 'Unwind in sophisticated private living spaces complete with plush seating, Smart Entertainment, and high-speed Wi-Fi.',
     ctaPrimaryText: 'Book Suite Now',
     ctaPrimaryHref: '/rooms',
+    bgImage: '', // ← manager: paste your own image URL here
   },
+];
+
+/** Fallback gradient backgrounds per slide index */
+const SLIDE_GRADIENTS = [
+  'radial-gradient(ellipse at 50% 30%, #292524 0%, #1C1917 50%, #0C0A09 100%)',
+  'radial-gradient(ellipse at 50% 30%, #352B20 0%, #1C1917 50%, #0C0A09 100%)',
+  'radial-gradient(ellipse at 50% 30%, #25201A 0%, #1C1917 50%, #0C0A09 100%)',
 ];
 
 export function HeroCarousel() {
@@ -78,7 +90,7 @@ export function HeroCarousel() {
       onTouchEnd={handleTouchEnd}
       style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', touchAction: 'pan-y' }}
     >
-      {/* Background gradients */}
+      {/* Slide Backgrounds — real image if provided, gradient fallback */}
       {HERO_SLIDES.map((s, idx) => (
         <div
           key={s.id}
@@ -86,18 +98,33 @@ export function HeroCarousel() {
           style={{
             opacity: idx === currentSlide ? 1 : 0,
             transition: 'opacity 1200ms cubic-bezier(0.4, 0, 0.2, 1)',
-            background: idx === 0
-              ? 'radial-gradient(ellipse at 50% 30%, #292524 0%, #1C1917 50%, #0C0A09 100%)'
-              : idx === 1
-              ? 'radial-gradient(ellipse at 50% 30%, #352B20 0%, #1C1917 50%, #0C0A09 100%)'
-              : 'radial-gradient(ellipse at 50% 30%, #25201A 0%, #1C1917 50%, #0C0A09 100%)',
+            background: s.bgImage ? undefined : SLIDE_GRADIENTS[idx % SLIDE_GRADIENTS.length],
           }}
         >
+          {/* Real photo if available */}
+          {s.bgImage ? (
+            <img
+              src={s.bgImage}
+              alt={s.title}
+              style={{
+                position: 'absolute',
+                inset: 0,
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+                objectPosition: 'center',
+              }}
+            />
+          ) : null}
+
+          {/* Overlay — darkens photo for text legibility, always present */}
           <div
             style={{
               position: 'absolute',
               inset: 0,
-              backgroundImage: 'radial-gradient(circle at 50% 50%, rgba(200,169,126,0.12) 0%, transparent 65%)',
+              background: s.bgImage
+                ? 'linear-gradient(to bottom, rgba(12,10,9,0.55) 0%, rgba(12,10,9,0.35) 50%, rgba(12,10,9,0.70) 100%)'
+                : 'radial-gradient(circle at 50% 50%, rgba(200,169,126,0.12) 0%, transparent 65%)',
             }}
           />
         </div>
@@ -146,7 +173,7 @@ export function HeroCarousel() {
             {slide.title}
           </h1>
 
-          {/* Subtitle — hidden on very small screens to avoid crowding */}
+          {/* Subtitle */}
           <p
             className="tv-hero-subtitle"
             style={{

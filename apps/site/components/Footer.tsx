@@ -45,9 +45,9 @@ export function Footer() {
               <h4 style={{ fontSize: '0.68rem', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.14em', color: '#C8A97E', marginBottom: '0.75rem' }}>
                 Follow Our Journey
               </h4>
-              <div style={{ display: 'flex', gap: '0.75rem' }}>
+              <div style={{ display: 'flex', gap: '0.6rem', flexWrap: 'wrap' }}>
                 <a
-                  href="https://instagram.com"
+                  href="https://www.instagram.com/trendvisionl"
                   target="_blank"
                   rel="noopener noreferrer"
                   style={{
@@ -69,7 +69,7 @@ export function Footer() {
                   <span>Instagram</span>
                 </a>
                 <a
-                  href="https://facebook.com"
+                  href="https://web.facebook.com/trendvisionltd"
                   target="_blank"
                   rel="noopener noreferrer"
                   style={{
@@ -91,7 +91,7 @@ export function Footer() {
                   <span>Facebook</span>
                 </a>
                 <a
-                  href="https://youtube.com"
+                  href="https://youtube.com/@trendvisionltd?si=FCnpIN6aNaFghJDT"
                   target="_blank"
                   rel="noopener noreferrer"
                   style={{
