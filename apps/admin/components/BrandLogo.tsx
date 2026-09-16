@@ -5,20 +5,18 @@ import React from 'react';
 interface BrandLogoProps {
   height?: number;
   className?: string;
-  variant?: 'light' | 'dark';
+  variant?: 'light' | 'dark' | 'auto';
   layout?: 'horizontal' | 'stacked';
 }
 
 export function BrandLogo({
   height = 36,
   className = '',
-  variant = 'dark',
+  variant = 'auto',
   layout = 'horizontal',
 }: BrandLogoProps) {
-  const isDarkBg = variant === 'dark';
-
-  const stemColor = isDarkBg ? '#FEFAF4' : '#1B1410';
-  const trendTextColor = isDarkBg ? '#FFFFFF' : '#1B1410';
+  const stemColor = variant === 'light' ? '#1B1410' : variant === 'dark' ? '#FEFAF4' : 'var(--tv-text)';
+  const trendTextColor = variant === 'light' ? '#1B1410' : variant === 'dark' ? '#FEFAF4' : 'var(--tv-text)';
   const logoHeight = height;
 
   if (layout === 'stacked') {

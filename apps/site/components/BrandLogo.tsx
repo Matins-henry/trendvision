@@ -5,7 +5,7 @@ import React from 'react';
 interface BrandLogoProps {
   height?: number;
   className?: string;
-  variant?: 'light' | 'dark';
+  variant?: 'light' | 'dark' | 'auto';
   layout?: 'horizontal' | 'stacked';
   showTagline?: boolean;
 }
@@ -17,16 +17,14 @@ interface BrandLogoProps {
 export function BrandLogo({
   height = 44,
   className = '',
-  variant = 'dark', // 'dark' = for dark backgrounds like Deep Forest Green; 'light' = for light backgrounds
+  variant = 'auto', // 'auto' = dynamically adapts to active Light/Dark theme CSS variables
   layout = 'horizontal',
   showTagline = false,
 }: BrandLogoProps) {
-  const isDarkBg = variant === 'dark';
-
-  // Color tokens based on dark vs light surface
-  const stemColor = isDarkBg ? '#FEFAF4' : '#1B1410';
-  const trendTextColor = isDarkBg ? '#FFFFFF' : '#1B1410';
-  const taglineColor = isDarkBg ? 'rgba(245, 239, 224, 0.65)' : '#7A6B5D';
+  // Color tokens based on dark, light, or auto theme context
+  const stemColor = variant === 'light' ? '#1B1410' : variant === 'dark' ? '#FEFAF4' : 'var(--tv-text)';
+  const trendTextColor = variant === 'light' ? '#1B1410' : variant === 'dark' ? '#FEFAF4' : 'var(--tv-text)';
+  const taglineColor = variant === 'light' ? '#7A6B5D' : variant === 'dark' ? 'rgba(245, 239, 224, 0.65)' : 'var(--tv-text-muted)';
 
   const logoHeight = height;
 

@@ -69,7 +69,7 @@ export function Navigation() {
         <div style={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem' }}>
           {/* Dynamic Brand Logo — Role Aware Link */}
           <Link href={homePath} style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', flexShrink: 0 }}>
-            <BrandLogo height={38} variant="dark" />
+            <BrandLogo height={38} variant="auto" />
           </Link>
 
           {/* Desktop Nav Finnova Tab Pills */}
