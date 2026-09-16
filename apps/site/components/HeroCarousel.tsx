@@ -22,7 +22,7 @@ const HERO_SLIDES: Slide[] = [
     subtitle: 'Indulge in world-class comfort, ambient nighttime luxury, and personalized service at Trend Vision Luxury Apartments & Residences.',
     ctaPrimaryText: 'Discover Suites',
     ctaPrimaryHref: '/rooms',
-    bgImage: '', // ← manager: paste your own image URL here, e.g. '/hero-1.jpg'
+    bgImage: '/Hero/first.png',
   },
   {
     id: 1,
@@ -31,7 +31,7 @@ const HERO_SLIDES: Slide[] = [
     subtitle: 'Immerse yourself in masterfully crafted suites featuring custom architectural ceilings, king-size beds, and total privacy.',
     ctaPrimaryText: 'Reserve Your Stay',
     ctaPrimaryHref: '/rooms',
-    bgImage: '', // ← manager: paste your own image URL here
+    bgImage: '/Hero/second.png',
   },
   {
     id: 2,
@@ -40,7 +40,7 @@ const HERO_SLIDES: Slide[] = [
     subtitle: 'Unwind in sophisticated private living spaces complete with plush seating, Smart Entertainment, and high-speed Wi-Fi.',
     ctaPrimaryText: 'Book Suite Now',
     ctaPrimaryHref: '/rooms',
-    bgImage: '', // ← manager: paste your own image URL here
+    bgImage: '/Hero/third.png',
   },
 ];
 
