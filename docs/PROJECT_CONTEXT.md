@@ -241,7 +241,7 @@ The route system uses **two maps** in `role-hierarchy.ts`:
    - Search by guest name/email/reference, filter by status
    - Create, edit, view details, and cancel bookings via modals
    - Status transitions: CONFIRMED → CHECKED_IN → CHECKED_OUT / CANCELLED
-   - Booking references auto-generated (`HTL-YYYY-NNNN`)
+   - Booking references auto-generated (`TVL-YYYY-NNNN`)
    - Total amount calculated server-side from room base rate × nights
    - RECEPTIONIST and MANAGER access only — OWNER explicitly excluded
 

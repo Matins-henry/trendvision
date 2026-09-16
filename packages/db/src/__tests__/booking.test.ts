@@ -47,10 +47,10 @@ describe('Booking Utilities Unit Tests', () => {
   });
 
   describe('generateBookingReference', () => {
-    it('should generate HTL-YYYY-0001 when no prior bookings exist for current year', async () => {
+    it('should generate TVL-YYYY-0001 when no prior bookings exist for current year', async () => {
       const year = new Date().getFullYear();
       const ref = await generateBookingReference(prisma);
-      expect(ref).toBe(`HTL-${year}-0001`);
+      expect(ref).toBe(`TVL-${year}-0001`);
     });
 
     it('should increment reference sequence when prior booking exists', async () => {
@@ -61,7 +61,7 @@ describe('Booking Utilities Unit Tests', () => {
       // Create a booking with sequence 0001
       await prisma.booking.create({
         data: {
-          reference: `HTL-${year}-0001`,
+          reference: `TVL-${year}-0001`,
           roomId: room.id,
           guestId: guest.id,
           checkIn: new Date('2026-09-01'),
@@ -73,7 +73,7 @@ describe('Booking Utilities Unit Tests', () => {
       });
 
       const nextRef = await generateBookingReference(prisma);
-      expect(nextRef).toBe(`HTL-${year}-0002`);
+      expect(nextRef).toBe(`TVL-${year}-0002`);
     });
   });
 });

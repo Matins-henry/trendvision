@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
     const success = await sendBookingConfirmationEmail({
       guestName: staff.name,
       guestEmail: recipientEmail,
-      reference: 'HTL-2026-TEST',
+      reference: 'TVL-2026-TEST',
       roomNumber: '101',
       roomType: 'Deluxe Parlor Suite',
       checkIn: new Date(),
