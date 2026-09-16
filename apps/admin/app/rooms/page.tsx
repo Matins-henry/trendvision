@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { getCurrentStaff, authenticatedFetch } from '@hotel/auth';
 import { Navigation } from '@/components/Navigation';
@@ -330,8 +330,56 @@ function RoomFormModal({
 
   const [photos, setPhotos] = useState<string[]>(room?.photos && room.photos.length > 0 ? room.photos : []);
   const [newPhotoUrl, setNewPhotoUrl] = useState('');
+  const [showUrlInput, setShowUrlInput] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  function handleDeviceFileUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+
+    Array.from(files).forEach((file) => {
+      if (!file.type.startsWith('image/')) return;
+
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          const MAX_WIDTH = 1600;
+          const MAX_HEIGHT = 1600;
+          let width = img.width;
+          let height = img.height;
+
+          if (width > height) {
+            if (width > MAX_WIDTH) {
+              height = Math.round((height * MAX_WIDTH) / width);
+              width = MAX_WIDTH;
+            }
+          } else {
+            if (height > MAX_HEIGHT) {
+              width = Math.round((width * MAX_HEIGHT) / height);
+              height = MAX_HEIGHT;
+            }
+          }
+
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          if (ctx) {
+            ctx.drawImage(img, 0, 0, width, height);
+            const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
+            setPhotos((prev) => [...prev, dataUrl]);
+          }
+        };
+        img.src = event.target?.result as string;
+      };
+      reader.readAsDataURL(file);
+    });
+
+    e.target.value = '';
+  }
 
   function addPhotoUrl(urlToAdd?: string) {
     const targetUrl = (urlToAdd || newPhotoUrl).trim();
@@ -530,33 +578,73 @@ function RoomFormModal({
           </div>
 
           {/* Multi-Photo Gallery Manager Section */}
-          <div style={{ background: 'var(--tv-bg-raised)', border: '1px solid var(--tv-border-md)', borderRadius: 'var(--tv-radius-sm)', padding: '1rem' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
+          <div style={{ background: 'var(--tv-bg-raised)', border: '1px solid var(--tv-border-md)', borderRadius: 'var(--tv-radius-sm)', padding: '1.25rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.85rem' }}>
               <label style={{ fontSize: '0.68rem', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.12em', color: 'var(--tv-gold)' }}>
                 📷 Room Photo Gallery ({photos.length} Attached)
               </label>
               <span style={{ fontSize: '0.65rem', color: 'var(--tv-text-muted)' }}>First photo = Primary Cover</span>
             </div>
 
-            {/* Custom URL Input */}
-            <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1rem' }}>
-              <input
-                type="url"
-                value={newPhotoUrl}
-                onChange={(e) => setNewPhotoUrl(e.target.value)}
-                className="tv-input"
-                style={{ padding: '0.55rem 0.75rem', fontSize: '0.8rem', flex: 1 }}
-                placeholder="https://example.com/room-photo.jpg"
-              />
+            {/* Hidden Device File Input for PC Folder / Phone Camera & Gallery */}
+            <input
+              type="file"
+              ref={fileInputRef}
+              accept="image/*"
+              multiple
+              style={{ display: 'none' }}
+              onChange={handleDeviceFileUpload}
+            />
+
+            {/* Direct Device Upload CTA Button */}
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.65rem', marginBottom: '1rem' }}>
               <button
                 type="button"
-                onClick={() => addPhotoUrl()}
+                onClick={() => fileInputRef.current?.click()}
                 className="tv-btn tv-btn-gold"
-                style={{ padding: '0.55rem 1rem', fontSize: '0.75rem' }}
+                style={{
+                  flex: 1,
+                  minWidth: '200px',
+                  padding: '0.75rem 1.25rem',
+                  fontSize: '0.8rem',
+                  justifyContent: 'center',
+                  fontWeight: '700',
+                  boxShadow: '0 4px 14px rgba(200,169,126,0.25)',
+                }}
               >
-                + Add URL
+                📸 Choose Image from Device / Mobile Gallery
+              </button>
+              <button
+                type="button"
+                onClick={() => setShowUrlInput(!showUrlInput)}
+                className="tv-btn tv-btn-ghost"
+                style={{ padding: '0.75rem 0.85rem', fontSize: '0.75rem' }}
+              >
+                {showUrlInput ? 'Hide URL Input' : '🔗 Paste Web URL'}
               </button>
             </div>
+
+            {/* Collapsible Web URL Input */}
+            {showUrlInput && (
+              <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1rem' }}>
+                <input
+                  type="url"
+                  value={newPhotoUrl}
+                  onChange={(e) => setNewPhotoUrl(e.target.value)}
+                  className="tv-input"
+                  style={{ padding: '0.55rem 0.75rem', fontSize: '0.8rem', flex: 1 }}
+                  placeholder="https://example.com/room-photo.jpg"
+                />
+                <button
+                  type="button"
+                  onClick={() => addPhotoUrl()}
+                  className="tv-btn tv-btn-gold"
+                  style={{ padding: '0.55rem 1rem', fontSize: '0.75rem' }}
+                >
+                  + Add URL
+                </button>
+              </div>
+            )}
 
             {/* Interactive Live Thumbnail List */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
