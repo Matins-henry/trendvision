@@ -262,21 +262,37 @@ export default function ReportsPage() {
 
         {/* Executive Manager Reports Inbox Section */}
         <div className="tv-card" style={{ padding: '1.5rem', marginBottom: '2rem' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.75rem', marginBottom: '1rem' }}>
             <div>
               <h2 style={{ fontSize: '0.75rem', fontWeight: '800', color: 'var(--tv-gold)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
-                📩 Manager Executive Reports Inbox
+                {staff?.role === 'MANAGER' ? '📩 Executive Reports Submitted to Owner' : '📩 Manager Executive Reports Inbox'}
               </h2>
               <p style={{ fontSize: '0.75rem', color: 'var(--tv-text-muted)', marginTop: '0.2rem' }}>
-                Operational summaries, shift notes, and executive submissions from Managers to Owner
+                {staff?.role === 'MANAGER'
+                  ? 'Operational summaries, shift notes, and executive updates submitted by you to the Owner'
+                  : 'Operational summaries, shift notes, and executive submissions received from Managers'}
               </p>
             </div>
-            <span className="tv-badge-gold">{reports.length} Reports Submitted</span>
+            
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+              {staff?.role === 'MANAGER' && (
+                <button
+                  onClick={() => setShowSubmitModal(true)}
+                  className="tv-btn tv-btn-gold"
+                  style={{ padding: '0.45rem 0.95rem', fontSize: '0.75rem' }}
+                >
+                  ➕ Submit Executive Report
+                </button>
+              )}
+              <span className="tv-badge-gold">{reports.length} Reports</span>
+            </div>
           </div>
 
           {reports.length === 0 ? (
             <p style={{ fontSize: '0.8rem', color: 'var(--tv-text-muted)', fontStyle: 'italic', textAlign: 'center', padding: '1.5rem 0' }}>
-              No executive reports submitted yet. Managers can use "+ Submit Executive Report" to send updates to the Owner.
+              {staff?.role === 'MANAGER'
+                ? 'You haven\'t submitted any executive reports yet. Click "+ Submit Executive Report" above to send shift updates directly to the Owner.'
+                : 'No executive reports received yet. Managers can submit shift notes and operational updates directly to your inbox.'}
             </p>
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
