@@ -81,7 +81,7 @@ export default function RatesPage() {
           return;
         }
 
-        if (staff.role !== 'MANAGER' && staff.role !== 'OWNER') {
+        if (staff.role !== 'OWNER') {
           router.push('/access-denied');
           return;
         }

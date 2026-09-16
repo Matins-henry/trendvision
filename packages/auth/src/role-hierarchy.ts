@@ -57,7 +57,7 @@ export const ROUTE_MIN_ROLE: Record<string, Role> = {
   '/dashboard': 'MANAGER', // Owner & Manager can view executive dashboard
   '/reports': 'MANAGER',
   '/rooms': 'MANAGER',
-  '/rates': 'MANAGER',
+  '/rates': 'OWNER', // Rates management restricted strictly to OWNER
   '/expenses': 'MANAGER',
   '/maintenance': 'RECEPTIONIST',
   '/bookings': 'RECEPTIONIST',
@@ -75,7 +75,7 @@ export const ROUTE_EXACT_ROLES: Record<string, Role[]> = {
   '/check-out': ['RECEPTIONIST', 'MANAGER', 'OWNER'],
   '/payments': ['RECEPTIONIST', 'MANAGER', 'OWNER'],
   '/rooms': ['MANAGER', 'OWNER'],
-  '/rates': ['MANAGER', 'OWNER'],
+  '/rates': ['OWNER'], // Restricted strictly to OWNER
   '/reports': ['MANAGER', 'OWNER'],
   '/expenses': ['MANAGER', 'OWNER'],
 };

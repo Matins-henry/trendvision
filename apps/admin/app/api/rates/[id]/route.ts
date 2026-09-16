@@ -16,8 +16,8 @@ export async function DELETE(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    if (staff.role !== 'MANAGER' && staff.role !== 'OWNER') {
-      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    if (staff.role !== 'OWNER') {
+      return NextResponse.json({ error: 'Forbidden — Rates management is restricted to Owner' }, { status: 403 });
     }
 
     const resolvedParams = await params;
@@ -48,8 +48,8 @@ export async function PATCH(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    if (staff.role !== 'MANAGER' && staff.role !== 'OWNER') {
-      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    if (staff.role !== 'OWNER') {
+      return NextResponse.json({ error: 'Forbidden — Rates management is restricted to Owner' }, { status: 403 });
     }
 
     const resolvedParams = await params;
