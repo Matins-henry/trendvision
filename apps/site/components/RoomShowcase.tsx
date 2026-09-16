@@ -141,14 +141,16 @@ export function RoomShowcase({ rooms }: { rooms?: any[] }) {
               key={activePhoto}
               src={activePhoto}
               alt={currentRoom.title}
+              className="tv-sharp-img"
               style={{
                 width: '100%',
                 height: '100%',
                 objectFit: 'cover',
                 position: 'absolute',
                 inset: 0,
-                filter: 'brightness(1.02) contrast(1.02)',
+                filter: 'contrast(1.06) saturate(1.08) brightness(0.97)',
                 transition: 'opacity 300ms ease-in-out',
+                imageRendering: '-webkit-optimize-contrast',
               }}
             />
           ) : (

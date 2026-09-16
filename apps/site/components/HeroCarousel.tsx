@@ -106,6 +106,7 @@ export function HeroCarousel() {
             <img
               src={s.bgImage}
               alt={s.title}
+              className="tv-sharp-img"
               style={{
                 position: 'absolute',
                 inset: 0,
@@ -113,17 +114,21 @@ export function HeroCarousel() {
                 height: '100%',
                 objectFit: 'cover',
                 objectPosition: 'center',
+                filter: 'contrast(1.08) saturate(1.08) brightness(0.94)',
+                transform: idx === currentSlide ? 'scale(1.04)' : 'scale(1.0)',
+                transition: 'transform 7000ms cubic-bezier(0.25, 1, 0.5, 1), opacity 1200ms ease',
+                imageRendering: '-webkit-optimize-contrast',
               }}
             />
           ) : null}
 
-          {/* Overlay — darkens photo for text legibility, always present */}
+          {/* Overlay — darkens photo for crisp text legibility */}
           <div
             style={{
               position: 'absolute',
               inset: 0,
               background: s.bgImage
-                ? 'linear-gradient(to bottom, rgba(12,10,9,0.55) 0%, rgba(12,10,9,0.35) 50%, rgba(12,10,9,0.70) 100%)'
+                ? 'linear-gradient(to bottom, rgba(12,10,9,0.65) 0%, rgba(12,10,9,0.38) 50%, rgba(12,10,9,0.82) 100%)'
                 : 'radial-gradient(circle at 50% 50%, rgba(200,169,126,0.12) 0%, transparent 65%)',
             }}
           />

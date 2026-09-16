@@ -90,30 +90,28 @@ export default async function HomePage() {
           <ScrollReveal animation="slide-right">
             <div className="tv-welcome-photos-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 140px), 1fr))', gap: '1rem' }}>
               <div
+                className="tv-sharp-img-card"
                 style={{
-                  position: 'relative',
-                  borderRadius: '0.75rem',
-                  overflow: 'hidden',
                   height: '320px',
-                  border: '1px solid rgba(200,169,126,0.35)',
-                  boxShadow: 'var(--tv-shadow)',
                 }}
               >
                 <img
                   src="/welcome/deluxe.png"
                   alt="Executive Residence"
-                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                  className="tv-sharp-img"
+                  style={{ width: '100%', height: '100%' }}
                 />
                 <div
                   style={{
                     position: 'absolute',
                     inset: 0,
-                    background: 'linear-gradient(to top, rgba(12,10,9,0.90) 0%, rgba(12,10,9,0.20) 50%, rgba(12,10,9,0.40) 100%)',
+                    background: 'linear-gradient(to top, rgba(12,10,9,0.92) 0%, rgba(12,10,9,0.20) 50%, rgba(12,10,9,0.40) 100%)',
                     padding: '1.25rem 1rem',
                     display: 'flex',
                     flexDirection: 'column',
                     justifyContent: 'space-between',
                     textAlign: 'center',
+                    pointerEvents: 'none',
                   }}
                 >
                   <div style={{ display: 'flex', justifyContent: 'center' }}>
@@ -131,31 +129,29 @@ export default async function HomePage() {
               </div>
 
               <div
+                className="tv-sharp-img-card"
                 style={{
-                  position: 'relative',
-                  borderRadius: '0.75rem',
-                  overflow: 'hidden',
                   height: '320px',
                   marginTop: '2rem',
-                  border: '1px solid rgba(200,169,126,0.35)',
-                  boxShadow: 'var(--tv-shadow)',
                 }}
               >
                 <img
                   src="/welcome/apartment.png"
                   alt="Master Apartments"
-                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                  className="tv-sharp-img"
+                  style={{ width: '100%', height: '100%' }}
                 />
                 <div
                   style={{
                     position: 'absolute',
                     inset: 0,
-                    background: 'linear-gradient(to top, rgba(12,10,9,0.90) 0%, rgba(12,10,9,0.20) 50%, rgba(12,10,9,0.40) 100%)',
+                    background: 'linear-gradient(to top, rgba(12,10,9,0.92) 0%, rgba(12,10,9,0.20) 50%, rgba(12,10,9,0.40) 100%)',
                     padding: '1.25rem 1rem',
                     display: 'flex',
                     flexDirection: 'column',
                     justifyContent: 'space-between',
                     textAlign: 'center',
+                    pointerEvents: 'none',
                   }}
                 >
                   <div style={{ display: 'flex', justifyContent: 'center' }}>
