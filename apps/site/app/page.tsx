@@ -86,26 +86,90 @@ export default async function HomePage() {
       {/* ═══════════════════════════════════ WELCOME / STORY SECTION ═══════════════════════════════════ */}
       <section id="explore" className="tv-welcome-section" style={{ padding: '6rem 1.5rem 5rem' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 300px), 1fr))', gap: '3.5rem', alignItems: 'center' }}>
-          {/* Left: Luxury Vector Showcase Badge Cards */}
+          {/* Left: Luxury Image Showcase Cards */}
           <ScrollReveal animation="slide-right">
             <div className="tv-welcome-photos-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 140px), 1fr))', gap: '1rem' }}>
-              <div style={{ borderRadius: '0.75rem', overflow: 'hidden', height: '320px', background: 'linear-gradient(135deg, #1C1917 0%, #0C0A09 100%)', border: '1px solid rgba(200,169,126,0.3)', padding: '2rem 1.5rem', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', boxShadow: 'var(--tv-shadow)' }}>
-                <Icons.Crown size={38} color="#C8A97E" />
-                <span style={{ fontSize: '0.62rem', fontWeight: '700', letterSpacing: '0.2em', textTransform: 'uppercase', color: '#C8A97E', marginTop: '1.25rem' }}>
-                  VVIP SUITE
-                </span>
-                <h4 style={{ fontFamily: 'Playfair Display, serif', fontSize: '1.25rem', color: '#FEFAF4', marginTop: '0.5rem', fontWeight: '600' }}>
-                  Executive Residence
-                </h4>
+              <div
+                style={{
+                  position: 'relative',
+                  borderRadius: '0.75rem',
+                  overflow: 'hidden',
+                  height: '320px',
+                  border: '1px solid rgba(200,169,126,0.35)',
+                  boxShadow: 'var(--tv-shadow)',
+                }}
+              >
+                <img
+                  src="/welcome/deluxe.png"
+                  alt="Executive Residence"
+                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                />
+                <div
+                  style={{
+                    position: 'absolute',
+                    inset: 0,
+                    background: 'linear-gradient(to top, rgba(12,10,9,0.90) 0%, rgba(12,10,9,0.20) 50%, rgba(12,10,9,0.40) 100%)',
+                    padding: '1.25rem 1rem',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'space-between',
+                    textAlign: 'center',
+                  }}
+                >
+                  <div style={{ display: 'flex', justifyContent: 'center' }}>
+                    <Icons.Crown size={28} color="#C8A97E" />
+                  </div>
+                  <div>
+                    <span style={{ fontSize: '0.62rem', fontWeight: '700', letterSpacing: '0.2em', textTransform: 'uppercase', color: '#C8A97E', display: 'block' }}>
+                      VVIP SUITE
+                    </span>
+                    <h4 style={{ fontFamily: 'Playfair Display, serif', fontSize: '1.15rem', color: '#FEFAF4', marginTop: '0.25rem', fontWeight: '600' }}>
+                      Executive Residence
+                    </h4>
+                  </div>
+                </div>
               </div>
-              <div style={{ borderRadius: '0.75rem', overflow: 'hidden', height: '320px', marginTop: '2rem', background: 'linear-gradient(135deg, #25201A 0%, #1C1917 100%)', border: '1px solid rgba(200,169,126,0.3)', padding: '2rem 1.5rem', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', boxShadow: 'var(--tv-shadow)' }}>
-                <Icons.Gem size={38} color="#C8A97E" />
-                <span style={{ fontSize: '0.62rem', fontWeight: '700', letterSpacing: '0.2em', textTransform: 'uppercase', color: '#C8A97E', marginTop: '1.25rem' }}>
-                  BOUTIQUE LUXURY
-                </span>
-                <h4 style={{ fontFamily: 'Playfair Display, serif', fontSize: '1.25rem', color: '#FEFAF4', marginTop: '0.5rem', fontWeight: '600' }}>
-                  Master Apartments
-                </h4>
+
+              <div
+                style={{
+                  position: 'relative',
+                  borderRadius: '0.75rem',
+                  overflow: 'hidden',
+                  height: '320px',
+                  marginTop: '2rem',
+                  border: '1px solid rgba(200,169,126,0.35)',
+                  boxShadow: 'var(--tv-shadow)',
+                }}
+              >
+                <img
+                  src="/welcome/apartment.png"
+                  alt="Master Apartments"
+                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                />
+                <div
+                  style={{
+                    position: 'absolute',
+                    inset: 0,
+                    background: 'linear-gradient(to top, rgba(12,10,9,0.90) 0%, rgba(12,10,9,0.20) 50%, rgba(12,10,9,0.40) 100%)',
+                    padding: '1.25rem 1rem',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'space-between',
+                    textAlign: 'center',
+                  }}
+                >
+                  <div style={{ display: 'flex', justifyContent: 'center' }}>
+                    <Icons.Gem size={28} color="#C8A97E" />
+                  </div>
+                  <div>
+                    <span style={{ fontSize: '0.62rem', fontWeight: '700', letterSpacing: '0.2em', textTransform: 'uppercase', color: '#C8A97E', display: 'block' }}>
+                      BOUTIQUE LUXURY
+                    </span>
+                    <h4 style={{ fontFamily: 'Playfair Display, serif', fontSize: '1.15rem', color: '#FEFAF4', marginTop: '0.25rem', fontWeight: '600' }}>
+                      Master Apartments
+                    </h4>
+                  </div>
+                </div>
               </div>
             </div>
           </ScrollReveal>
