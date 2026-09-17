@@ -24,6 +24,12 @@ export function Navigation() {
   const router = useRouter();
   const [loggingOut, setLoggingOut] = useState(false);
   const [newBookingCount, setNewBookingCount] = useState<number>(0);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  // Close mobile drawer on route change
+  useEffect(() => {
+    setMobileMenuOpen(false);
+  }, [pathname]);
 
   async function handleLogout() {
     if (loggingOut) return;
@@ -44,7 +50,7 @@ export function Navigation() {
         const data = await res.json();
         setNewBookingCount(data.count || 0);
       }
-    } catch (err) {
+    } catch {
       // Ignore background poll errors silently
     }
   }, []);
@@ -64,15 +70,15 @@ export function Navigation() {
   const homePath = staff.role === 'RECEPTIONIST' ? '/bookings' : '/dashboard';
 
   return (
-    <nav className="tv-navbar" style={{ height: '72px' }}>
-      <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 1.25rem', height: '100%' }}>
-        <div style={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem' }}>
+    <nav className="tv-navbar" style={{ position: 'sticky', top: 0, zIndex: 50 }}>
+      <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 1rem', height: '68px' }}>
+        <div style={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.5rem' }}>
           {/* Dynamic Brand Logo — Role Aware Link */}
           <Link href={homePath} style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', flexShrink: 0 }}>
-            <BrandLogo height={38} variant="auto" />
+            <BrandLogo height={32} variant="auto" />
           </Link>
 
-          {/* Desktop Nav Finnova Tab Pills */}
+          {/* Desktop Nav Finnova Tab Pills (Visible >= 840px) */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', flex: 1, justifyContent: 'center' }} className="admin-desktop-nav">
             {visibleItems.map((item) => {
               const isActive = pathname === item.path;
@@ -86,7 +92,7 @@ export function Navigation() {
                     display: 'flex',
                     alignItems: 'center',
                     gap: '0.4rem',
-                    padding: '0.5rem 1.1rem',
+                    padding: '0.5rem 1rem',
                     borderRadius: '999px',
                     fontSize: '0.78rem',
                     fontWeight: '600',
@@ -126,16 +132,17 @@ export function Navigation() {
           </div>
 
           {/* Right Action Cluster */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.875rem', flexShrink: 0 }}>
-            {/* Live Reception Alert Badge */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexShrink: 0 }}>
+            {/* Live Reception Alert Badge (Desktop/Tablet) */}
             {newBookingCount > 0 && (
               <Link
                 href="/check-in"
+                className="admin-alert-badge"
                 style={{
                   display: 'flex',
                   alignItems: 'center',
                   gap: '0.35rem',
-                  padding: '0.35rem 0.75rem',
+                  padding: '0.35rem 0.65rem',
                   background: 'var(--tv-gold-pale)',
                   border: '1px solid var(--tv-gold-pale-md)',
                   borderRadius: '999px',
@@ -146,45 +153,206 @@ export function Navigation() {
                 }}
               >
                 <span>🔔</span>
-                <span>{newBookingCount} New / Arrivals</span>
+                <span className="admin-alert-text">{newBookingCount} New</span>
               </Link>
             )}
 
             <ThemeToggle />
 
-            {/* Staff Role Badge */}
-            <div style={{ textAlign: 'right' }} className="admin-user-info">
-              <div style={{ fontSize: '0.8rem', fontWeight: '700', color: 'var(--tv-text)', lineHeight: 1.2 }}>{staff.name}</div>
-              <span className="tv-badge-gold" style={{ fontSize: '0.6rem', padding: '0.15rem 0.6rem' }}>
-                {staff.role}
-              </span>
+            {/* Desktop Staff Role Badge & Sign Out */}
+            <div style={{ alignItems: 'center', gap: '0.75rem' }} className="admin-desktop-user">
+              <div style={{ textAlign: 'right' }}>
+                <div style={{ fontSize: '0.8rem', fontWeight: '700', color: 'var(--tv-text)', lineHeight: 1.2 }}>{staff.name}</div>
+                <span className="tv-badge-gold" style={{ fontSize: '0.58rem', padding: '0.1rem 0.5rem' }}>
+                  {staff.role}
+                </span>
+              </div>
+
+              <button
+                onClick={handleLogout}
+                disabled={loggingOut}
+                className="tv-btn tv-btn-ghost"
+                style={{ padding: '0.4rem 0.85rem', fontSize: '0.75rem', borderRadius: '0.5rem', whiteSpace: 'nowrap' }}
+              >
+                {loggingOut ? '...' : 'Sign Out'}
+              </button>
             </div>
 
+            {/* Mobile Quick Sign Out Button (Header Direct Access on Mobile) */}
             <button
               onClick={handleLogout}
               disabled={loggingOut}
-              className="tv-btn tv-btn-ghost"
-              style={{ padding: '0.45rem 0.95rem', fontSize: '0.75rem', borderRadius: '0.5rem' }}
+              className="admin-mobile-direct-logout"
+              title="Sign Out"
+              aria-label="Sign Out"
+              style={{
+                display: 'none',
+                alignItems: 'center',
+                gap: '0.3rem',
+                padding: '0.35rem 0.65rem',
+                fontSize: '0.72rem',
+                fontWeight: '600',
+                borderRadius: '0.5rem',
+                background: 'rgba(239, 68, 68, 0.12)',
+                color: '#EF4444',
+                border: '1px solid rgba(239, 68, 68, 0.3)',
+                cursor: 'pointer',
+              }}
             >
-              {loggingOut ? '...' : 'Sign Out'}
+              <span>🚪</span>
+              <span>{loggingOut ? '...' : 'Logout'}</span>
+            </button>
+
+            {/* Mobile Menu Toggle Hamburger */}
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="admin-mobile-toggle"
+              aria-label="Toggle Navigation Menu"
+              style={{
+                display: 'none',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: '38px',
+                height: '38px',
+                borderRadius: '0.5rem',
+                background: 'var(--tv-surface-hover)',
+                border: '1px solid var(--tv-border)',
+                color: 'var(--tv-text)',
+                cursor: 'pointer',
+                fontSize: '1.2rem',
+              }}
+            >
+              {mobileMenuOpen ? '✕' : '☰'}
             </button>
           </div>
         </div>
       </div>
+
+      {/* Mobile Navigation Drawer */}
+      {mobileMenuOpen && (
+        <div
+          className="admin-mobile-drawer"
+          style={{
+            position: 'absolute',
+            top: '68px',
+            left: 0,
+            right: 0,
+            backgroundColor: 'var(--tv-bg)',
+            borderBottom: '1px solid var(--tv-border)',
+            boxShadow: '0 12px 32px rgba(0, 0, 0, 0.3)',
+            padding: '1.25rem 1rem 1.5rem',
+            zIndex: 99,
+          }}
+        >
+          {/* User Info Card */}
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              padding: '0.85rem 1rem',
+              borderRadius: '0.75rem',
+              background: 'var(--tv-surface)',
+              border: '1px solid var(--tv-border)',
+              marginBottom: '1rem',
+            }}
+          >
+            <div>
+              <div style={{ fontSize: '0.9rem', fontWeight: '700', color: 'var(--tv-text)' }}>{staff.name}</div>
+              <span className="tv-badge-gold" style={{ fontSize: '0.6rem', padding: '0.15rem 0.55rem', marginTop: '0.2rem', display: 'inline-block' }}>
+                {staff.role}
+              </span>
+            </div>
+            <button
+              onClick={handleLogout}
+              disabled={loggingOut}
+              className="tv-btn"
+              style={{
+                padding: '0.45rem 0.9rem',
+                fontSize: '0.78rem',
+                borderRadius: '0.5rem',
+                background: 'rgba(239, 68, 68, 0.15)',
+                color: '#EF4444',
+                border: '1px solid rgba(239, 68, 68, 0.3)',
+                fontWeight: '700',
+              }}
+            >
+              🚪 {loggingOut ? '...' : 'Sign Out'}
+            </button>
+          </div>
+
+          {/* Nav Links Grid / List */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '0.5rem' }}>
+            {visibleItems.map((item) => {
+              const isActive = pathname === item.path;
+              const isCheckInTab = item.path === '/check-in';
+
+              return (
+                <Link
+                  key={item.path}
+                  href={item.path}
+                  onClick={() => setMobileMenuOpen(false)}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.5rem',
+                    padding: '0.7rem 0.85rem',
+                    borderRadius: '0.6rem',
+                    fontSize: '0.85rem',
+                    fontWeight: '600',
+                    textDecoration: 'none',
+                    background: isActive ? 'var(--tv-gold)' : 'var(--tv-surface)',
+                    color: isActive ? '#0D121F' : 'var(--tv-text)',
+                    border: '1px solid ' + (isActive ? 'var(--tv-gold)' : 'var(--tv-border)'),
+                    position: 'relative',
+                  }}
+                >
+                  <span style={{ fontSize: '1rem' }}>{item.icon}</span>
+                  <span>{item.label}</span>
+                  {isCheckInTab && newBookingCount > 0 && (
+                    <span
+                      style={{
+                        marginLeft: 'auto',
+                        background: '#EF4444',
+                        color: '#FFF',
+                        fontSize: '0.62rem',
+                        fontWeight: '800',
+                        padding: '0.1rem 0.4rem',
+                        borderRadius: '999px',
+                      }}
+                    >
+                      {newBookingCount}
+                    </span>
+                  )}
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+      )}
 
       <style>{`
         @keyframes tv-pulse {
           0%, 100% { opacity: 1; transform: scale(1); }
           50% { opacity: 0.7; transform: scale(1.08); }
         }
-        @media (min-width: 768px) {
-          .admin-mobile-nav { display: none !important; }
-          .admin-user-info { display: block !important; }
+        
+        @media (min-width: 840px) {
+          .admin-desktop-nav { display: flex !important; }
+          .admin-desktop-user { display: flex !important; }
+          .admin-mobile-toggle { display: none !important; }
+          .admin-mobile-direct-logout { display: none !important; }
         }
-        @media (max-width: 767px) {
+
+        @media (max-width: 839px) {
           .admin-desktop-nav { display: none !important; }
+          .admin-desktop-user { display: none !important; }
+          .admin-mobile-toggle { display: flex !important; }
+          .admin-mobile-direct-logout { display: flex !important; }
+          .admin-alert-text { display: none !important; }
         }
       `}</style>
     </nav>
   );
 }
+
