@@ -53,7 +53,7 @@ export function Navbar() {
       >
         {/* Dynamic Brand Logo */}
         <Link href="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', flexShrink: 0, minWidth: 0 }}>
-          <BrandLogo height={38} variant="auto" />
+          <BrandLogo height={38} variant="dark" />
         </Link>
 
         {/* Desktop Nav Links */}

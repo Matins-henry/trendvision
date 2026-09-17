@@ -17,7 +17,7 @@ interface BrandLogoProps {
 export function BrandLogo({
   height = 44,
   className = '',
-  variant = 'auto', // 'auto' = dynamically adapts to active Light/Dark theme CSS variables
+  variant = 'dark', // 'dark' = white text for luxury dark surfaces; 'light' = dark text; 'auto' = CSS var
   layout = 'horizontal',
   showTagline = false,
 }: BrandLogoProps) {
