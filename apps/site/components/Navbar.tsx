@@ -34,7 +34,6 @@ export function Navbar() {
     <header
       className="tv-navbar"
       style={{
-        height: '72px',
         paddingTop: 'env(safe-area-inset-top, 0px)',
       }}
     >
@@ -44,7 +43,7 @@ export function Navbar() {
           maxWidth: '1280px',
           margin: '0 auto',
           padding: '0 1.25rem',
-          height: '100%',
+          width: '100%',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
@@ -142,7 +141,6 @@ export function Navbar() {
       <div
         className={`tv-mobile-nav ${mobileOpen ? 'open' : ''}`}
         style={{
-          paddingTop: 'calc(72px + env(safe-area-inset-top, 0px))',
           paddingBottom: 'calc(1.5rem + env(safe-area-inset-bottom, 0px))',
         }}
       >

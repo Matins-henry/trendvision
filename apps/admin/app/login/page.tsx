@@ -133,25 +133,32 @@ function LoginFormContent() {
 
       {/* ═══════════════════════════════════ RIGHT PANEL (INTERACTIVE 2-STEP LOGIN FORM) ═══════════════════════════════════ */}
       <div
+        className="tv-login-right-panel"
         style={{
           backgroundColor: 'var(--tv-bg)',
           color: 'var(--tv-text)',
-          padding: '4rem 2.5rem',
+          padding: '3rem 1.5rem',
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
           alignItems: 'center',
           position: 'relative',
+          minHeight: '100vh',
         }}
       >
         {/* Top Right Theme Toggle */}
-        <div style={{ position: 'absolute', top: '2rem', right: '2rem', zIndex: 20 }}>
+        <div style={{ position: 'absolute', top: '1.25rem', right: '1.25rem', zIndex: 20 }}>
           <ThemeToggle />
+        </div>
+
+        {/* Mobile-only Brand Logo (hidden on desktop since left panel has it) */}
+        <div className="tv-mobile-brand-logo" style={{ marginBottom: '2rem', textAlign: 'center' }}>
+          <BrandLogo height={36} variant="auto" />
         </div>
 
         <div style={{ maxWidth: '420px', width: '100%' }}>
           {/* Header */}
-          <div style={{ marginBottom: '2.5rem' }}>
+          <div style={{ marginBottom: '2rem' }}>
             <h2 className="tv-serif" style={{ fontSize: '2rem', fontWeight: '800', color: 'var(--tv-text)', marginBottom: '0.4rem' }}>
               Welcome Back!
             </h2>

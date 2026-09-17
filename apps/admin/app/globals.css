@@ -146,15 +146,21 @@ body {
   }
 }
 
+/* Hide branding panel on mobile — only show the form */
 .tv-login-left-brand {
   background: linear-gradient(135deg, #0D2818 0%, #1B4332 60%, #081C10 100%);
   color: #FEFAF4;
   padding: 4rem 3rem;
-  display: flex;
+  display: none; /* Hidden on mobile by default */
   flex-direction: column;
   justify-content: space-between;
   position: relative;
   overflow: hidden;
+}
+@media (min-width: 960px) {
+  .tv-login-left-brand {
+    display: flex; /* Show on desktop */
+  }
 }
 .tv-login-left-brand::before {
   content: '';
@@ -551,4 +557,55 @@ html.light .tv-finnova-dark-panel {
 }
 .tv-finnova-dark-panel ::-webkit-scrollbar-thumb:hover {
   background: rgba(255,255,255,0.2);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   ADMIN GLOBAL — Mobile Responsiveness
+ ═══════════════════════════════════════════════════════════════ */
+
+/* Prevent horizontal overflow on all screens */
+html, body {
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+/* Mobile-only brand logo in login: hide on desktop */
+.tv-mobile-brand-logo {
+  display: block;
+}
+@media (min-width: 960px) {
+  .tv-mobile-brand-logo {
+    display: none;
+  }
+}
+
+@media (max-width: 767px) {
+  /* Prevent any section from bleeding past screen edge */
+  section, header, footer, nav, main {
+    max-width: 100vw;
+    box-sizing: border-box;
+  }
+
+  /* Dashboard metric cards — stack on mobile */
+  .tv-metrics-grid {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 0.75rem !important;
+  }
+
+  /* Admin navbar — compact on mobile */
+  .tv-navbar {
+    padding: 0 0.75rem !important;
+  }
+
+  /* Login page right panel — proper padding on mobile */
+  .tv-login-right-panel {
+    padding: 2rem 1.25rem !important;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Dashboard metric cards — full single column below 480px */
+  .tv-metrics-grid {
+    grid-template-columns: 1fr !important;
+  }
 }

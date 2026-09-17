@@ -52,7 +52,7 @@ export function FloatingMobileBar() {
     >
       {/* Concierge Direct Call Button */}
       <a
-        href="tel:+2348000000000"
+        href="tel:+2348032780622"
         style={{
           display: 'inline-flex',
           alignItems: 'center',

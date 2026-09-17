@@ -181,6 +181,9 @@ img { max-width: 100%; display: block; }
   position: sticky;
   top: 0;
   z-index: 50;
+  height: 68px;
+  display: flex;
+  align-items: center;
   transition: background-color 300ms ease, box-shadow 300ms ease;
 }
 
@@ -810,10 +813,21 @@ img { max-width: 100%; display: block; }
    MOBILE RESPONSIVENESS — All Screen Sizes
 ═══════════════════════════════════════════════════════════════ */
 
+/* ═══════════════════════════════════════════════════════════════
+   FLOATING MOBILE BAR — Body Padding Offset
+   Prevent bottom content from being hidden behind the fixed bar
+═══════════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  /* Ensure page content doesn't hide behind floating bar */
+  .tv-footer {
+    padding-bottom: calc(4.5rem + env(safe-area-inset-bottom, 0px)) !important;
+  }
+}
+
 /* Tablet: 768px and below */
 @media (max-width: 768px) {
-  .tv-hero { min-height: 70vh; }
-  .tv-hero-content { padding: 3.5rem 1.25rem 6rem; }
+  .tv-hero { min-height: 60vh; }
+  .tv-hero-content { padding: 3.5rem 1.25rem 5rem; }
 
   .tv-amenity-strip-3 {
     grid-template-columns: 1fr;
@@ -837,8 +851,8 @@ img { max-width: 100%; display: block; }
 /* Mobile: 640px and below */
 @media (max-width: 640px) {
   /* Hero */
-  .tv-hero { min-height: 65vh; }
-  .tv-hero-content { padding: 3rem 1rem 5.5rem; }
+  .tv-hero { min-height: 55vh; }
+  .tv-hero-content { padding: 2.5rem 1rem 5rem; }
 
   /* Section spacing */
   section { padding-left: 1rem !important; padding-right: 1rem !important; }
@@ -863,6 +877,8 @@ img { max-width: 100%; display: block; }
   /* Welcome section stacked */
   .tv-welcome-grid { grid-template-columns: 1fr !important; }
   .tv-welcome-photos { display: none !important; }
+  /* Hide welcome photo cards on mobile to prevent overflow */
+  .tv-welcome-photos-grid { display: none !important; }
 }
 
 /* Prevent navbar logo from clipping on small phones */
@@ -1057,10 +1073,11 @@ img { max-width: 100%; display: block; }
 @media (max-width: 640px) {
   .tv-footer {
     padding-top: 3rem !important;
-    padding-bottom: 2rem !important;
+    /* Extra bottom padding to clear the floating bar */
+    padding-bottom: calc(5.5rem + env(safe-area-inset-bottom, 0px)) !important;
   }
   /* Footer main grid — single column */
-  .tv-footer > div > div:first-of-type {
+  .tv-footer > div > div {
     grid-template-columns: 1fr !important;
     gap: 2rem !important;
   }
@@ -1142,7 +1159,7 @@ img { max-width: 100%; display: block; }
 
 .tv-mobile-nav {
   position: fixed;
-  top: 84px;
+  top: 68px;
   left: 0;
   right: 0;
   background: rgba(12, 10, 9, 0.98);
@@ -1362,9 +1379,29 @@ img { max-width: 100%; display: block; }
  ═══════════════════════════════════════════════════════════════ */
 @media (max-width: 767px) {
   .tv-navbar {
-    height: 72px !important;
+    height: 60px !important;
   }
   .tv-mobile-nav {
-    padding-top: 72px !important;
+    top: 60px !important;
+    padding-top: 60px !important;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   GLOBAL OVERFLOW PROTECTION — Ensure nothing bleeds off screen
+ ═══════════════════════════════════════════════════════════════ */
+@media (max-width: 767px) {
+  /* Force all sections to respect viewport width */
+  section,
+  header,
+  footer,
+  nav,
+  main {
+    max-width: 100vw;
+    overflow-x: hidden;
+  }
+  /* Prevent grids from causing overflow */
+  [style*="grid-template-columns"] {
+    max-width: 100%;
   }
 }

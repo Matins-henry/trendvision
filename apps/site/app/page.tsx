@@ -84,9 +84,9 @@ export default async function HomePage() {
       </section>
 
       {/* ═══════════════════════════════════ WELCOME / STORY SECTION ═══════════════════════════════════ */}
-      <section id="explore" className="tv-welcome-section" style={{ padding: '6rem 1.5rem 5rem' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 300px), 1fr))', gap: '3.5rem', alignItems: 'center' }}>
-          {/* Left: Luxury Image Showcase Cards */}
+      <section id="explore" className="tv-welcome-section" style={{ padding: '5rem 1.5rem 4rem' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 340px), 1fr))', gap: '3rem', alignItems: 'center' }}>
+          {/* Left: Luxury Image Showcase Cards — hidden on mobile via CSS */}
           <ScrollReveal animation="slide-right">
             <div className="tv-welcome-photos-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 140px), 1fr))', gap: '1rem' }}>
               <div
