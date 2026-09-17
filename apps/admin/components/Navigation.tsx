@@ -31,6 +31,18 @@ export function Navigation() {
     setMobileMenuOpen(false);
   }, [pathname]);
 
+  // Lock body scroll when mobile menu is open
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [mobileMenuOpen]);
+
   async function handleLogout() {
     if (loggingOut) return;
     try {
@@ -71,15 +83,21 @@ export function Navigation() {
 
   return (
     <nav className="tv-navbar" style={{ position: 'sticky', top: 0, zIndex: 50 }}>
-      <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 1rem', height: '68px' }}>
-        <div style={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.5rem' }}>
+      <div className="tv-navbar-container">
+        <div style={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.75rem' }}>
+          
           {/* Dynamic Brand Logo — Role Aware Link */}
           <Link href={homePath} style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', flexShrink: 0 }}>
-            <BrandLogo height={32} variant="auto" />
+            <div className="admin-logo-desktop">
+              <BrandLogo height={34} variant="auto" />
+            </div>
+            <div className="admin-logo-mobile">
+              <BrandLogo height={28} variant="auto" />
+            </div>
           </Link>
 
           {/* Desktop Nav Finnova Tab Pills (Visible >= 840px) */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', flex: 1, justifyContent: 'center' }} className="admin-desktop-nav">
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', flex: 1, justifyContent: 'center' }} className="admin-desktop-nav">
             {visibleItems.map((item) => {
               const isActive = pathname === item.path;
               const isCheckInTab = item.path === '/check-in';
@@ -92,7 +110,7 @@ export function Navigation() {
                     display: 'flex',
                     alignItems: 'center',
                     gap: '0.4rem',
-                    padding: '0.5rem 1rem',
+                    padding: '0.45rem 0.95rem',
                     borderRadius: '999px',
                     fontSize: '0.78rem',
                     fontWeight: '600',
@@ -132,7 +150,7 @@ export function Navigation() {
           </div>
 
           {/* Right Action Cluster */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexShrink: 0 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', flexShrink: 0 }}>
             {/* Live Reception Alert Badge (Desktop/Tablet) */}
             {newBookingCount > 0 && (
               <Link
@@ -178,31 +196,6 @@ export function Navigation() {
               </button>
             </div>
 
-            {/* Mobile Quick Sign Out Button (Header Direct Access on Mobile) */}
-            <button
-              onClick={handleLogout}
-              disabled={loggingOut}
-              className="admin-mobile-direct-logout"
-              title="Sign Out"
-              aria-label="Sign Out"
-              style={{
-                display: 'none',
-                alignItems: 'center',
-                gap: '0.3rem',
-                padding: '0.35rem 0.65rem',
-                fontSize: '0.72rem',
-                fontWeight: '600',
-                borderRadius: '0.5rem',
-                background: 'rgba(239, 68, 68, 0.12)',
-                color: '#EF4444',
-                border: '1px solid rgba(239, 68, 68, 0.3)',
-                cursor: 'pointer',
-              }}
-            >
-              <span>🚪</span>
-              <span>{loggingOut ? '...' : 'Logout'}</span>
-            </button>
-
             {/* Mobile Menu Toggle Hamburger */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -212,14 +205,15 @@ export function Navigation() {
                 display: 'none',
                 alignItems: 'center',
                 justifyContent: 'center',
-                width: '38px',
-                height: '38px',
-                borderRadius: '0.5rem',
-                background: 'var(--tv-surface-hover)',
+                width: '40px',
+                height: '40px',
+                borderRadius: '0.6rem',
+                background: 'var(--tv-surface)',
                 border: '1px solid var(--tv-border)',
                 color: 'var(--tv-text)',
                 cursor: 'pointer',
-                fontSize: '1.2rem',
+                fontSize: '1.25rem',
+                transition: 'all 200ms ease',
               }}
             >
               {mobileMenuOpen ? '✕' : '☰'}
@@ -228,61 +222,110 @@ export function Navigation() {
         </div>
       </div>
 
+      {/* Mobile Drawer Overlay Backdrop */}
+      {mobileMenuOpen && (
+        <div
+          onClick={() => setMobileMenuOpen(false)}
+          style={{
+            position: 'fixed',
+            inset: 0,
+            top: '64px',
+            backgroundColor: 'rgba(0, 0, 0, 0.6)',
+            backdropFilter: 'blur(4px)',
+            zIndex: 90,
+          }}
+        />
+      )}
+
       {/* Mobile Navigation Drawer */}
       {mobileMenuOpen && (
         <div
           className="admin-mobile-drawer"
           style={{
             position: 'absolute',
-            top: '68px',
+            top: '64px',
             left: 0,
             right: 0,
             backgroundColor: 'var(--tv-bg)',
             borderBottom: '1px solid var(--tv-border)',
-            boxShadow: '0 12px 32px rgba(0, 0, 0, 0.3)',
-            padding: '1.25rem 1rem 1.5rem',
+            boxShadow: '0 20px 40px rgba(0, 0, 0, 0.4)',
+            padding: '1.25rem 1rem 1.75rem',
             zIndex: 99,
+            maxHeight: 'calc(100vh - 64px)',
+            overflowY: 'auto',
           }}
         >
-          {/* User Info Card */}
+          {/* User Profile Header Card */}
           <div
             style={{
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
-              padding: '0.85rem 1rem',
-              borderRadius: '0.75rem',
+              padding: '1rem 1.1rem',
+              borderRadius: '0.85rem',
               background: 'var(--tv-surface)',
               border: '1px solid var(--tv-border)',
-              marginBottom: '1rem',
+              marginBottom: '1.25rem',
             }}
           >
-            <div>
-              <div style={{ fontSize: '0.9rem', fontWeight: '700', color: 'var(--tv-text)' }}>{staff.name}</div>
-              <span className="tv-badge-gold" style={{ fontSize: '0.6rem', padding: '0.15rem 0.55rem', marginTop: '0.2rem', display: 'inline-block' }}>
-                {staff.role}
-              </span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+              <div
+                style={{
+                  width: '38px',
+                  height: '38px',
+                  borderRadius: '50%',
+                  background: 'var(--tv-gold)',
+                  color: '#0D121F',
+                  fontWeight: '800',
+                  fontSize: '0.95rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                {staff.name ? staff.name.charAt(0).toUpperCase() : 'U'}
+              </div>
+              <div>
+                <div style={{ fontSize: '0.9rem', fontWeight: '700', color: 'var(--tv-text)', lineHeight: 1.2 }}>
+                  {staff.name}
+                </div>
+                <span
+                  className="tv-badge-gold"
+                  style={{ fontSize: '0.62rem', padding: '0.12rem 0.55rem', marginTop: '0.25rem', display: 'inline-block' }}
+                >
+                  {staff.role}
+                </span>
+              </div>
             </div>
+
             <button
               onClick={handleLogout}
               disabled={loggingOut}
-              className="tv-btn"
               style={{
-                padding: '0.45rem 0.9rem',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.4rem',
+                padding: '0.5rem 0.95rem',
                 fontSize: '0.78rem',
-                borderRadius: '0.5rem',
-                background: 'rgba(239, 68, 68, 0.15)',
+                borderRadius: '0.55rem',
+                background: 'rgba(239, 68, 68, 0.12)',
                 color: '#EF4444',
                 border: '1px solid rgba(239, 68, 68, 0.3)',
                 fontWeight: '700',
+                cursor: 'pointer',
               }}
             >
-              🚪 {loggingOut ? '...' : 'Sign Out'}
+              <span>🚪</span>
+              <span>{loggingOut ? '...' : 'Sign Out'}</span>
             </button>
           </div>
 
-          {/* Nav Links Grid / List */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '0.5rem' }}>
+          {/* Nav Links Grid */}
+          <div style={{ fontSize: '0.72rem', fontWeight: '700', color: 'var(--tv-text-muted)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.6rem', paddingLeft: '0.2rem' }}>
+            Navigation Menu
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(1, 1fr)', gap: '0.5rem' }}>
             {visibleItems.map((item) => {
               const isActive = pathname === item.path;
               const isCheckInTab = item.path === '/check-in';
@@ -295,35 +338,35 @@ export function Navigation() {
                   style={{
                     display: 'flex',
                     alignItems: 'center',
-                    gap: '0.5rem',
-                    padding: '0.7rem 0.85rem',
-                    borderRadius: '0.6rem',
-                    fontSize: '0.85rem',
+                    gap: '0.75rem',
+                    padding: '0.8rem 1rem',
+                    borderRadius: '0.7rem',
+                    fontSize: '0.88rem',
                     fontWeight: '600',
                     textDecoration: 'none',
                     background: isActive ? 'var(--tv-gold)' : 'var(--tv-surface)',
                     color: isActive ? '#0D121F' : 'var(--tv-text)',
                     border: '1px solid ' + (isActive ? 'var(--tv-gold)' : 'var(--tv-border)'),
-                    position: 'relative',
+                    transition: 'all 150ms ease',
                   }}
                 >
-                  <span style={{ fontSize: '1rem' }}>{item.icon}</span>
-                  <span>{item.label}</span>
+                  <span style={{ fontSize: '1.1rem' }}>{item.icon}</span>
+                  <span style={{ flex: 1 }}>{item.label}</span>
                   {isCheckInTab && newBookingCount > 0 && (
                     <span
                       style={{
-                        marginLeft: 'auto',
                         background: '#EF4444',
                         color: '#FFF',
-                        fontSize: '0.62rem',
+                        fontSize: '0.65rem',
                         fontWeight: '800',
-                        padding: '0.1rem 0.4rem',
+                        padding: '0.15rem 0.5rem',
                         borderRadius: '999px',
                       }}
                     >
-                      {newBookingCount}
+                      {newBookingCount} New
                     </span>
                   )}
+                  <span style={{ opacity: 0.5, fontSize: '0.8rem' }}>→</span>
                 </Link>
               );
             })}
@@ -332,6 +375,13 @@ export function Navigation() {
       )}
 
       <style>{`
+        .tv-navbar-container {
+          max-width: 1280px;
+          margin: 0 auto;
+          padding: 0 1.25rem;
+          height: 68px;
+        }
+
         @keyframes tv-pulse {
           0%, 100% { opacity: 1; transform: scale(1); }
           50% { opacity: 0.7; transform: scale(1.08); }
@@ -341,18 +391,25 @@ export function Navigation() {
           .admin-desktop-nav { display: flex !important; }
           .admin-desktop-user { display: flex !important; }
           .admin-mobile-toggle { display: none !important; }
-          .admin-mobile-direct-logout { display: none !important; }
+          .admin-logo-mobile { display: none !important; }
+          .admin-logo-desktop { display: block !important; }
         }
 
         @media (max-width: 839px) {
+          .tv-navbar-container {
+            padding: 0 0.85rem;
+            height: 64px;
+          }
           .admin-desktop-nav { display: none !important; }
           .admin-desktop-user { display: none !important; }
           .admin-mobile-toggle { display: flex !important; }
-          .admin-mobile-direct-logout { display: flex !important; }
+          .admin-logo-mobile { display: block !important; }
+          .admin-logo-desktop { display: none !important; }
           .admin-alert-text { display: none !important; }
         }
       `}</style>
     </nav>
   );
 }
+
 
